@@ -232,3 +232,33 @@ Student predaje sljedeće materijale:
 - Sve potrebno da aplikacija može biti pokrenuta i demonstrirana bez dodatne konfiguracije
 
 Rok za predaju je **7 dana prije definisanog termina ispita**, termin odbrane će biti blagovremeno objavljen.
+
+## 10. Reference
+
+- [MahApps.Metro – Modern UI za WPF](https://github.com/MahApps/MahApps.Metro)  
+  Poznata open-source biblioteka za izradu WPF aplikacija u Metro stilu (Windows 10/11 izgled).  
+  Omogućava moderne prozore, flyout-e, dijaloge i teme sa akcentnim bojama.
+
+- [MaterialDesignInXAML Toolkit](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit)  
+  Potpuna implementacija Material Design principa u XAML-u.  
+  Nudi moderan izgled, animacije, ripple efekte i veliki broj gotovih kontrola.
+
+- [LiveCharts2 – Biblioteka za grafikone u WPF-u](https://github.com/beto-rodriguez/LiveCharts2)  
+  Moderna biblioteka za vizuelizaciju podataka sa interaktivnim i animiranim grafikonima.  
+  Jednostavno se povezuje sa MVVM modelom i idealna je za analitičke prikaze.
+
+- [HandyControl – Besplatne kontrole i teme](https://github.com/HandyOrg/HandyControl)  
+  Obuhvata više od 60 modernih kontrola (Stepper, Drawer, Growl, Timeline itd.).  
+  Lako se integriše i podržava promjenu tema i lokalizaciju aplikacije.
+
+- [ModernWpfUI – Fluent dizajn za WPF](https://github.com/Kinnara/ModernWpf)  
+  Donosi Fluent Design (WinUI 2 stil) u klasične WPF aplikacije.  
+  Lagan, moderan i kompatibilan sa novim Windows okruženjima.
+
+- [Extended WPF Toolkit (Xceed)](https://github.com/xceedsoftware/wpftoolkit)  
+  Sadrži napredne komponente poput PropertyGrid-a, ColorPicker-a, MaskedTextBox-a i drugih.  
+  Osnovna verzija je besplatna i idealna za poslovne aplikacije.
+
+- [Markdown → PDF konverter (mardowntopdf.com)](https://www.markdowntopdf.com)  
+  Besplatan onlajn alat za konverziju Markdown fajlova u dobro formatirane PDF dokumente.
+
