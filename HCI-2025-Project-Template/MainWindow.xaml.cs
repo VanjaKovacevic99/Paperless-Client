@@ -18,6 +18,7 @@ namespace HCI_2025_Project_Template
     {
         public MainWindow()
         {
+            
             InitializeComponent();
         }
     }

@@ -7,6 +7,12 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-
+        <Grid>
+            <!-- Primjer: Material Design dugme -->
+            <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                Content="Click me!"
+                Width="100"
+                Height="40"/>
+        </Grid>
     </Grid>
 </Window>
