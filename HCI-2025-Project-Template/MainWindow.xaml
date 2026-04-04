@@ -8,11 +8,22 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid>
-            <!-- Primjer: Material Design dugme -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
             <Button Style="{StaticResource MaterialDesignRaisedButton}"
-                Content="Click me!"
-                Width="100"
-                Height="40"/>
+            Content="Click me!"
+            Click="TestButton_Click"
+            Width="150"
+            Height="40"
+            Grid.Row="0"/>
+
+            <TextBlock Name="ResultText"
+               Grid.Row="1"
+               Margin="0,20,0,0"
+               FontSize="16"/>
         </Grid>
     </Grid>
 </Window>

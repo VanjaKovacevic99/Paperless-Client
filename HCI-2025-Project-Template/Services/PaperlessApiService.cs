@@ -1,47 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 
-namespace HCI_2025_Project_Template.Services
+namespace HCI_2025_Project.Services
 {
-    internal class PaperlessApiService
+    public class PaperlessApiService
     {
         private readonly HttpClient _httpClient;
 
-        private const string BaseUrl = "http://paperless-etfbl.duckdns.org:8000/api/";
-
-        public PaperlessApiService(string apiToken)
+        public PaperlessApiService()
         {
-            _httpClient = new HttpClient
-            {
-                BaseAddress = new Uri(BaseUrl)
-            };
+            _httpClient = new HttpClient();
+            _httpClient.BaseAddress = new Uri("http://paperless-etfbl.duckdns.org:8000/api/");
 
             _httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Token", apiToken);
+                new AuthenticationHeaderValue("Token", "88bf3a2b5e1d113067e974612e0a6bf73bb35e67");
         }
 
-        /// <summary>
-        /// Provjera da li je API token validan
-        /// </summary>
-        public async Task<bool> TestLoginAsync()
+        public async Task<string> GetDocumentsAsync()
         {
             try
             {
-                // Jednostavan endpoint koji zahtijeva autentifikaciju
                 var response = await _httpClient.GetAsync("documents/");
-
-                return response.IsSuccessStatusCode;
+                var content = await response.Content.ReadAsStringAsync();
+                MessageBox.Show($"duzina" + content.Length);
+                return $"STATUS: {response.StatusCode}\n\n{content}";
             }
-            catch
+            catch (Exception ex)
             {
-                return false;
+                return "EXCEPTION: " + ex.Message;
             }
         }
-
     }
 }
