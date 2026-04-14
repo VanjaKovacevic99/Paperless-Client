@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HCI_2025_Project_Template.Models
 {
-    internal class Tag
+    public class Tag
     {
         public int Id { get; set; }
         public string? Name { get; set; }

@@ -1,4 +1,5 @@
 ﻿using HCI_2025_Project.Services;
+using HCI_2025_Project_Template.ViewModels;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -9,22 +10,23 @@ namespace HCI_2025_Project_Template
     
     public partial class MainWindow : Window
     {
-       
+        private readonly DocumentsViewModel _viewModel;
 
         public MainWindow()
         {
             InitializeComponent();
+            _viewModel = new DocumentsViewModel();
+            this.DataContext = _viewModel;
            
 
         }
 
-
-        private async void TestButton_Click(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var apiService = new PaperlessApiService();
-            var data = await apiService.GetDocumentsAsync();
-            MessageBox.Show(data.Substring(0, 500));
+            await _viewModel.LoadDocumentsAsync();
+            DocumentsGrid.ItemsSource = _viewModel.Documents;
+            DocumentsCards.ItemsSource = _viewModel.Documents;
         }
-       
+
     }
 }

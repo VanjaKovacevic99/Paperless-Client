@@ -5,25 +5,74 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HCI_2025_Project_Template"
         mc:Ignorable="d"
+        Loaded="Window_Loaded"
         Title="MainWindow" Height="450" Width="800">
+    
     <Grid>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            <Button Style="{StaticResource MaterialDesignRaisedButton}"
-            Content="Click me!"
-            Click="TestButton_Click"
-            Width="150"
-            Height="40"
-            Grid.Row="0"/>
+        <TabControl Grid.Row="1">
 
-            <TextBlock Name="ResultText"
-               Grid.Row="1"
-               Margin="0,20,0,0"
-               FontSize="16"/>
-        </Grid>
+            <TabItem Header="Tabela">
+                <DataGrid x:Name="DocumentsGrid"
+                      Margin="10"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True">
+
+                    <DataGrid.Columns>
+                        
+                        <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
+                        <DataGridTextColumn Header="Created" Binding="{Binding CreatedDisplay}" Width="*"/>
+                        <DataGridTextColumn Header="Tags" Binding="{Binding TagNamesDisplay}" Width="200"/>
+                        <DataGridTextColumn Header="Type" Binding="{Binding DocumentTypeName}" Width="*"/>
+                    </DataGrid.Columns>
+
+                </DataGrid>
+            </TabItem>
+
+            <!-- 🟢 KARTIČNI PRIKAZ -->
+            <TabItem Header="Kartice">
+                <ScrollViewer>
+                    <ItemsControl x:Name="DocumentsCards">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="Gray"
+                                    BorderThickness="1"
+                                    CornerRadius="10"
+                                    Padding="10"
+                                    Margin="10"
+                                    Width="200">
+
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Title}"
+                                               FontWeight="Bold"
+                                               FontSize="14"/>
+
+                                        <TextBlock Text="{Binding CreatedDisplay}"
+                                               FontSize="12"/>
+                                        <TextBlock Text="{Binding TagNamesDisplay}"
+                                         FontSize="12"/>
+                                        <TextBlock Text="{Binding DocumentTypeName}"
+                                         FontSize="12"/>
+                                    </StackPanel>
+
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+
+                    </ItemsControl>
+                </ScrollViewer>
+            </TabItem>
+
+        </TabControl>
     </Grid>
 </Window>
