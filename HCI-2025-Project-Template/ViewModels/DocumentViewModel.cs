@@ -13,6 +13,37 @@ namespace HCI_2025_Project_Template.ViewModels
     public class DocumentsViewModel : INotifyPropertyChanged
     {
         private readonly PaperlessApiService _apiService;
+        private string? _next;
+        private string? _previous;
+        private List<Tag> _tagsCache = new List<Tag>();
+        private List<DocumentType> _typesCache = new List<DocumentType>();
+        public int _pageSize { get; set; } = 10;
+
+        public int PageSize
+        {
+            get => _pageSize;
+            set
+            {
+                if (_pageSize != value)
+                {
+                    _pageSize = value;
+
+                    CurrentPage = 1;              // reset na prvu stranicu
+                    OnPropertyChanged();
+
+                    _ = LoadDocumentsAsync();     // 🔥 reload
+                }
+            }
+        }
+
+ 
+
+        public int CurrentPage { get; set; } = 1;
+
+        public string PageInfo =>
+            $"{(CurrentPage - 1) * PageSize + 1} - {CurrentPage * PageSize}";
+        public bool HasNextPage => _next != null;
+        public bool HasPreviousPage => _previous != null;
 
         public DocumentsViewModel()
         {
@@ -28,29 +59,67 @@ namespace HCI_2025_Project_Template.ViewModels
 
         public async Task LoadDocumentsAsync()
         {
-            var documents = await _apiService.GetDocumentsAsync();
-            var tags = await _apiService.GetTagsAsync();
-            var types = await _apiService.GetDocumentTypesAsync();
+            Documents.Clear();
 
-            // Napravi rječnik za brzo mapiranje ID -> naziv
-            var tagsLookup = tags.ToDictionary(t => t.Id, t => t.Name);
-            var typesLookup = types.ToDictionary(t => t.Id, t => t.Name);
+            var response = await _apiService.GetDocumentsAsync(CurrentPage,PageSize);
 
+            _next = response.next;
+            _previous = response.previous;
+
+            var documents = response.results;
+            if (response?.results == null)
+                return;
+
+            // load once
+            if (_tagsCache.Count == 0)
+                _tagsCache = await _apiService.GetTagsAsync();
+
+            if (_typesCache.Count == 0)
+                _typesCache = await _apiService.GetDocumentTypesAsync();
+
+            var tagsLookup = _tagsCache.ToDictionary(t => t.Id, t => t.Name);
+            var typesLookup = _typesCache.ToDictionary(t => t.Id, t => t.Name);
 
             foreach (var doc in documents)
             {
-                // Mapiranje ID-eva na imena
                 doc.TagNames = doc.Tags
-                                  .Select(id => tagsLookup.ContainsKey(id) ? tagsLookup[id] : " ")
-                                  .ToList();
+                    .Select(id => tagsLookup.TryGetValue(id, out var name) ? name : " ")
+                    .ToList();
 
-                doc.DocumentTypeName = doc.DocumentType.HasValue &&
-                               typesLookup.TryGetValue(doc.DocumentType.Value, out var typeName)
-                               ? typeName
-                               : " ";
+                doc.DocumentTypeName =
+                    doc.DocumentType.HasValue &&
+                    typesLookup.TryGetValue(doc.DocumentType.Value, out var typeName)
+                    ? typeName
+                    : " ";
 
                 Documents.Add(doc);
             }
+
+            OnPropertyChanged(nameof(HasNextPage));
+            OnPropertyChanged(nameof(HasPreviousPage));
+            OnPropertyChanged(nameof(PageInfo));
         }
+
+        public async Task NextPageAsync()
+        {
+            if (HasNextPage)
+            {
+                CurrentPage++;
+                await LoadDocumentsAsync();
+            }
+            OnPropertyChanged(nameof(PageInfo));
+        }
+
+        public async Task PreviousPageAsync()
+        {
+            if (HasPreviousPage && CurrentPage > 1)
+            {
+                CurrentPage--;
+                await LoadDocumentsAsync();
+            }
+            OnPropertyChanged(nameof(PageInfo));
+        }
+
+
     }
 }

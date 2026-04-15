@@ -19,19 +19,15 @@ namespace HCI_2025_Project.Services
                 new AuthenticationHeaderValue("Token", "88bf3a2b5e1d113067e974612e0a6bf73bb35e67");
         }
 
-        public async Task<List<Document>> GetDocumentsAsync()
+        public async Task<ApiResponse<Document>> GetDocumentsAsync(int page, int pageSize)
         {
-            var response = await _httpClient.GetAsync("documents/");
+            var response = await _httpClient.GetAsync(
+                $"documents/?page={page}&page_size={pageSize}");
+
             var json = await response.Content.ReadAsStringAsync();
 
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-
-            var apiResponse = JsonSerializer.Deserialize<ApiResponse<Document>>(json, options);
-
-            return apiResponse?.results ?? new List<Document>();
+            return JsonSerializer.Deserialize<ApiResponse<Document>>(json,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
 
         public async Task<List<Tag>> GetTagsAsync()

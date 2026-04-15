@@ -3,40 +3,71 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:HCI_2025_Project_Template"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
-        Title="MainWindow" Height="450" Width="800">
-    
-    <Grid>
+        Title="Paperless Client"
+        Height="600"
+        Width="900"
+        Background="{DynamicResource MaterialDesignPaper}">
+
+    <Grid Margin="10">
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TabControl Grid.Row="1">
+        <!-- HEADER -->
+        <TextBlock Text="📄 Paperless-NGX Desktop Client"
+                   FontSize="22"
+                   FontWeight="Bold"
+                   Margin="0,0,0,10"/>
 
-            <TabItem Header="Tabela">
-                <DataGrid x:Name="DocumentsGrid"
-                      Margin="10"
-                      AutoGenerateColumns="False"
-                      IsReadOnly="True">
+        <!-- MAIN CONTENT -->
+        <TabControl Grid.Row="1"
+                    Style="{StaticResource MaterialDesignTabControl}">
+
+            <!-- TABLE VIEW -->
+            <TabItem Header="Table">
+
+                <DataGrid ItemsSource="{Binding Documents}"
+                          Margin="10"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          Style="{StaticResource MaterialDesignDataGrid}">
 
                     <DataGrid.Columns>
-                        
-                        <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
-                        <DataGridTextColumn Header="Created" Binding="{Binding CreatedDisplay}" Width="*"/>
-                        <DataGridTextColumn Header="Tags" Binding="{Binding TagNamesDisplay}" Width="200"/>
-                        <DataGridTextColumn Header="Type" Binding="{Binding DocumentTypeName}" Width="*"/>
-                    </DataGrid.Columns>
+                        <DataGridTextColumn Header="Title"
+                                            Binding="{Binding Title}"
+                                            Width="*"/>
 
+                        <DataGridTextColumn Header="Created"
+                                            Binding="{Binding CreatedDisplay}"
+                                            Width="200"/>
+
+                        <DataGridTextColumn Header="Tags"
+                                            Binding="{Binding TagNamesDisplay}"
+                                            Width="200"/>
+
+                        <DataGridTextColumn Header="Type"
+                                            Binding="{Binding DocumentTypeName}"
+                                            Width="150"/>
+                    </DataGrid.Columns>
                 </DataGrid>
+
             </TabItem>
 
-            <!-- 🟢 KARTIČNI PRIKAZ -->
-            <TabItem Header="Kartice">
+            <!-- CARD VIEW -->
+            <TabItem Header="Cards">
+
                 <ScrollViewer>
-                    <ItemsControl x:Name="DocumentsCards">
+
+                    <ItemsControl ItemsSource="{Binding Documents}">
+
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel/>
@@ -45,34 +76,87 @@
 
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border BorderBrush="Gray"
-                                    BorderThickness="1"
-                                    CornerRadius="10"
-                                    Padding="10"
-                                    Margin="10"
-                                    Width="200">
+
+                                <materialDesign:Card Width="220"
+                                                     Margin="10"
+                                                     Padding="10"
+                                                     UniformCornerRadius="8">
 
                                     <StackPanel>
+
                                         <TextBlock Text="{Binding Title}"
-                                               FontWeight="Bold"
-                                               FontSize="14"/>
+                                                   FontSize="16"
+                                                   FontWeight="Bold"
+                                                   Margin="0,0,0,5"/>
 
                                         <TextBlock Text="{Binding CreatedDisplay}"
-                                               FontSize="12"/>
+                                                   Opacity="0.7"/>
+
                                         <TextBlock Text="{Binding TagNamesDisplay}"
-                                         FontSize="12"/>
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,5,0,0"/>
+
                                         <TextBlock Text="{Binding DocumentTypeName}"
-                                         FontSize="12"/>
+                                                   FontStyle="Italic"
+                                                   Opacity="0.8"/>
+
                                     </StackPanel>
 
-                                </Border>
+                                </materialDesign:Card>
+
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
 
                     </ItemsControl>
+
                 </ScrollViewer>
+
             </TabItem>
 
         </TabControl>
+
+        <StackPanel
+            Grid.Row="2"
+            Orientation="Horizontal"
+            HorizontalAlignment="Center"
+            Margin="10"
+            VerticalAlignment="Center">
+
+            <!-- Page size -->
+            <TextBlock Text="Page size:"
+               VerticalAlignment="Center"
+               Margin="5"/>
+
+            <ComboBox Width="70"
+                      SelectedIndex="0"
+          SelectedItem="{Binding PageSize, Mode=TwoWay}">
+
+                <sys:Int32>10</sys:Int32>
+                <sys:Int32>20</sys:Int32>
+                <sys:Int32>50</sys:Int32>
+
+            </ComboBox>
+
+            <!-- Prev -->
+            <Button Content="◀ Prev"
+            Style="{StaticResource MaterialDesignOutlinedButton}"
+            Click="Prev_Click"
+            IsEnabled="{Binding HasPreviousPage}"
+            Margin="10,0"/>
+
+            <!-- Page info -->
+            <TextBlock Text="{Binding PageInfo}"
+               FontSize="16"
+               VerticalAlignment="Center"
+               Margin="10"/>
+
+            <!-- Next -->
+            <Button Content="Next ▶"
+            Style="{StaticResource MaterialDesignRaisedButton}"
+            Click="Next_Click"
+            IsEnabled="{Binding HasNextPage}"
+            Margin="10,0"/>
+
+        </StackPanel>
     </Grid>
 </Window>
