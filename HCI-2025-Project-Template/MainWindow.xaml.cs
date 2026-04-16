@@ -99,5 +99,25 @@ namespace HCI_2025_Project_Template
             var preview = new DocumentPreviewWindow(doc);
             preview.Show();
         }
+
+        private void Documents_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.Navigate(AppView.Documents);
+        }
+
+        private void Upload_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.Navigate(AppView.Upload);
+        }
+
+        private void Tags_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.Navigate(AppView.Tags);
+        }
+
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.Navigate(AppView.Settings);
+        }
     }
 }

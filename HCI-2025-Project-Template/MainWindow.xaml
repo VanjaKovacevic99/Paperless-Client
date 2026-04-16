@@ -15,215 +15,233 @@
 
     <Grid Margin="10">
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-       
-        <!-- HEADER -->
-        <StackPanel Grid.Row="0" Margin="0,0,0,10">
+        <!-- ===================== -->
+        <!-- LEFT SIDEBAR -->
+        <!-- ===================== -->
+        <Border Grid.Column="0"
+                Background="#FAFAFA"
+                CornerRadius="8"
+                Padding="10"
+                Margin="0,0,10,0">
 
-            <!-- TITLE -->
-            <TextBlock Text="📄 Paperless-NGX Desktop Client"
+            <StackPanel>
+
+                <TextBlock Text="MENU"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Margin="10"
+                           Foreground="#333"/>
+
+                <Button Content="📄 Documents"
+        Click="Documents_Click"
+        Style="{StaticResource MaterialDesignFlatButton}"
+        Margin="5"/>
+
+                <Button Content="⬆ Upload"
+        Click="Upload_Click"
+        Style="{StaticResource MaterialDesignFlatButton}"
+        Margin="5"/>
+
+                <Button Content="🏷 Tags"
+        Click="Tags_Click"
+        Style="{StaticResource MaterialDesignFlatButton}"
+        Margin="5"/>
+
+                <Button Content="⚙ Settings"
+        Click="Settings_Click"
+        Style="{StaticResource MaterialDesignFlatButton}"
+        Margin="5"/>
+
+            </StackPanel>
+
+        </Border>
+
+        <!-- ===================== -->
+        <!-- RIGHT MAIN CONTENT -->
+        <!-- ===================== -->
+        <Grid Grid.Column="1"  Visibility="{Binding IsDocuments, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- HEADER -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,10">
+
+                <!-- TITLE -->
+                <TextBlock Text="📄 Paperless-NGX Desktop Client"
                FontSize="22"
                FontWeight="Bold"
                Margin="0,0,0,10"/>
 
-            <Grid Margin="0,0,0,10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    
-                </Grid.ColumnDefinitions>
+                <!-- SEARCH WRAPPER -->
+                <Grid Margin="0,0,0,10">
 
-                <!-- SEARCH -->
-                <TextBox 
-             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-             VerticalAlignment="Center"
-             VerticalContentAlignment="Center"
-             materialDesign:HintAssist.Hint="Search documents..."
-             Margin="5,0,0,0"
-             Padding="30,0,0,0"
-             Height="35"    
-             Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
-            
-            <materialDesign:PackIcon Kind="Magnify"
-                                    
-                             Width="20"
-                             Height="20"
-                             VerticalAlignment="Center"
-                             Margin="10,0,0,0"
-                             HorizontalAlignment="Left"/>
-            </Grid>
+                    <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                 VerticalAlignment="Center"
+                 VerticalContentAlignment="Center"
+                 materialDesign:HintAssist.Hint="Search documents..."
+                 Height="35"
+                 Padding="30,0,0,0"
+                 Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
 
-            <!-- FILTERS -->
-            <StackPanel Orientation="Horizontal"
-             Margin="0,10,0,10">
+                    <!-- ICON (LOUPE) -->
+                    <materialDesign:PackIcon Kind="Magnify"
+                                 Width="20"
+                                 Height="20"
+                                 VerticalAlignment="Center"
+                                 HorizontalAlignment="Left"
+                                 Margin="10,0,0,0"/>
+                </Grid>
 
-                <!-- TAG -->
-                <ComboBox Width="180"
-              Margin="0,0,10,0"
-              ItemsSource="{Binding Tags}"
-              DisplayMemberPath="Name"
-              SelectedItem="{Binding SelectedTag}"
-              materialDesign:HintAssist.Hint="Tag"/>
+                <!-- FILTERS -->
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
 
-                <!-- TYPE -->
-                <ComboBox Width="180"
-              Margin="0,0,10,0"
-              ItemsSource="{Binding DocumentTypes}"
-              DisplayMemberPath="Name"
-              SelectedItem="{Binding SelectedType}"
-              materialDesign:HintAssist.Hint="Type"/>
+                    <ComboBox Width="180"
+                  ItemsSource="{Binding Tags}"
+                  DisplayMemberPath="Name"
+                  SelectedItem="{Binding SelectedTag}"
+                  materialDesign:HintAssist.Hint="Tag"/>
 
-                <!-- CORRESPONDENT -->
-                <ComboBox Width="180"
-              ItemsSource="{Binding Correspondents}"
-              DisplayMemberPath="Name"
-              SelectedItem="{Binding SelectedCorrespondent}"
-              materialDesign:HintAssist.Hint="Correspondent"/>
+                    <ComboBox Width="180"
+                  Margin="10,0,0,0"
+                  ItemsSource="{Binding DocumentTypes}"
+                  DisplayMemberPath="Name"
+                  SelectedItem="{Binding SelectedType}"
+                  materialDesign:HintAssist.Hint="Type"/>
 
-                <Button Content="Reset filters"
-        Click="ResetFilters_Click"
-        Style="{StaticResource MaterialDesignOutlinedButton}"
-        Margin="10,0"/>
+                    <ComboBox Width="180"
+                  Margin="10,0,0,0"
+                  ItemsSource="{Binding Correspondents}"
+                  DisplayMemberPath="Name"
+                  SelectedItem="{Binding SelectedCorrespondent}"
+                  materialDesign:HintAssist.Hint="Correspondent"/>
+
+                    <Button Content="Reset"
+                Margin="10,0,0,0"
+                Style="{StaticResource MaterialDesignOutlinedButton}"
+                Click="ResetFilters_Click"/>
+
+                </StackPanel>
 
             </StackPanel>
-        </StackPanel>
 
-        <!-- MAIN CONTENT -->
-        <TabControl Grid.Row="1"
-                    Style="{StaticResource MaterialDesignTabControl}">
+            <!-- ================= TAB CONTENT ================= -->
+            <TabControl Grid.Row="1"
+                        Style="{StaticResource MaterialDesignTabControl}"
+                        >
 
-            <!-- TABLE VIEW -->
-            <TabItem Header="Table">
+                <!-- TABLE -->
+                <TabItem Header="Table">
 
-                <DataGrid ItemsSource="{Binding Documents}"
-                          Margin="10"
-                          AutoGenerateColumns="False"
-                          IsReadOnly="True"
-                          Style="{StaticResource MaterialDesignDataGrid}"
-                           MouseDoubleClick="DocumentsGrid_MouseDoubleClick">
+                    <DataGrid ItemsSource="{Binding Documents}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              MouseDoubleClick="DocumentsGrid_MouseDoubleClick">
 
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Title"
-                                            Binding="{Binding Title}"
-                                            Width="*"/>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Title"
+                                                Binding="{Binding Title}"
+                                                Width="*"/>
+                            <DataGridTextColumn Header="Created"
+                                                Binding="{Binding CreatedDisplay}"
+                                                Width="200"/>
+                            <DataGridTextColumn Header="Tags"
+                                                Binding="{Binding TagNamesDisplay}"
+                                                Width="200"/>
+                            <DataGridTextColumn Header="Type"
+                                                Binding="{Binding DocumentTypeName}"
+                                                Width="150"/>
+                        </DataGrid.Columns>
 
-                        <DataGridTextColumn Header="Created"
-                                            Binding="{Binding CreatedDisplay}"
-                                            Width="200"/>
+                    </DataGrid>
 
-                        <DataGridTextColumn Header="Tags"
-                                            Binding="{Binding TagNamesDisplay}"
-                                            Width="200"/>
+                </TabItem>
 
-                        <DataGridTextColumn Header="Type"
-                                            Binding="{Binding DocumentTypeName}"
-                                            Width="150"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+                <!-- CARDS -->
+                <TabItem Header="Cards">
 
-            </TabItem>
+                    <ScrollViewer>
 
-            <!-- CARD VIEW -->
-            <TabItem Header="Cards">
+                        <ItemsControl ItemsSource="{Binding Documents}">
 
-                <ScrollViewer>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
 
-                    <ItemsControl ItemsSource="{Binding Documents}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
 
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
+                                    <materialDesign:Card Width="220"
+                                                         Margin="10"
+                                                         Padding="10"
+                                                         Background="White"
+                                                         MouseDoubleClick="Card_MouseDoubleClick">
 
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
+                                        <StackPanel>
 
-                                <materialDesign:Card Width="220"
-                                                     Margin="10"
-                                                     Padding="10"
-                                                     UniformCornerRadius="8"
-                                                     MouseDoubleClick="Card_MouseDoubleClick">
+                                            <TextBlock Text="{Binding Title}"
+                                                       FontSize="16"
+                                                       FontWeight="Bold"/>
 
-                                    <StackPanel >
+                                            <TextBlock Text="{Binding CreatedDisplay}"
+                                                       Opacity="0.6"/>
 
-                                        <TextBlock Text="{Binding Title}"
-                                                   FontSize="16"
-                                                   FontWeight="Bold"
-                                                   Margin="0,0,0,5"/>
+                                            <TextBlock Text="{Binding TagNamesDisplay}"
+                                                       TextWrapping="Wrap"
+                                                       Margin="0,5,0,0"/>
 
-                                        <TextBlock Text="{Binding CreatedDisplay}"
-                                                   Opacity="0.7"/>
+                                            <TextBlock Text="{Binding DocumentTypeName}"
+                                                       FontStyle="Italic"
+                                                       Opacity="0.7"/>
 
-                                        <TextBlock Text="{Binding TagNamesDisplay}"
-                                                   TextWrapping="Wrap"
-                                                   Margin="0,5,0,0"/>
+                                        </StackPanel>
 
-                                        <TextBlock Text="{Binding DocumentTypeName}"
-                                                   FontStyle="Italic"
-                                                   Opacity="0.8"/>
+                                    </materialDesign:Card>
 
-                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
 
-                                </materialDesign:Card>
+                        </ItemsControl>
 
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
+                    </ScrollViewer>
 
-                    </ItemsControl>
+                </TabItem>
 
-                </ScrollViewer>
+            </TabControl>
 
-            </TabItem>
+            <!-- ================= PAGINATION ================= -->
+            <StackPanel Grid.Row="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Margin="10">
 
-        </TabControl>
+                <Button Content="◀ Prev"
+                        Click="Prev_Click"
+                        IsEnabled="{Binding HasPreviousPage}"
+                        Margin="5"/>
 
-        <StackPanel
-            Grid.Row="2"
-            Orientation="Horizontal"
-            HorizontalAlignment="Center"
-            Margin="10"
-            VerticalAlignment="Center">
+                <TextBlock Text="{Binding PageInfo}"
+                           Margin="10"
+                           VerticalAlignment="Center"/>
 
-            <!-- Page size -->
-            <TextBlock Text="Page size:"
-               VerticalAlignment="Center"
-               Margin="5"/>
+                <Button Content="Next ▶"
+                        Click="Next_Click"
+                        IsEnabled="{Binding HasNextPage}"
+                        Margin="5"/>
 
-            <ComboBox Width="70"
-                      SelectedIndex="0"
-          SelectedItem="{Binding PageSize, Mode=TwoWay}">
+            </StackPanel>
 
-                <sys:Int32>10</sys:Int32>
-                <sys:Int32>20</sys:Int32>
-                <sys:Int32>50</sys:Int32>
+        </Grid>
 
-            </ComboBox>
-
-            <!-- Prev -->
-            <Button Content="◀ Prev"
-            Style="{StaticResource MaterialDesignOutlinedButton}"
-            Click="Prev_Click"
-            IsEnabled="{Binding HasPreviousPage}"
-            Margin="10,0"/>
-
-            <!-- Page info -->
-            <TextBlock Text="{Binding PageInfo}"
-               FontSize="16"
-               VerticalAlignment="Center"
-               Margin="10"/>
-
-            <!-- Next -->
-            <Button Content="Next ▶"
-            Style="{StaticResource MaterialDesignRaisedButton}"
-            Click="Next_Click"
-            IsEnabled="{Binding HasNextPage}"
-            Margin="10,0"/>
-
-        </StackPanel>
     </Grid>
 </Window>

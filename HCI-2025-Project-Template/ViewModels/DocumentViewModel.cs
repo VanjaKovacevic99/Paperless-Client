@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Runtime;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -110,6 +111,31 @@ namespace HCI_2025_Project_Template.ViewModels
                 }
             }
         }
+        public bool IsDocuments => CurrentView == AppView.Documents;
+        public bool IsUpload => CurrentView == AppView.Upload;
+        public bool IsTags => CurrentView == AppView.Tags;
+        public bool IsSettings => CurrentView == AppView.Settings;
+        private AppView _currentView = AppView.Documents;
+
+        public AppView CurrentView
+        {
+            get => _currentView;
+            set
+            {
+                _currentView = value;
+
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsDocuments));
+                OnPropertyChanged(nameof(IsUpload));
+                OnPropertyChanged(nameof(IsTags));
+                OnPropertyChanged(nameof(IsSettings));
+            }
+        }
+        public void Navigate(AppView view)
+        {
+            CurrentView = view;
+        }
+
         public DocumentsViewModel()
         {
             _apiService = new PaperlessApiService();
