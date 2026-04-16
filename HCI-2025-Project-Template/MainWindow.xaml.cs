@@ -129,6 +129,7 @@ namespace HCI_2025_Project_Template
             {
                 var vm = (DocumentsViewModel)DataContext;
                 vm.Upload.FilePath = dialog.FileName;
+                vm.UploadFileName = System.IO.Path.GetFileName(dialog.FileName);
             }
         }
 
@@ -140,6 +141,7 @@ namespace HCI_2025_Project_Template
 
                 var vm = (DocumentsViewModel)DataContext;
                 vm.Upload.FilePath = files[0];
+                vm.UploadFileName= System.IO.Path.GetFileName(files[0]);
 
               
             }
