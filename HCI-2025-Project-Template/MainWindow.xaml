@@ -103,7 +103,8 @@
                           Margin="10"
                           AutoGenerateColumns="False"
                           IsReadOnly="True"
-                          Style="{StaticResource MaterialDesignDataGrid}">
+                          Style="{StaticResource MaterialDesignDataGrid}"
+                           MouseDoubleClick="DocumentsGrid_MouseDoubleClick">
 
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Title"
@@ -145,9 +146,10 @@
                                 <materialDesign:Card Width="220"
                                                      Margin="10"
                                                      Padding="10"
-                                                     UniformCornerRadius="8">
+                                                     UniformCornerRadius="8"
+                                                     MouseDoubleClick="Card_MouseDoubleClick">
 
-                                    <StackPanel>
+                                    <StackPanel >
 
                                         <TextBlock Text="{Binding Title}"
                                                    FontSize="16"

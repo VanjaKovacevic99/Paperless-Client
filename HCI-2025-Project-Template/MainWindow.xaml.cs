@@ -1,10 +1,13 @@
 ﻿using HCI_2025_Project.Services;
 using HCI_2025_Project_Template.ViewModels;
+using HCI_2025_Project_Template.Views;
+using HCI_2025_Project_Template.Models;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace HCI_2025_Project_Template
 {
@@ -72,6 +75,29 @@ namespace HCI_2025_Project_Template
             vm.SelectedType = vm.DocumentTypes[0];
             vm.SelectedCorrespondent = vm.Correspondents[0];
             vm.SearchText = "";
+        }
+
+        private void DocumentsGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var grid = sender as DataGrid;
+
+            if (grid?.SelectedItem is Document selectedDocument)
+            {
+                var previewWindow = new DocumentPreviewWindow(selectedDocument);
+                previewWindow.ShowDialog();
+            }
+        }
+
+        private void Card_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var card = sender as FrameworkElement;
+            if (card == null) return;
+
+            var doc = card.DataContext as Document;
+            if (doc == null) return;
+
+            var preview = new DocumentPreviewWindow(doc);
+            preview.Show();
         }
     }
 }

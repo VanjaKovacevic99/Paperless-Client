@@ -107,5 +107,13 @@ namespace HCI_2025_Project.Services
             return JsonSerializer.Deserialize<ApiResponse<Document>>(json,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
+
+
+        public async Task<byte[]> DownloadDocumentAsync(int id)
+        {
+            var url = $"http://paperless-etfbl.duckdns.org:8000/api/documents/{id}/download/";
+
+            return await _httpClient.GetByteArrayAsync(url);
+        }
     }
 }
