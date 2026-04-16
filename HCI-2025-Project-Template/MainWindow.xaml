@@ -38,21 +38,25 @@
                            Foreground="#333"/>
 
                 <Button Content="📄 Documents"
+                        HorizontalAlignment="Left"
         Click="Documents_Click"
         Style="{StaticResource MaterialDesignFlatButton}"
         Margin="5"/>
 
                 <Button Content="⬆ Upload"
+                        HorizontalAlignment="Left"
         Click="Upload_Click"
         Style="{StaticResource MaterialDesignFlatButton}"
         Margin="5"/>
 
                 <Button Content="🏷 Tags"
+                        HorizontalAlignment="Left"
         Click="Tags_Click"
         Style="{StaticResource MaterialDesignFlatButton}"
         Margin="5"/>
 
                 <Button Content="⚙ Settings"
+                        HorizontalAlignment="Left"
         Click="Settings_Click"
         Style="{StaticResource MaterialDesignFlatButton}"
         Margin="5"/>
@@ -242,6 +246,88 @@
             </StackPanel>
 
         </Grid>
+        <Grid Grid.Column="1"   Visibility="{Binding IsUpload, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Border Padding="60,40,60,40">
+                <StackPanel HorizontalAlignment="Stretch" >
+
+                <TextBlock Text="Upload document"
+                   FontSize="22"
+                   FontWeight="Bold"
+                   Margin="0,0,0,20"/>
+
+                <!-- TITLE -->
+                <TextBox Text="{Binding Upload.Title, UpdateSourceTrigger=PropertyChanged}"
+                 materialDesign:HintAssist.Hint="Title"
+                 Margin="0,0,0,10"/>
+
+                <!-- TAG -->
+                <ComboBox ItemsSource="{Binding Tags}"
+                  DisplayMemberPath="Name"
+                  SelectedItem="{Binding Upload.Tag}"
+                  materialDesign:HintAssist.Hint="Tag"
+                  Margin="0,0,0,10"/>
+
+                <!-- TYPE -->
+                <ComboBox ItemsSource="{Binding DocumentTypes}"
+                  DisplayMemberPath="Name"
+                  SelectedItem="{Binding Upload.Type}"
+                  materialDesign:HintAssist.Hint="Type"
+                  Margin="0,0,0,10"/>
+
+                <!-- CORRESPONDENT -->
+                <ComboBox ItemsSource="{Binding Correspondents}"
+                  DisplayMemberPath="Name"
+                  SelectedItem="{Binding Upload.Correspondent}"
+                  materialDesign:HintAssist.Hint="Correspondent"
+                  Margin="0,0,0,20"/>
+
+                <!-- FILE SECTION (LAST) -->
+                <Border BorderBrush="#DDD"
+                BorderThickness="1"
+                Padding="15"
+                CornerRadius="8"
+                Background="#FAFAFA"
+                AllowDrop="True"
+                Drop="File_Drop">
+
+                    <StackPanel HorizontalAlignment="Center">
+
+                        <TextBlock Text="Drag &amp; drop file "
+                           HorizontalAlignment="Center"
+                           Opacity="0.7"
+                           Margin="0,0,0,10"/>
+
+                        <TextBlock Text="{Binding UploadFileName}"
+                           HorizontalAlignment="Center"
+                           FontWeight="Bold"
+                           Margin="0,0,0,10"/>
+
+                        <Button Content="Choose file"
+                        Width="150"
+                        Click="ChooseFile_Click"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"/>
+
+                    </StackPanel>
+
+                </Border>
+
+                <!-- UPLOAD BUTTON -->
+                <Button Content="Upload"
+                Margin="0,20,0,0"
+                Height="40"
+                Style="{StaticResource MaterialDesignRaisedButton}"
+                Click="UploadFile_Click"/>
+
+            </StackPanel>
+            </Border>
+        </Grid>
+        <Grid Grid.Column="1"  Visibility="{Binding IsTags, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <TextBlock>Ovo je tag</TextBlock>
+        </Grid>
+        <Grid Grid.Column="1"  Visibility="{Binding IsSettings, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <TextBlock>Ovo je settings</TextBlock>
+        </Grid>
+
 
     </Grid>
 </Window>

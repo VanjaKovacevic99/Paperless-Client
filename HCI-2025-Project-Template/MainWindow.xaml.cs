@@ -119,5 +119,52 @@ namespace HCI_2025_Project_Template
         {
             _viewModel.Navigate(AppView.Settings);
         }
+
+        private void ChooseFile_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.Filter = "All files (*.*)|*.*";
+
+            if (dialog.ShowDialog() == true)
+            {
+                var vm = (DocumentsViewModel)DataContext;
+                vm.Upload.FilePath = dialog.FileName;
+            }
+        }
+
+        private void File_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                var vm = (DocumentsViewModel)DataContext;
+                vm.Upload.FilePath = files[0];
+
+              
+            }
+        }
+
+        private async void UploadFile_Click(object sender, RoutedEventArgs e) {
+            var vm = (DocumentsViewModel)DataContext;
+
+            if (string.IsNullOrWhiteSpace(vm.Upload.FilePath))
+            {
+                MessageBox.Show("Please select a file.");
+                return;
+            }
+
+           
+            if (string.IsNullOrWhiteSpace(vm.Upload.Title))
+            {
+                MessageBox.Show("Please enter document title.");
+                return;
+            }
+
+            
+            await vm.UploadAsync();
+            MessageBox.Show("Upload successful!");
+
+        }
     }
 }

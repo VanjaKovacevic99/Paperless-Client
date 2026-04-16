@@ -1,4 +1,5 @@
 ﻿using HCI_2025_Project_Template.Models;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
@@ -114,6 +115,38 @@ namespace HCI_2025_Project.Services
             var url = $"http://paperless-etfbl.duckdns.org:8000/api/documents/{id}/download/";
 
             return await _httpClient.GetByteArrayAsync(url);
+        }
+
+
+        public async Task<bool> UploadDocumentAsync(string filePath, string title, int? tagId, int? typeId, int? correspondentId)
+        {
+           
+
+            using var form = new MultipartFormDataContent();
+
+       
+            var fileBytes = await File.ReadAllBytesAsync(filePath);
+            var fileContent = new ByteArrayContent(fileBytes);
+            fileContent.Headers.ContentType =
+                new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+
+            form.Add(fileContent, "document", Path.GetFileName(filePath));
+
+            
+            form.Add(new StringContent(title ?? ""), "title");
+
+            if (tagId.HasValue)
+                form.Add(new StringContent(tagId.ToString()), "tags");
+
+            if (typeId.HasValue)
+                form.Add(new StringContent(typeId.ToString()), "document_type");
+
+            if (correspondentId.HasValue )
+                form.Add(new StringContent(correspondentId.ToString()), "correspondent");
+
+            var response = await _httpClient.PostAsync("documents/post_document/", form);
+
+            return response.IsSuccessStatusCode;
         }
     }
 }

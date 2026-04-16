@@ -136,6 +136,29 @@ namespace HCI_2025_Project_Template.ViewModels
             CurrentView = view;
         }
 
+        private string _uploadFileName;
+        public string UploadFileName
+        {
+            get => _uploadFileName;
+            set
+            {
+                _uploadFileName = value;
+                OnPropertyChanged(nameof(UploadFileName));
+            }
+        }
+
+
+
+        private UploadDocumentModel _upload = new UploadDocumentModel();
+        public UploadDocumentModel Upload
+        {
+            get => _upload;
+            set
+            {
+                _upload = value;
+                OnPropertyChanged();
+            }
+        }
         public DocumentsViewModel()
         {
             _apiService = new PaperlessApiService();
@@ -247,6 +270,20 @@ namespace HCI_2025_Project_Template.ViewModels
 
             CurrentPage = 1;
             await LoadDocumentsAsync();
+        }
+
+        public async Task UploadAsync()
+        {
+            var success = await _apiService.UploadDocumentAsync(
+                Upload.FilePath,
+                Upload.Title,
+                Upload.Tag?.Id,
+                Upload.Type?.Id,
+                Upload.Correspondent?.Id
+            );
+
+            if (success)
+                await LoadDocumentsAsync();
         }
 
 
