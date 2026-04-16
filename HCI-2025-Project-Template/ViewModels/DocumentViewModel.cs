@@ -60,7 +60,56 @@ namespace HCI_2025_Project_Template.ViewModels
                 }
             }
         }
+        public ObservableCollection<Tag> Tags { get; set; } = new();
+        public ObservableCollection<DocumentType> DocumentTypes { get; set; } = new();
+        public ObservableCollection<Correspondent> Correspondents { get; set; } = new();
 
+        private Tag _selectedTag;
+        public Tag SelectedTag
+        {
+            get => _selectedTag;
+            set
+            {
+                if (_selectedTag != value)
+                {
+                    _selectedTag = value;
+                    CurrentPage = 1;
+                    _ = LoadDocumentsAsync();
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private DocumentType _selectedType;
+        public DocumentType SelectedType
+        {
+            get => _selectedType;
+            set
+            {
+                if (_selectedType != value)
+                {
+                    _selectedType = value;
+                    CurrentPage = 1;
+                    _ = LoadDocumentsAsync();
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private Correspondent _selectedCorrespondent;
+        public Correspondent SelectedCorrespondent
+        {
+            get => _selectedCorrespondent;
+            set
+            {
+                if (_selectedCorrespondent != value)
+                {
+                    _selectedCorrespondent = value;
+                    CurrentPage = 1;
+                    _ = LoadDocumentsAsync();
+                    OnPropertyChanged();
+                }
+            }
+        }
         public DocumentsViewModel()
         {
             _apiService = new PaperlessApiService();
@@ -77,7 +126,26 @@ namespace HCI_2025_Project_Template.ViewModels
         {
             Documents.Clear();
 
-            var response = await _apiService.GetDocumentsAsync(CurrentPage,PageSize,SearchText);
+            int? tagId = (SelectedTag != null && SelectedTag.Id != 0)
+    ? SelectedTag.Id
+    : null;
+
+            int? typeId = (SelectedType != null && SelectedType.Id != 0)
+                ? SelectedType.Id
+                : null;
+
+            int? correspondentId = (SelectedCorrespondent != null && SelectedCorrespondent.Id != 0)
+                ? SelectedCorrespondent.Id
+                : null;
+
+            var response = await _apiService.GetDocumentsAsync(
+                CurrentPage,
+                PageSize,
+                SearchText,
+                tagId,
+                typeId,
+                correspondentId
+            );
 
             _next = response.next;
             _previous = response.previous;
@@ -134,6 +202,25 @@ namespace HCI_2025_Project_Template.ViewModels
                 await LoadDocumentsAsync();
             }
             OnPropertyChanged(nameof(PageInfo));
+        }
+
+        public async Task InitializeAsync()
+        {
+            Tags = new ObservableCollection<Tag>(await _apiService.GetTagsAsync());
+            Tags.Insert(0, new Tag { Id = 0, Name = "All tags" });
+            OnPropertyChanged(nameof(Tags));
+
+            DocumentTypes = new ObservableCollection<DocumentType>(await _apiService.GetDocumentTypesAsync());
+            DocumentTypes.Insert(0, new DocumentType { Id = 0, Name = "All types" });
+
+            OnPropertyChanged(nameof(DocumentTypes));
+
+            Correspondents = new ObservableCollection<Correspondent>(await _apiService.GetCorrespondentsAsync());
+            Correspondents.Insert(0, new Correspondent { Id = 0, Name = "All correspondents" });
+            OnPropertyChanged(nameof(Correspondents));
+
+            CurrentPage = 1;
+            await LoadDocumentsAsync();
         }
 
 

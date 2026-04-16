@@ -59,19 +59,51 @@ namespace HCI_2025_Project.Services
 
             return apiResponse?.results ?? new List<DocumentType>();
         }
+        public async Task<List<Correspondent>> GetCorrespondentsAsync()
+        {
+           
 
-        public async Task<ApiResponse<Document>> GetDocumentsAsync(int page, int pageSize, string search)
+            var response = await _httpClient.GetAsync("correspondents/");
+
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+
+
+            var apiResponse = JsonSerializer.Deserialize<ApiResponse<Correspondent>>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            return apiResponse?.results ?? new List<Correspondent>();
+        }
+
+        public async Task<ApiResponse<Document>> GetDocumentsAsync(
+    int page,
+    int pageSize,
+    string search,
+    int? tagId,
+    int? typeId,
+    int? correspondentId)
         {
             var url = $"documents/?page={page}&page_size={pageSize}";
 
             if (!string.IsNullOrWhiteSpace(search))
-            {
                 url += $"&query={search}";
-            }
+
+            if (tagId.HasValue)
+                url += $"&tags__id={tagId}";
+
+            if (typeId.HasValue)
+                url += $"&document_type__id={typeId}";
+
+            if (correspondentId.HasValue)
+                url += $"&correspondent__id={correspondentId}";
 
             var response = await _httpClient.GetAsync(url);
-            var json = await response.Content.ReadAsStringAsync();
+            response.EnsureSuccessStatusCode();
 
+            var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<ApiResponse<Document>>(json,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }

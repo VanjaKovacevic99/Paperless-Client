@@ -26,7 +26,7 @@ namespace HCI_2025_Project_Template
         {
             var vm = (DocumentsViewModel)DataContext;
 
-            await vm.LoadDocumentsAsync();
+            await vm.InitializeAsync();
         }
 
         private async void Next_Click(object sender, RoutedEventArgs e) { 
@@ -64,9 +64,14 @@ namespace HCI_2025_Project_Template
             }
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void ResetFilters_Click(object sender, RoutedEventArgs e)
         {
+            var vm = (DocumentsViewModel)DataContext;
 
+            vm.SelectedTag = vm.Tags[0];
+            vm.SelectedType = vm.DocumentTypes[0];
+            vm.SelectedCorrespondent = vm.Correspondents[0];
+            vm.SearchText = "";
         }
     }
 }
