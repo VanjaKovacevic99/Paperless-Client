@@ -59,5 +59,21 @@ namespace HCI_2025_Project.Services
 
             return apiResponse?.results ?? new List<DocumentType>();
         }
+
+        public async Task<ApiResponse<Document>> GetDocumentsAsync(int page, int pageSize, string search)
+        {
+            var url = $"documents/?page={page}&page_size={pageSize}";
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                url += $"&query={search}";
+            }
+
+            var response = await _httpClient.GetAsync(url);
+            var json = await response.Content.ReadAsStringAsync();
+
+            return JsonSerializer.Deserialize<ApiResponse<Document>>(json,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
     }
 }

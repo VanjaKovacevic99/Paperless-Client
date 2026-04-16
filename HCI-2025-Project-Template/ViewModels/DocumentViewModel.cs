@@ -28,10 +28,10 @@ namespace HCI_2025_Project_Template.ViewModels
                 {
                     _pageSize = value;
 
-                    CurrentPage = 1;              // reset na prvu stranicu
+                    CurrentPage = 1;             
                     OnPropertyChanged();
 
-                    _ = LoadDocumentsAsync();     // 🔥 reload
+                    _ = LoadDocumentsAsync();    
                 }
             }
         }
@@ -44,6 +44,22 @@ namespace HCI_2025_Project_Template.ViewModels
             $"{(CurrentPage - 1) * PageSize + 1} - {CurrentPage * PageSize}";
         public bool HasNextPage => _next != null;
         public bool HasPreviousPage => _previous != null;
+
+        private string _searchText;
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                if (_searchText != value)
+                {
+                    _searchText = value;
+                    CurrentPage = 1; 
+                    _ = LoadDocumentsAsync(); 
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public DocumentsViewModel()
         {
@@ -61,7 +77,7 @@ namespace HCI_2025_Project_Template.ViewModels
         {
             Documents.Clear();
 
-            var response = await _apiService.GetDocumentsAsync(CurrentPage,PageSize);
+            var response = await _apiService.GetDocumentsAsync(CurrentPage,PageSize,SearchText);
 
             _next = response.next;
             _previous = response.previous;

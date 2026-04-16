@@ -21,11 +21,42 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+       
         <!-- HEADER -->
-        <TextBlock Text="📄 Paperless-NGX Desktop Client"
-                   FontSize="22"
-                   FontWeight="Bold"
-                   Margin="0,0,0,10"/>
+        <StackPanel Grid.Row="0" Margin="0,0,0,10">
+
+            <!-- TITLE -->
+            <TextBlock Text="📄 Paperless-NGX Desktop Client"
+               FontSize="22"
+               FontWeight="Bold"
+               Margin="0,0,0,10"/>
+
+            <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    
+                </Grid.ColumnDefinitions>
+
+                <!-- SEARCH -->
+                <TextBox 
+             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+             VerticalAlignment="Center"
+             VerticalContentAlignment="Center"
+             materialDesign:HintAssist.Hint="Search documents..."
+             Margin="5,0,0,0"
+             Padding="30,0,0,0"
+             Height="35"    
+             Style="{StaticResource MaterialDesignOutlinedTextBox}" TextChanged="TextBox_TextChanged"/>
+            
+            <materialDesign:PackIcon Kind="Magnify"
+                                    
+                             Width="20"
+                             Height="20"
+                             VerticalAlignment="Center"
+                             Margin="10,0,0,0"
+                             HorizontalAlignment="Left"/>
+            </Grid>
+        </StackPanel>
 
         <!-- MAIN CONTENT -->
         <TabControl Grid.Row="1"

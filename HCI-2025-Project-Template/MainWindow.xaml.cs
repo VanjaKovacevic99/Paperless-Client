@@ -64,7 +64,9 @@ namespace HCI_2025_Project_Template
             }
         }
 
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
 
-
+        }
     }
 }
