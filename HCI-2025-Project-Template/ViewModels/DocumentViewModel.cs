@@ -8,6 +8,8 @@ using System.Runtime;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
 
 namespace HCI_2025_Project_Template.ViewModels
 {
@@ -29,15 +31,15 @@ namespace HCI_2025_Project_Template.ViewModels
                 {
                     _pageSize = value;
 
-                    CurrentPage = 1;             
+                    CurrentPage = 1;
                     OnPropertyChanged();
 
-                    _ = LoadDocumentsAsync();    
+                    _ = LoadDocumentsAsync();
                 }
             }
         }
 
- 
+
 
         public int CurrentPage { get; set; } = 1;
 
@@ -55,13 +57,14 @@ namespace HCI_2025_Project_Template.ViewModels
                 if (_searchText != value)
                 {
                     _searchText = value;
-                    CurrentPage = 1; 
-                    _ = LoadDocumentsAsync(); 
+                    CurrentPage = 1;
+                    _ = LoadDocumentsAsync();
                     OnPropertyChanged();
                 }
             }
         }
         public ObservableCollection<Tag> Tags { get; set; } = new();
+        public ObservableCollection<Tag> Tags1 { get; set; } = new();
         public ObservableCollection<DocumentType> DocumentTypes { get; set; } = new();
         public ObservableCollection<Correspondent> Correspondents { get; set; } = new();
 
@@ -167,7 +170,7 @@ namespace HCI_2025_Project_Template.ViewModels
 
         public ObservableCollection<Document> Documents { get; }
 
-        public event PropertyChangedEventHandler ? PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string name = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
@@ -269,9 +272,18 @@ namespace HCI_2025_Project_Template.ViewModels
             OnPropertyChanged(nameof(Correspondents));
 
             CurrentPage = 1;
+            await LoadTagsAsync();
             await LoadDocumentsAsync();
         }
 
+        public async Task LoadTagsAsync()
+        {
+            var tags = await _apiService.GetTagsAsync();
+
+            Tags1 = new ObservableCollection<Tag>(tags);
+
+            OnPropertyChanged(nameof(Tags1));
+        }
         public async Task UploadAsync()
         {
             var success = await _apiService.UploadDocumentAsync(
@@ -287,5 +299,117 @@ namespace HCI_2025_Project_Template.ViewModels
         }
 
 
+        public async Task DeleteTagAsync(int id)
+        {
+
+
+            var success = await _apiService.DeleteTagAsync(id);
+
+            if (success)
+                await LoadTagsAsync();
+        }
+
+        private string _newTagName;
+        public string NewTagName
+        {
+            get => _newTagName;
+            set { _newTagName = value; OnPropertyChanged(); }
+        }
+
+        private Color _newTagColor = Colors.LightGray;
+
+        public Color NewTagColor
+        {
+            get => _newTagColor;
+            set
+            {
+                _newTagColor = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(NewTagColorHex));
+            }
+        }
+        public string NewTagColorHex =>
+    $"#{NewTagColor.R:X2}{NewTagColor.G:X2}{NewTagColor.B:X2}";
+        public async Task CreateTagAsync()
+        {
+            if (string.IsNullOrWhiteSpace(NewTagName))
+            {
+                MessageBox.Show("Unesite naziv taga.");
+                return;
+            }
+
+
+            MessageBox.Show("aa" + NewTagColorHex);
+            
+            
+
+            bool success = await _apiService.CreateTagAsync(NewTagName, NewTagColorHex);
+            if (success)
+            {
+                await LoadTagsAsync();
+                NewTagName = "";
+                NewTagColor = Colors.LightGray;
+            }
+            else
+            {
+                MessageBox.Show("Greška pri kreiranju taga.");
+            }
+        }
+
+
+
+        private bool _hasSelectedTag;
+        public bool HasSelectedTag
+        {
+            get => _hasSelectedTag;
+            set
+            {
+                _hasSelectedTag = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private Tag _crudTag;
+        public Tag CrudTag
+        {
+            get => _crudTag;
+            set
+            {
+                _crudTag = value;
+                OnPropertyChanged();
+                HasSelectedTag = _crudTag != null;
+            }
+        }
+        private string NormalizeColor(string color)
+        {
+            Color c = (Color)ColorConverter.ConvertFromString(color);
+            return $"#{c.R:X2}{c.G:X2}{c.B:X2}";
+        }
+
+        public async Task UpdateTagAsync()
+        {
+            if (CrudTag == null)
+                return;
+
+            string hexColor = NormalizeColor( CrudTag.Color);
+
+        
+            MessageBox.Show(hexColor);
+          
+            var success = await _apiService.UpdateTagAsync(
+                CrudTag.Id,
+                CrudTag.Name,
+                hexColor
+            );
+
+            MessageBox.Show(success ? "UPDATED OK" : "UPDATE FAILED");
+
+            if (success)
+            {
+                await LoadTagsAsync();
+                CrudTag = null;
+                HasSelectedTag = false;
+            }
+        }
     }
 }

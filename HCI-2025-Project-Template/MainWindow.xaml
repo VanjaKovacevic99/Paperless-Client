@@ -6,12 +6,16 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:HCI_2025_Project_Template"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:conv="clr-namespace:HCI_2025_Project_Template.Converters"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         Title="Paperless Client"
         Height="600"
         Width="900"
         Background="{DynamicResource MaterialDesignPaper}">
+    <Window.Resources>
+        <conv:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
+    </Window.Resources>
 
     <Grid Margin="10">
 
@@ -321,8 +325,165 @@
             </StackPanel>
             </Border>
         </Grid>
-        <Grid Grid.Column="1"  Visibility="{Binding IsTags, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <TextBlock>Ovo je tag</TextBlock>
+        <Grid Grid.Column="1"  Visibility="{Binding IsTags, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="40">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+
+            <!-- Naslov -->
+            <TextBlock Grid.Row="0" Text="🏷 Tags" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
+
+            <!-- Dodavanje novog taga -->
+            <Grid Grid.Row="1" Margin="0,0,0,20">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- NAME -->
+                <TextBox Grid.Column="0"
+             MinWidth="120"
+             Text="{Binding NewTagName, UpdateSourceTrigger=PropertyChanged}"
+             materialDesign:HintAssist.Hint="Enter new tag"
+             Margin="0,0,10,0"/>
+
+                <!-- COLOR -->
+                <materialDesign:ColorPicker Grid.Column="1"
+                              
+                                 Color="{Binding NewTagColor, Mode=TwoWay}"
+                                 
+                                 Margin="0,0,10,0"/>
+
+
+                <TextBlock Text="{Binding NewTagColorHex}"
+               Margin="10,0,0,0"
+               VerticalAlignment="Center"/>
+                <!-- BUTTON -->
+                <Button Grid.Column="2"
+            Content="Add"
+            Width="120"
+            Click="AddTag_Click"
+            Style="{StaticResource MaterialDesignRaisedButton}"/>
+
+            </Grid>
+
+
+            <Grid Grid.Row="2">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- ================= LEFT: DATA GRID ================= -->
+                <DataGrid Grid.Column="0"
+              ItemsSource="{Binding Tags1}"
+              SelectedItem="{Binding CrudTag}"
+              AutoGenerateColumns="False"
+              HeadersVisibility="Column"
+              BorderThickness="1"
+              BorderBrush="#DDD"
+              IsReadOnly="True"
+              CanUserAddRows="False"
+              CanUserDeleteRows="False"
+              ScrollViewer.VerticalScrollBarVisibility="Auto">
+
+                    <DataGrid.Columns>
+
+                        <!-- Color -->
+                        <DataGridTemplateColumn Header="Color" Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5">
+                                        <Ellipse Width="16" Height="16"
+                                     Fill="{Binding Color, Converter={StaticResource ColorToBrushConverter}}"
+                                     Margin="0,0,8,0"/>
+                                        <TextBlock Text="{Binding Color}"
+                                       FontFamily="Consolas"
+                                       FontSize="11"
+                                       Foreground="Gray"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- Name -->
+                        <DataGridTextColumn Header="Tag Name"
+                                 Binding="{Binding Name}"
+                                 Width="*"/>
+
+                        <!-- Edit (opciono, možeš i bez ovog) -->
+                        <DataGridTemplateColumn Header="Edit" Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Edit"
+                                            Click="EditTag_Click"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Margin="5,0"
+                   />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- Delete -->
+                        <DataGridTemplateColumn Header="Delete" Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Delete"
+                                Click="DeleteTag_Click"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Margin="5,0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <!-- ================= RIGHT: EDIT PANEL ================= -->
+                <!-- ================= RIGHT: EDIT PANEL ================= -->
+                <StackPanel Grid.Column="1"
+            Margin="20"
+            IsEnabled="{Binding HasSelectedTag}">
+
+                    <!-- EMPTY STATE TEXT -->
+                    <TextBlock Text="Select a tag to edit"
+               HorizontalAlignment="Center"
+               Opacity="0.5"
+               Margin="0,20,0,20"
+               Visibility="{Binding HasSelectedTag, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=True}">
+                    </TextBlock>
+
+                    <!-- EDIT TITLE -->
+                    <TextBlock Text="Edit Tag"
+               FontSize="18"
+               FontWeight="Bold"
+               Margin="0,0,0,10"/>
+
+                    <!-- NAME -->
+                    <TextBox Text="{Binding CrudTag.Name, UpdateSourceTrigger=PropertyChanged}"
+             materialDesign:HintAssist.Hint="Tag name"
+             Margin="0,0,0,10"/>
+
+                    <!-- COLOR -->
+                    <materialDesign:ColorPicker
+        Color="{Binding CrudTag.Color, Mode=TwoWay}"
+        Margin="0,0,0,10"/>
+
+                    <!-- UPDATE BUTTON -->
+                    <Button Content="Update"
+            Click="UpdateTag_Click"
+            Style="{StaticResource MaterialDesignRaisedButton}"/>
+
+                </StackPanel>
+
+            </Grid>
         </Grid>
         <Grid Grid.Column="1"  Visibility="{Binding IsSettings, Converter={StaticResource BooleanToVisibilityConverter}}">
             <TextBlock>Ovo je settings</TextBlock>

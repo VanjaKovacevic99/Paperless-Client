@@ -1,7 +1,7 @@
-﻿using HCI_2025_Project.Services;
-using HCI_2025_Project_Template.ViewModels;
+﻿using HCI_2025_Project_Template.ViewModels;
 using HCI_2025_Project_Template.Views;
 using HCI_2025_Project_Template.Models;
+
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -167,6 +167,49 @@ namespace HCI_2025_Project_Template
             await vm.UploadAsync();
             MessageBox.Show("Upload successful!");
 
+        }
+
+        private async void AddTag_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = (DocumentsViewModel)DataContext;
+            await vm.CreateTagAsync();
+        }
+
+     
+        
+
+        private async void DeleteTag_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var tag = button?.DataContext as Tag;  // direktno uzmi tag iz dugmeta
+      
+            if (tag == null) return;
+
+            var vm = (DocumentsViewModel)DataContext;
+            await vm.DeleteTagAsync(tag.Id);  // proslijedi ID
+        }
+
+        private async void EditTag_Click(object sender, RoutedEventArgs args) {
+            var button = sender as Button;
+            var tag = button?.DataContext as Tag;
+
+            if (tag == null) return;
+
+            var vm = (DocumentsViewModel)DataContext;
+
+            vm.CrudTag = new Tag
+            {
+                Id = tag.Id,
+                Name = tag.Name,
+                Color = tag.Color
+            };
+
+            vm.HasSelectedTag = true;
+        }
+        private async void UpdateTag_Click(object sender, RoutedEventArgs args) {
+            var vm = (DocumentsViewModel)DataContext;
+
+            await vm.UpdateTagAsync();
         }
     }
 }

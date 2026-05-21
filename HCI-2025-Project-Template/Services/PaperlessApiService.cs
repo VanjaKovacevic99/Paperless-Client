@@ -2,6 +2,8 @@
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using System.Windows;
 
@@ -79,13 +81,7 @@ namespace HCI_2025_Project.Services
             return apiResponse?.results ?? new List<Correspondent>();
         }
 
-        public async Task<ApiResponse<Document>> GetDocumentsAsync(
-    int page,
-    int pageSize,
-    string search,
-    int? tagId,
-    int? typeId,
-    int? correspondentId)
+        public async Task<ApiResponse<Document>> GetDocumentsAsync( int page, int pageSize, string search, int? tagId, int? typeId, int? correspondentId)
         {
             var url = $"documents/?page={page}&page_size={pageSize}";
 
@@ -147,6 +143,68 @@ namespace HCI_2025_Project.Services
             var response = await _httpClient.PostAsync("documents/post_document/", form);
 
             return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> CreateTagAsync(string name, string color)
+        {
+            try
+            {
+                var payload = new { name, color };
+                var json = JsonSerializer.Serialize(payload);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PostAsync("tags/", content);
+                return response.IsSuccessStatusCode;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteTagAsync(int id)
+        {
+            try
+            {
+                var response = await _httpClient.DeleteAsync($"tags/{id}/");
+                return response.IsSuccessStatusCode;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateTagAsync(int id, string newName, string color)
+        {
+            try
+            {
+                var payload = new
+                {
+                    name = newName,
+                    color = color
+                };
+                MessageBox.Show(color);
+                var json = JsonSerializer.Serialize(payload);
+
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PutAsync($"tags/{id}/", content);
+
+                var responseBody = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show($"ERROR: {response.StatusCode}\n{responseBody}");
+                }
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return false;
+            }
         }
     }
 }
