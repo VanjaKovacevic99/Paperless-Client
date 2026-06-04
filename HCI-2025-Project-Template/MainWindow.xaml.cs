@@ -211,5 +211,13 @@ namespace HCI_2025_Project_Template
 
             await vm.UpdateTagAsync();
         }
+
+        private async void SaveSettings_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = (DocumentsViewModel)DataContext;
+            MessageBox.Show("klik");
+            vm.ApplyTheme(); // primijeni odmah
+            vm.SaveSettings(); // snimi u JSON
+        }
     }
 }

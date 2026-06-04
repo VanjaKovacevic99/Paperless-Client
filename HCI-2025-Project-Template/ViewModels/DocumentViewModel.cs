@@ -1,5 +1,7 @@
 ﻿using HCI_2025_Project.Services;
 using HCI_2025_Project_Template.Models;
+using HCI_2025_Project_Template.Services;
+using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,10 +13,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
+
 namespace HCI_2025_Project_Template.ViewModels
 {
     public class DocumentsViewModel : INotifyPropertyChanged
     {
+        private readonly SettingsService _settingsService = new SettingsService();
         private readonly PaperlessApiService _apiService;
         private string? _next;
         private string? _previous;
@@ -258,6 +262,8 @@ namespace HCI_2025_Project_Template.ViewModels
 
         public async Task InitializeAsync()
         {
+            Settings = _settingsService.Load();
+            ApplyTheme();
             Tags = new ObservableCollection<Tag>(await _apiService.GetTagsAsync());
             Tags.Insert(0, new Tag { Id = 0, Name = "All tags" });
             OnPropertyChanged(nameof(Tags));
@@ -340,8 +346,8 @@ namespace HCI_2025_Project_Template.ViewModels
 
 
             MessageBox.Show("aa" + NewTagColorHex);
-            
-            
+
+
 
             bool success = await _apiService.CreateTagAsync(NewTagName, NewTagColorHex);
             if (success)
@@ -391,11 +397,11 @@ namespace HCI_2025_Project_Template.ViewModels
             if (CrudTag == null)
                 return;
 
-            string hexColor = NormalizeColor( CrudTag.Color);
+            string hexColor = NormalizeColor(CrudTag.Color);
 
-        
+
             MessageBox.Show(hexColor);
-          
+
             var success = await _apiService.UpdateTagAsync(
                 CrudTag.Id,
                 CrudTag.Name,
@@ -411,5 +417,55 @@ namespace HCI_2025_Project_Template.ViewModels
                 HasSelectedTag = false;
             }
         }
-    }
+        private AppSettings _settings;
+
+        public AppSettings Settings
+        {
+            get => _settings;
+            set
+            {
+                _settings = value;
+                OnPropertyChanged();
+            }
+        }
+        public void ApplyTheme()
+        {
+            var paletteHelper = new PaletteHelper();
+            var theme = paletteHelper.GetTheme();
+
+            if (Settings.Theme == "Dark")
+                theme.SetBaseTheme(BaseTheme.Dark);
+            else
+                theme.SetBaseTheme(BaseTheme.Light);
+
+            if (!string.IsNullOrWhiteSpace(Settings.PrimaryColor))
+            {
+                var color = (Color)ColorConverter.ConvertFromString(Settings.PrimaryColor);
+                theme.SetPrimaryColor(color);
+            }
+
+            paletteHelper.SetTheme(theme);
+        }
+
+        public void SaveSettings()
+        {
+            _settingsService.Save(Settings);
+        }
+
+    
+
+    private Color _selectedColor;
+
+        public Color SelectedColor
+        {
+            get => _selectedColor;
+            set
+            {
+                _selectedColor = value;
+                OnPropertyChanged();
+
+                Settings.PrimaryColor = value.ToString();
+            }
+        }
+    } 
 }
