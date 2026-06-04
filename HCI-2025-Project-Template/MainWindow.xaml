@@ -35,35 +35,53 @@
 
             <StackPanel>
 
-                <TextBlock Text="MENU"
+                <TextBlock Text="{DynamicResource Menu}"
                            FontSize="16"
                            FontWeight="Bold"
                            Margin="10"
                            Foreground="#333"/>
 
-                <Button Content="📄 Documents"
-                        HorizontalAlignment="Left"
+                <Button HorizontalAlignment="Left"
         Click="Documents_Click"
         Style="{StaticResource MaterialDesignFlatButton}"
-        Margin="5"/>
+        Margin="5">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="📄"/>
+                        <TextBlock Text="{DynamicResource Documents}"/>
+                    </StackPanel>
+                </Button>
 
-                <Button Content="⬆ Upload"
+                <Button 
                         HorizontalAlignment="Left"
         Click="Upload_Click"
         Style="{StaticResource MaterialDesignFlatButton}"
-        Margin="5"/>
+        Margin="5">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="⬆"/>
+                        <TextBlock Text="{DynamicResource Upload}"/>
+                    </StackPanel>
+                </Button>
 
-                <Button Content="🏷 Tags"
-                        HorizontalAlignment="Left"
+                <Button HorizontalAlignment="Left"
         Click="Tags_Click"
         Style="{StaticResource MaterialDesignFlatButton}"
-        Margin="5"/>
+        Margin="5">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="🏷"/>
+                        <TextBlock Text="{DynamicResource Tags}"/>
+                    </StackPanel>
+                </Button>
 
-                <Button Content="⚙ Settings"
+                <Button 
                         HorizontalAlignment="Left"
         Click="Settings_Click"
         Style="{StaticResource MaterialDesignFlatButton}"
-        Margin="5"/>
+        Margin="5">
+                <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="⚙"/>
+                        <TextBlock Text="{DynamicResource Settings}"/>
+                </StackPanel>
+                </Button>
 
             </StackPanel>
 
@@ -83,11 +101,7 @@
             <!-- HEADER -->
             <StackPanel Grid.Row="0" Margin="0,0,0,10">
 
-                <!-- TITLE -->
-                <TextBlock Text="📄 Paperless-NGX Desktop Client"
-               FontSize="22"
-               FontWeight="Bold"
-               Margin="0,0,0,10"/>
+                <TextBlock Grid.Row="0" Text="{DynamicResource Documents}" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
 
                 <!-- SEARCH WRAPPER -->
                 <Grid Margin="0,0,0,10">
@@ -95,7 +109,7 @@
                     <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                  VerticalAlignment="Center"
                  VerticalContentAlignment="Center"
-                 materialDesign:HintAssist.Hint="Search documents..."
+                 materialDesign:HintAssist.Hint="{DynamicResource Search}"
                  Height="35"
                  Padding="30,0,0,0"
                  Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
@@ -116,23 +130,23 @@
                   ItemsSource="{Binding Tags}"
                   DisplayMemberPath="Name"
                   SelectedItem="{Binding SelectedTag}"
-                  materialDesign:HintAssist.Hint="Tag"/>
+                  materialDesign:HintAssist.Hint="{DynamicResource Tag}"/>
 
                     <ComboBox Width="180"
                   Margin="10,0,0,0"
                   ItemsSource="{Binding DocumentTypes}"
                   DisplayMemberPath="Name"
                   SelectedItem="{Binding SelectedType}"
-                  materialDesign:HintAssist.Hint="Type"/>
+                  materialDesign:HintAssist.Hint="{DynamicResource Type}"/>
 
                     <ComboBox Width="180"
                   Margin="10,0,0,0"
                   ItemsSource="{Binding Correspondents}"
                   DisplayMemberPath="Name"
                   SelectedItem="{Binding SelectedCorrespondent}"
-                  materialDesign:HintAssist.Hint="Correspondent"/>
+                  materialDesign:HintAssist.Hint="{DynamicResource Correspondent}"/>
 
-                    <Button Content="Reset"
+                    <Button Content="{DynamicResource Reset}"
                 Margin="10,0,0,0"
                 Style="{StaticResource MaterialDesignOutlinedButton}"
                 Click="ResetFilters_Click"/>
@@ -147,26 +161,42 @@
                         >
 
                 <!-- TABLE -->
-                <TabItem Header="Table">
+                <TabItem Header="{DynamicResource Table}">
 
                     <DataGrid ItemsSource="{Binding Documents}"
                               AutoGenerateColumns="False"
                               IsReadOnly="True"
                               MouseDoubleClick="DocumentsGrid_MouseDoubleClick">
-
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Title"
-                                                Binding="{Binding Title}"
-                                                Width="*"/>
-                            <DataGridTextColumn Header="Created"
-                                                Binding="{Binding CreatedDisplay}"
-                                                Width="200"/>
-                            <DataGridTextColumn Header="Tags"
-                                                Binding="{Binding TagNamesDisplay}"
-                                                Width="200"/>
-                            <DataGridTextColumn Header="Type"
-                                                Binding="{Binding DocumentTypeName}"
-                                                Width="150"/>
+
+                            <DataGridTextColumn Binding="{Binding Title}"
+                        Width="*">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource Title}" />
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Binding="{Binding CreatedDisplay}"
+                        Width="200">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource Created}" />
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Binding="{Binding TagNamesDisplay}"
+                        Width="200">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource Tags}" />
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Binding="{Binding DocumentTypeName}"
+                        Width="150">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource Type}" />
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+
                         </DataGrid.Columns>
 
                     </DataGrid>
@@ -174,7 +204,7 @@
                 </TabItem>
 
                 <!-- CARDS -->
-                <TabItem Header="Cards">
+                <TabItem Header="{DynamicResource Cards}">
 
                     <ScrollViewer>
 
@@ -232,21 +262,27 @@
                         Orientation="Horizontal"
                         HorizontalAlignment="Center"
                         Margin="10">
-
-                <Button Content="◀ Prev"
-                        Click="Prev_Click"
-                        IsEnabled="{Binding HasPreviousPage}"
-                        Margin="5"/>
+                <Button Click="Prev_Click"
+        IsEnabled="{Binding HasPreviousPage}"
+        Margin="5">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="◀" Margin="0,0,5,0"/>
+                        <TextBlock Text="{DynamicResource Previous}"/>
+                    </StackPanel>
+                </Button>
 
                 <TextBlock Text="{Binding PageInfo}"
-                           Margin="10"
-                           VerticalAlignment="Center"/>
+           Margin="10"
+           VerticalAlignment="Center"/>
 
-                <Button Content="Next ▶"
-                        Click="Next_Click"
-                        IsEnabled="{Binding HasNextPage}"
-                        Margin="5"/>
-
+                <Button Click="Next_Click"
+        IsEnabled="{Binding HasNextPage}"
+        Margin="5">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{DynamicResource Next}"/>
+                        <TextBlock Text="▶" Margin="5,0,0,0"/>
+                    </StackPanel>
+                </Button>
             </StackPanel>
 
         </Grid>
@@ -254,39 +290,39 @@
             <Border Padding="60,40,60,40">
                 <StackPanel HorizontalAlignment="Stretch" >
 
-                <TextBlock Text="Upload document"
-                   FontSize="22"
+                    <TextBlock Text="{DynamicResource UploadDocument}"
+                   FontSize="20"
                    FontWeight="Bold"
-                   Margin="0,0,0,20"/>
+                   Margin="0,0,0,10"/>
 
-                <!-- TITLE -->
-                <TextBox Text="{Binding Upload.Title, UpdateSourceTrigger=PropertyChanged}"
-                 materialDesign:HintAssist.Hint="Title"
+                    <!-- TITLE -->
+                    <TextBox Text="{Binding Upload.Title, UpdateSourceTrigger=PropertyChanged}"
+                 materialDesign:HintAssist.Hint="{DynamicResource Title}"
                  Margin="0,0,0,10"/>
 
-                <!-- TAG -->
-                <ComboBox ItemsSource="{Binding Tags}"
+                    <!-- TAG -->
+                    <ComboBox ItemsSource="{Binding Tags}"
                   DisplayMemberPath="Name"
                   SelectedItem="{Binding Upload.Tag}"
-                  materialDesign:HintAssist.Hint="Tag"
+                  materialDesign:HintAssist.Hint="{DynamicResource Tag}"
                   Margin="0,0,0,10"/>
 
-                <!-- TYPE -->
-                <ComboBox ItemsSource="{Binding DocumentTypes}"
+                    <!-- TYPE -->
+                    <ComboBox ItemsSource="{Binding DocumentTypes}"
                   DisplayMemberPath="Name"
                   SelectedItem="{Binding Upload.Type}"
-                  materialDesign:HintAssist.Hint="Type"
+                  materialDesign:HintAssist.Hint="{DynamicResource Type}"
                   Margin="0,0,0,10"/>
 
-                <!-- CORRESPONDENT -->
-                <ComboBox ItemsSource="{Binding Correspondents}"
+                    <!-- CORRESPONDENT -->
+                    <ComboBox ItemsSource="{Binding Correspondents}"
                   DisplayMemberPath="Name"
                   SelectedItem="{Binding Upload.Correspondent}"
-                  materialDesign:HintAssist.Hint="Correspondent"
+                  materialDesign:HintAssist.Hint="{DynamicResource Correspondent}"
                   Margin="0,0,0,20"/>
 
-                <!-- FILE SECTION (LAST) -->
-                <Border BorderBrush="#DDD"
+                    <!-- FILE SECTION (LAST) -->
+                    <Border BorderBrush="#DDD"
                 BorderThickness="1"
                 Padding="15"
                 CornerRadius="8"
@@ -294,35 +330,35 @@
                 AllowDrop="True"
                 Drop="File_Drop">
 
-                    <StackPanel HorizontalAlignment="Center">
+                        <StackPanel HorizontalAlignment="Center">
 
-                        <TextBlock Text="Drag &amp; drop file "
+                            <TextBlock Text="Drag &amp; drop file "
                            HorizontalAlignment="Center"
                            Opacity="0.7"
                            Margin="0,0,0,10"/>
 
-                        <TextBlock Text="{Binding UploadFileName}"
+                            <TextBlock Text="{Binding UploadFileName}"
                            HorizontalAlignment="Center"
                            FontWeight="Bold"
                            Margin="0,0,0,10"/>
 
-                        <Button Content="Choose file"
+                            <Button Content="{DynamicResource ChooseFile}"
                         Width="150"
                         Click="ChooseFile_Click"
                         Style="{StaticResource MaterialDesignOutlinedButton}"/>
 
-                    </StackPanel>
+                        </StackPanel>
 
-                </Border>
+                    </Border>
 
-                <!-- UPLOAD BUTTON -->
-                <Button Content="Upload"
+                    <!-- UPLOAD BUTTON -->
+                    <Button Content="{DynamicResource Create}"
                 Margin="0,20,0,0"
                 Height="40"
                 Style="{StaticResource MaterialDesignRaisedButton}"
                 Click="UploadFile_Click"/>
 
-            </StackPanel>
+                </StackPanel>
             </Border>
         </Grid>
         <Grid Grid.Column="1"  Visibility="{Binding IsTags, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="40">
@@ -332,10 +368,10 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            
+
 
             <!-- Naslov -->
-            <TextBlock Grid.Row="0" Text="🏷 Tags" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
+            <TextBlock Grid.Row="0" Text="{DynamicResource Tags}" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
 
             <!-- Dodavanje novog taga -->
             <Grid Grid.Row="1" Margin="0,0,0,20">
@@ -350,7 +386,7 @@
                 <TextBox Grid.Column="0"
              MinWidth="120"
              Text="{Binding NewTagName, UpdateSourceTrigger=PropertyChanged}"
-             materialDesign:HintAssist.Hint="Enter new tag"
+             materialDesign:HintAssist.Hint="{DynamicResource EnterNewTag}"
              Margin="0,0,10,0"/>
 
                 <!-- COLOR -->
@@ -366,7 +402,7 @@
                VerticalAlignment="Center"/>
                 <!-- BUTTON -->
                 <Button Grid.Column="2"
-            Content="Add"
+            Content="{DynamicResource Add}"
             Width="120"
             Click="AddTag_Click"
             Style="{StaticResource MaterialDesignRaisedButton}"/>
@@ -393,52 +429,57 @@
               CanUserAddRows="False"
               CanUserDeleteRows="False"
               ScrollViewer.VerticalScrollBarVisibility="Auto">
-
                     <DataGrid.Columns>
 
                         <!-- Color -->
-                        <DataGridTemplateColumn Header="Color" Width="Auto">
+                        <DataGridTemplateColumn Width="Auto">
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock Text="{DynamicResource Color}" />
+                            </DataGridTemplateColumn.Header>
+
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5">
                                         <Ellipse Width="16" Height="16"
-                                     Fill="{Binding Color, Converter={StaticResource ColorToBrushConverter}}"
-                                     Margin="0,0,8,0"/>
+                             Fill="{Binding Color, Converter={StaticResource ColorToBrushConverter}}"
+                             Margin="0,0,8,0"/>
                                         <TextBlock Text="{Binding Color}"
-                                       FontFamily="Consolas"
-                                       FontSize="11"
-                                       Foreground="Gray"/>
+                               FontFamily="Consolas"
+                               FontSize="11"
+                               Foreground="Gray"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
                         <!-- Name -->
-                        <DataGridTextColumn Header="Tag Name"
-                                 Binding="{Binding Name}"
-                                 Width="*"/>
+                        <DataGridTextColumn Binding="{Binding Name}"
+                         Width="*">
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="{DynamicResource Name}" />
+                            </DataGridTextColumn.Header>
+                        </DataGridTextColumn>
 
-                        <!-- Edit (opciono, možeš i bez ovog) -->
-                        <DataGridTemplateColumn Header="Edit" Width="Auto">
+                        <!-- Edit -->
+                        <DataGridTemplateColumn Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Content="Edit"
-                                            Click="EditTag_Click"
-                    Style="{StaticResource MaterialDesignOutlinedButton}"
-                    Margin="5,0"
-                   />
+                                    <Button Content="{DynamicResource Edit}"
+                        Click="EditTag_Click"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Margin="5,0"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
                         <!-- Delete -->
-                        <DataGridTemplateColumn Header="Delete" Width="Auto">
+                        <DataGridTemplateColumn  Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Content="Delete"
-                                Click="DeleteTag_Click"
-                                Style="{StaticResource MaterialDesignOutlinedButton}"
-                                Margin="5,0"/>
+                                    <Button Content="{DynamicResource Delete}"
+                        Click="DeleteTag_Click"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Margin="5,0"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -453,7 +494,7 @@
             IsEnabled="{Binding HasSelectedTag}">
 
                     <!-- EMPTY STATE TEXT -->
-                    <TextBlock Text="Select a tag to edit"
+                    <TextBlock Text="{DynamicResource SelectTag}"
                HorizontalAlignment="Center"
                Opacity="0.5"
                Margin="0,20,0,20"
@@ -461,14 +502,14 @@
                     </TextBlock>
 
                     <!-- EDIT TITLE -->
-                    <TextBlock Text="Edit Tag"
+                    <TextBlock Text="{DynamicResource EditTag}"
                FontSize="18"
                FontWeight="Bold"
                Margin="0,0,0,10"/>
 
                     <!-- NAME -->
                     <TextBox Text="{Binding CrudTag.Name, UpdateSourceTrigger=PropertyChanged}"
-             materialDesign:HintAssist.Hint="Tag name"
+             materialDesign:HintAssist.Hint="{DynamicResource TagName}"
              Margin="0,0,0,10"/>
 
                     <!-- COLOR -->
@@ -477,9 +518,11 @@
         Margin="0,0,0,10"/>
 
                     <!-- UPDATE BUTTON -->
-                    <Button Content="Update"
+                    <Button Content="{DynamicResource Update}"
             Click="UpdateTag_Click"
-            Style="{StaticResource MaterialDesignRaisedButton}"/>
+            Style="{StaticResource MaterialDesignRaisedButton}">
+                    
+                    </Button>
 
                 </StackPanel>
 
@@ -490,13 +533,13 @@
 
             <StackPanel Margin="100">
 
-                <TextBlock Text="Settings"
+                <TextBlock Text="{DynamicResource Settings}"
                FontSize="22"
                FontWeight="Bold"
                Margin="0,0,0,20"/>
 
                 <!-- THEME -->
-                <TextBlock Text="Theme"
+                <TextBlock Text="{DynamicResource Theme}"
                Margin="0,10,0,5"/>
                 <ComboBox SelectedValue="{Binding Settings.Theme, Mode=TwoWay}"
           SelectedValuePath="Content">
@@ -505,23 +548,25 @@
                 </ComboBox>
 
                 <!-- LANGUAGE -->
-                <TextBlock Text="Language"
-               Margin="0,15,0,5"/>
-                <ComboBox SelectedItem="{Binding Settings.Language, Mode=TwoWay}"  SelectedValuePath="Content">
-                    <ComboBoxItem Content="English"/>
-                    <ComboBoxItem Content="Serbian"/>
+                <TextBlock Text="{DynamicResource Language}"
+            Margin="0,15,0,5"/>
+
+                <ComboBox SelectedValue="{Binding Settings.Language, Mode=TwoWay}"
+                    SelectedValuePath="Content">
+                    <ComboBoxItem Content="en"/>
+                    <ComboBoxItem Content="sr"/>
                 </ComboBox>
 
                 <!-- COLOR -->
-                <TextBlock Text="Accent color"
+                <TextBlock Text="{DynamicResource AccentColor}"
                Margin="0,15,0,5"/>
 
                 <materialDesign:ColorPicker
-    Color="{Binding SelectedColor, Mode=TwoWay}"
-    Height="100"/>
+             Color="{Binding SelectedColor, Mode=TwoWay}"
+            Height="100"/>
 
                 <Button Style="{StaticResource MaterialDesignRaisedButton}"
-                         Click="SaveSettings_Click"> Save</Button>
+                         Click="SaveSettings_Click" Content="{DynamicResource Save}"/>
 
             </StackPanel>
         </Grid>

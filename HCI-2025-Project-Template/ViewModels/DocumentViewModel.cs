@@ -264,6 +264,7 @@ namespace HCI_2025_Project_Template.ViewModels
         {
             Settings = _settingsService.Load();
             ApplyTheme();
+            SetLanguage(Settings.Language);
             Tags = new ObservableCollection<Tag>(await _apiService.GetTagsAsync());
             Tags.Insert(0, new Tag { Id = 0, Name = "All tags" });
             OnPropertyChanged(nameof(Tags));
@@ -452,9 +453,9 @@ namespace HCI_2025_Project_Template.ViewModels
             _settingsService.Save(Settings);
         }
 
-    
 
-    private Color _selectedColor;
+
+        private Color _selectedColor;
 
         public Color SelectedColor
         {
@@ -467,5 +468,29 @@ namespace HCI_2025_Project_Template.ViewModels
                 Settings.PrimaryColor = value.ToString();
             }
         }
-    } 
+
+
+
+        public void SetLanguage(string lang)
+        {
+            var dict = new ResourceDictionary();
+
+            dict.Source = new Uri(
+                $"Resources/Strings.{lang}.xaml",
+                UriKind.Relative);
+
+            var dictionaries = Application.Current.Resources.MergedDictionaries;
+
+            var oldDict = dictionaries.FirstOrDefault(d =>
+                d.Source != null &&
+                d.Source.OriginalString.Contains("Strings"));
+
+            if (oldDict != null)
+                dictionaries.Remove(oldDict);
+
+            dictionaries.Add(dict);
+
+            Settings.Language = lang;
+        }
+    }
 }

@@ -1,0 +1,37 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <sys:String x:Key="Documents">Dokumenti</sys:String>
+  <sys:String x:Key="Tags">Tagovi</sys:String>
+    <sys:String x:Key="Upload">Dodaj dokument</sys:String>
+    <sys:String x:Key="Settings">Podešavanja</sys:String>
+  <sys:String x:Key="Search">Pretraži dokumente...</sys:String>
+  <sys:String x:Key="Tag">Tag</sys:String>
+  <sys:String x:Key="Type">Tip</sys:String>
+  <sys:String x:Key="Correspondent">Korespodent</sys:String>
+  <sys:String x:Key="Reset">Poništi</sys:String>
+  <sys:String x:Key="Title">Naslov</sys:String>
+  <sys:String x:Key="Created">Kreirano</sys:String>
+  <sys:String x:Key="Table">Tabela</sys:String>
+  <sys:String x:Key="Cards">Kartice</sys:String>
+  <sys:String x:Key="Previous">Prethodni</sys:String>
+  <sys:String x:Key="Next">Sledeći</sys:String>
+  <sys:String x:Key="UploadDocument">Dodavanje dokumenta</sys:String>
+  <sys:String x:Key="ChooseFile">Izaberi fajl</sys:String>
+  <sys:String x:Key="Create">Kreiraj</sys:String>
+  <sys:String x:Key="EnterNewTag">Unesi novi tag</sys:String>
+  <sys:String x:Key="Add">Dodaj</sys:String>
+  <sys:String x:Key="Name">Naziv</sys:String>
+  <sys:String x:Key="Edit">Izmijeni</sys:String>
+  <sys:String x:Key="Color">Boja</sys:String>
+  <sys:String x:Key="Delete">Obrisi</sys:String>
+  <sys:String x:Key="SelectTag">Selektuj tag za izmjenu</sys:String>
+  <sys:String x:Key="EditTag">Izmijeni tag</sys:String>
+  <sys:String x:Key="TagName">Naziv taga</sys:String>
+  <sys:String x:Key="Update">Izmijeni</sys:String>
+  <sys:String x:Key="Theme">Tema</sys:String>
+  <sys:String x:Key="Language">Jezik</sys:String>
+  <sys:String x:Key="AccentColor">Akcent boja</sys:String>
+  <sys:String x:Key="Save">Sačuvaj</sys:String>
+  <sys:String x:Key="Menu">MENI</sys:String>
+</ResourceDictionary>

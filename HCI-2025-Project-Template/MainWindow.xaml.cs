@@ -216,7 +216,8 @@ namespace HCI_2025_Project_Template
         {
             var vm = (DocumentsViewModel)DataContext;
             MessageBox.Show("klik");
-            vm.ApplyTheme(); // primijeni odmah
+            vm.ApplyTheme();
+            vm.SetLanguage(vm.Settings.Language);
             vm.SaveSettings(); // snimi u JSON
         }
     }

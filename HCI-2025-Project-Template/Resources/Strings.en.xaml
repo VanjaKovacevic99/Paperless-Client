@@ -1,0 +1,38 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <sys:String x:Key="Documents">Documents</sys:String>
+  <sys:String x:Key="Tags">Tags</sys:String>
+    <sys:String x:Key="Upload">Upload documents</sys:String>
+    <sys:String x:Key="Settings">Settings</sys:String>
+  <sys:String x:Key="Search">Search documents...</sys:String>
+  <sys:String x:Key="Tag">Tag</sys:String>
+  <sys:String x:Key="Type">Type</sys:String>
+  <sys:String x:Key="Correspondent">Correspondent</sys:String>
+  <sys:String x:Key="Reset">Reset</sys:String>
+  <sys:String x:Key="Title">Title</sys:String>
+  <sys:String x:Key="Created">Created</sys:String>
+  <sys:String x:Key="Table">Table</sys:String>
+  <sys:String x:Key="Cards">Cards</sys:String>
+  <sys:String x:Key="Previous">Previous</sys:String>
+  <sys:String x:Key="Next">Next</sys:String>
+  <sys:String x:Key="UploadDocument">Upload document</sys:String>
+  <sys:String x:Key="ChooseFile">Choose file</sys:String>
+  <sys:String x:Key="Create">Create</sys:String>
+  <sys:String x:Key="EnterNewTag">Enter new tag</sys:String>
+  <sys:String x:Key="Add">Add</sys:String>
+  <sys:String x:Key="Name">Name</sys:String>
+  <sys:String x:Key="Edit">Edit</sys:String>
+  <sys:String x:Key="Color">Color</sys:String>
+  <sys:String x:Key="Delete">Delete</sys:String>
+  <sys:String x:Key="SelectTag">Select a tag to edit</sys:String>
+  <sys:String x:Key="EditTag">Edit tag</sys:String>
+  <sys:String x:Key="TagName">Tag name</sys:String>
+  <sys:String x:Key="Update">Update</sys:String>
+  <sys:String x:Key="Theme">Theme</sys:String>
+  <sys:String x:Key="Language">Language</sys:String>
+  <sys:String x:Key="AccentColor">Accent color</sys:String>
+  <sys:String x:Key="Save">Save</sys:String>
+  <sys:String x:Key="Menu">MENU</sys:String>
+
+</ResourceDictionary>

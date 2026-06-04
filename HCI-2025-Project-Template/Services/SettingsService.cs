@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HCI_2025_Project_Template.Services
+﻿namespace HCI_2025_Project_Template.Services
 {
     using HCI_2025_Project_Template.Models;
     using System.IO;
