@@ -178,8 +178,19 @@ namespace HCI_2025_Project_Template.ViewModels
         private void OnPropertyChanged([CallerMemberName] string name = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
+        private bool _isLoading;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set
+            {
+                _isLoading = value;
+                OnPropertyChanged();
+            }
+        }
         public async Task LoadDocumentsAsync()
         {
+            IsLoading = true;
             Documents.Clear();
 
             int? tagId = (SelectedTag != null && SelectedTag.Id != 0)
@@ -248,6 +259,10 @@ namespace HCI_2025_Project_Template.ViewModels
                 MessageBox.Show((string)Application.Current.Resources["NetworkError"]);
                 return;
             }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         public async Task NextPageAsync()
@@ -255,6 +270,7 @@ namespace HCI_2025_Project_Template.ViewModels
             if (HasNextPage)
             {
                 CurrentPage++;
+                IsLoading = true;
                 try
                 {
                     await LoadDocumentsAsync();
@@ -264,6 +280,11 @@ namespace HCI_2025_Project_Template.ViewModels
                 {
                     MessageBox.Show((string)Application.Current.Resources["NetworkError"]);
                     return;
+                }
+                finally
+                {
+                    IsLoading = false;
+
                 }
             }
             OnPropertyChanged(nameof(PageInfo));
@@ -274,6 +295,7 @@ namespace HCI_2025_Project_Template.ViewModels
             if (HasPreviousPage && CurrentPage > 1)
             {
                 CurrentPage--;
+                IsLoading = true;
                 try
                 {
                     await LoadDocumentsAsync();
@@ -284,31 +306,37 @@ namespace HCI_2025_Project_Template.ViewModels
                     MessageBox.Show((string)Application.Current.Resources["NetworkError"]);
                     return;
                 }
+                finally
+                {
+                    IsLoading = false;
+                }
             }
             OnPropertyChanged(nameof(PageInfo));
         }
 
         public async Task InitializeAsync()
         {
-            Settings = _settingsService.Load();
-            ApplyTheme();
-            SetLanguage(Settings.Language);
-            Tags = new ObservableCollection<Tag>(await _apiService.GetTagsAsync());
-            Tags.Insert(0, new Tag { Id = 0, Name = "All tags" });
-            OnPropertyChanged(nameof(Tags));
-
-            DocumentTypes = new ObservableCollection<DocumentType>(await _apiService.GetDocumentTypesAsync());
-            DocumentTypes.Insert(0, new DocumentType { Id = 0, Name = "All types" });
-
-            OnPropertyChanged(nameof(DocumentTypes));
-
-            Correspondents = new ObservableCollection<Correspondent>(await _apiService.GetCorrespondentsAsync());
-            Correspondents.Insert(0, new Correspondent { Id = 0, Name = "All correspondents" });
-            OnPropertyChanged(nameof(Correspondents));
-
-            CurrentPage = 1;
+            IsLoading = true;
             try
             {
+                Settings = _settingsService.Load();
+                ApplyTheme();
+                SetLanguage(Settings.Language);
+                Tags = new ObservableCollection<Tag>(await _apiService.GetTagsAsync());
+                Tags.Insert(0, new Tag { Id = 0, Name = "All tags" });
+                OnPropertyChanged(nameof(Tags));
+
+                DocumentTypes = new ObservableCollection<DocumentType>(await _apiService.GetDocumentTypesAsync());
+                DocumentTypes.Insert(0, new DocumentType { Id = 0, Name = "All types" });
+
+                OnPropertyChanged(nameof(DocumentTypes));
+
+                Correspondents = new ObservableCollection<Correspondent>(await _apiService.GetCorrespondentsAsync());
+                Correspondents.Insert(0, new Correspondent { Id = 0, Name = "All correspondents" });
+                OnPropertyChanged(nameof(Correspondents));
+
+                CurrentPage = 1;
+
                 await LoadTagsAsync();
                 await LoadDocumentsAsync();
             }
@@ -317,10 +345,16 @@ namespace HCI_2025_Project_Template.ViewModels
                 MessageBox.Show((string)Application.Current.Resources["NetworkError"]);
                 return;
             }
+            finally
+            {
+                IsLoading = false;
+
+            }
         }
 
         public async Task LoadTagsAsync()
         {
+            IsLoading = true;
             try
             {
                 var tags = await _apiService.GetTagsAsync();
@@ -334,9 +368,14 @@ namespace HCI_2025_Project_Template.ViewModels
                 MessageBox.Show((string)Application.Current.Resources["NetworkError"]);
                 return;
             }
+            finally
+            {
+                IsLoading = false;
+            }
         }
         public async Task UploadAsync()
         {
+            IsLoading = true;
             if (string.IsNullOrWhiteSpace(Upload.Title))
             {
                 MessageBox.Show((string)Application.Current.Resources["TitleRequired"]);
@@ -373,18 +412,23 @@ namespace HCI_2025_Project_Template.ViewModels
                     MessageBox.Show((string)Application.Current.Resources["UploadFailed"]);
                 }
 
+
             }
             catch
             {
                 MessageBox.Show((string)Application.Current.Resources["NetworkError"]);
                 return;
             }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
 
         public async Task DeleteTagAsync(int id)
         {
-
+            IsLoading = true;
             try
             {
                 var success = await _apiService.DeleteTagAsync(id);
@@ -403,6 +447,7 @@ namespace HCI_2025_Project_Template.ViewModels
                 MessageBox.Show((string)Application.Current.Resources["NetworkError"]);
                 return;
             }
+            finally { IsLoading = false; }
         }
 
         private string _newTagName;
@@ -445,7 +490,7 @@ namespace HCI_2025_Project_Template.ViewModels
                 MessageBox.Show((string)Application.Current.Resources["TagNameTooLong"]);
                 return;
             }
-
+            IsLoading = true;
 
             try
             {
@@ -466,6 +511,10 @@ namespace HCI_2025_Project_Template.ViewModels
             {
                 MessageBox.Show((string)Application.Current.Resources["NetworkError"]);
                 return;
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 
@@ -527,6 +576,7 @@ namespace HCI_2025_Project_Template.ViewModels
 
 
             MessageBox.Show(hexColor);
+            IsLoading = true;
             try
             {
                 var success = await _apiService.UpdateTagAsync(
@@ -548,6 +598,10 @@ namespace HCI_2025_Project_Template.ViewModels
             {
                 MessageBox.Show((string)Application.Current.Resources["NetworkError"]);
                 return;
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
         private AppSettings _settings;
