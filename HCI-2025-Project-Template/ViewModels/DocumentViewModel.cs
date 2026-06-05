@@ -55,6 +55,11 @@ namespace HCI_2025_Project_Template.ViewModels
             {
                 if (_searchText != value)
                 {
+                    if (value?.Length > 100)
+                    {
+                        MessageBox.Show((string)Application.Current.Resources["SearchTooLong"]);
+                        return;
+                    }
                     _searchText = value;
                     CurrentPage = 1;
                     _ = LoadDocumentsAsync();
@@ -332,6 +337,23 @@ namespace HCI_2025_Project_Template.ViewModels
         }
         public async Task UploadAsync()
         {
+            if (string.IsNullOrWhiteSpace(Upload.Title))
+            {
+                MessageBox.Show((string)Application.Current.Resources["TitleRequired"]);
+                return;
+            }
+
+            if (Upload.FilePath == null)
+            {
+                MessageBox.Show((string)Application.Current.Resources["FileRequired"]);
+                return;
+            }
+
+            if (!System.IO.File.Exists(Upload.FilePath))
+            {
+                MessageBox.Show((string)Application.Current.Resources["FileNotFound"]);
+                return;
+            }
             try
             {
                 var success = await _apiService.UploadDocumentAsync(
@@ -412,6 +434,17 @@ namespace HCI_2025_Project_Template.ViewModels
                     (string)Application.Current.Resources["TagNameRequired"]);
                 return;
             }
+            if (NewTagName.Length < 2)
+            {
+                MessageBox.Show((string)Application.Current.Resources["TagNameTooShort"]);
+                return;
+            }
+
+            if (NewTagName.Length > 30)
+            {
+                MessageBox.Show((string)Application.Current.Resources["TagNameTooLong"]);
+                return;
+            }
 
 
             try
@@ -469,8 +502,27 @@ namespace HCI_2025_Project_Template.ViewModels
         public async Task UpdateTagAsync()
         {
             if (CrudTag == null)
+            {
+                MessageBox.Show((string)Application.Current.Resources["NoTagSelected"]);
                 return;
+            }
 
+            if (string.IsNullOrWhiteSpace(CrudTag.Name))
+            {
+                MessageBox.Show((string)Application.Current.Resources["TagNameRequired"]);
+                return;
+            }
+
+            if (CrudTag.Name.Length < 2)
+            {
+                MessageBox.Show((string)Application.Current.Resources["TagNameTooShort"]);
+                return;
+            }
+            if (NewTagName.Length > 30)
+            {
+                MessageBox.Show((string)Application.Current.Resources["TagNameTooLong"]);
+                return;
+            }
             string hexColor = NormalizeColor(CrudTag.Color);
 
 

@@ -44,4 +44,11 @@
   <sys:String x:Key="SelectFile">Molimo Vas izaberite fajl.</sys:String>
   <sys:String x:Key="EnterDocumentTitle">Molimo Vas unesite naziv dokumenta.</sys:String>
   <sys:String x:Key="UploadSussesiful">Uspješno dodavanje.</sys:String>
+  <sys:String x:Key="TagNameTooShort">Naziv taga je prekratak.</sys:String>
+  <sys:String x:Key="TagNameTooLong">Naziv taga je previše dug.</sys:String>
+  <sys:String x:Key="TagNoSelected">Molimo vas izaberite tag.</sys:String>
+  <sys:String x:Key="TitleRequired">Naziv dokumenta je obavezan.</sys:String>
+  <sys:String x:Key="FileRequired">Potrebno je odabrati fajl.</sys:String>
+  <sys:String x:Key="FileNotFound">Fajl nije pronađen.</sys:String>
+  <sys:String x:Key="SearchTooLong">Tekst za pretragu je previše dug.</sys:String>
 </ResourceDictionary>

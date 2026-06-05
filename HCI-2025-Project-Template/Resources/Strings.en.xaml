@@ -44,4 +44,11 @@
   <sys:String x:Key="SelectFile">Please select a file.</sys:String>
   <sys:String x:Key="EnterDocumentTitle">Please enter document title.</sys:String>
   <sys:String x:Key="UploadSussesiful">Upload sussesiful.</sys:String>
+  <sys:String x:Key="TagNameTooShort">Tag name too short.</sys:String>
+  <sys:String x:Key="TagNameTooLong">Tag name too long.</sys:String>
+  <sys:String x:Key="TagNoSelected">Please select a tag.</sys:String>
+  <sys:String x:Key="TitleRequired">Document title is required.</sys:String>
+  <sys:String x:Key="FileRequired">File required.</sys:String>
+  <sys:String x:Key="FileNotFound">File not found.</sys:String>
+  <sys:String x:Key="SearchTooLong">Search text is too long.</sys:String>
 </ResourceDictionary>
