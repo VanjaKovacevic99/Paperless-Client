@@ -2,14 +2,9 @@
 using HCI_2025_Project_Template.Models;
 using HCI_2025_Project_Template.Services;
 using MaterialDesignThemes.Wpf;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Runtime;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
@@ -194,50 +189,60 @@ namespace HCI_2025_Project_Template.ViewModels
                 ? SelectedCorrespondent.Id
                 : null;
 
-            var response = await _apiService.GetDocumentsAsync(
-                CurrentPage,
-                PageSize,
-                SearchText,
-                tagId,
-                typeId,
-                correspondentId
-            );
-
-            _next = response.next;
-            _previous = response.previous;
-
-            var documents = response.results;
-            if (response?.results == null)
-                return;
-
-            // load once
-            if (_tagsCache.Count == 0)
-                _tagsCache = await _apiService.GetTagsAsync();
-
-            if (_typesCache.Count == 0)
-                _typesCache = await _apiService.GetDocumentTypesAsync();
-
-            var tagsLookup = _tagsCache.ToDictionary(t => t.Id, t => t.Name);
-            var typesLookup = _typesCache.ToDictionary(t => t.Id, t => t.Name);
-
-            foreach (var doc in documents)
+            try
             {
-                doc.TagNames = doc.Tags
-                    .Select(id => tagsLookup.TryGetValue(id, out var name) ? name : " ")
-                    .ToList();
+                var response = await _apiService.GetDocumentsAsync(
+                    CurrentPage,
+                    PageSize,
+                    SearchText,
+                    tagId,
+                    typeId,
+                    correspondentId
+                );
 
-                doc.DocumentTypeName =
-                    doc.DocumentType.HasValue &&
-                    typesLookup.TryGetValue(doc.DocumentType.Value, out var typeName)
-                    ? typeName
-                    : " ";
 
-                Documents.Add(doc);
+                _next = response.next;
+                _previous = response.previous;
+
+                var documents = response.results;
+                if (response?.results == null)
+                    return;
+
+                // load once
+                if (_tagsCache.Count == 0)
+                    _tagsCache = await _apiService.GetTagsAsync();
+
+                if (_typesCache.Count == 0)
+                    _typesCache = await _apiService.GetDocumentTypesAsync();
+
+                var tagsLookup = _tagsCache.ToDictionary(t => t.Id, t => t.Name);
+                var typesLookup = _typesCache.ToDictionary(t => t.Id, t => t.Name);
+
+                foreach (var doc in documents)
+                {
+                    doc.TagNames = doc.Tags
+                        .Select(id => tagsLookup.TryGetValue(id, out var name) ? name : " ")
+                        .ToList();
+
+                    doc.DocumentTypeName =
+                        doc.DocumentType.HasValue &&
+                        typesLookup.TryGetValue(doc.DocumentType.Value, out var typeName)
+                        ? typeName
+                        : " ";
+
+                    Documents.Add(doc);
+
+                }
+
+                OnPropertyChanged(nameof(HasNextPage));
+                OnPropertyChanged(nameof(HasPreviousPage));
+                OnPropertyChanged(nameof(PageInfo));
             }
-
-            OnPropertyChanged(nameof(HasNextPage));
-            OnPropertyChanged(nameof(HasPreviousPage));
-            OnPropertyChanged(nameof(PageInfo));
+            catch
+            {
+                MessageBox.Show((string)Application.Current.Resources["NetworkError"]);
+                return;
+            }
         }
 
         public async Task NextPageAsync()
@@ -245,7 +250,16 @@ namespace HCI_2025_Project_Template.ViewModels
             if (HasNextPage)
             {
                 CurrentPage++;
-                await LoadDocumentsAsync();
+                try
+                {
+                    await LoadDocumentsAsync();
+                }
+
+                catch
+                {
+                    MessageBox.Show((string)Application.Current.Resources["NetworkError"]);
+                    return;
+                }
             }
             OnPropertyChanged(nameof(PageInfo));
         }
@@ -255,7 +269,16 @@ namespace HCI_2025_Project_Template.ViewModels
             if (HasPreviousPage && CurrentPage > 1)
             {
                 CurrentPage--;
-                await LoadDocumentsAsync();
+                try
+                {
+                    await LoadDocumentsAsync();
+
+                }
+                catch
+                {
+                    MessageBox.Show((string)Application.Current.Resources["NetworkError"]);
+                    return;
+                }
             }
             OnPropertyChanged(nameof(PageInfo));
         }
@@ -279,41 +302,85 @@ namespace HCI_2025_Project_Template.ViewModels
             OnPropertyChanged(nameof(Correspondents));
 
             CurrentPage = 1;
-            await LoadTagsAsync();
-            await LoadDocumentsAsync();
+            try
+            {
+                await LoadTagsAsync();
+                await LoadDocumentsAsync();
+            }
+            catch
+            {
+                MessageBox.Show((string)Application.Current.Resources["NetworkError"]);
+                return;
+            }
         }
 
         public async Task LoadTagsAsync()
         {
-            var tags = await _apiService.GetTagsAsync();
+            try
+            {
+                var tags = await _apiService.GetTagsAsync();
 
-            Tags1 = new ObservableCollection<Tag>(tags);
+                Tags1 = new ObservableCollection<Tag>(tags);
 
-            OnPropertyChanged(nameof(Tags1));
+                OnPropertyChanged(nameof(Tags1));
+            }
+            catch
+            {
+                MessageBox.Show((string)Application.Current.Resources["NetworkError"]);
+                return;
+            }
         }
         public async Task UploadAsync()
         {
-            var success = await _apiService.UploadDocumentAsync(
-                Upload.FilePath,
-                Upload.Title,
-                Upload.Tag?.Id,
-                Upload.Type?.Id,
-                Upload.Correspondent?.Id
-            );
+            try
+            {
+                var success = await _apiService.UploadDocumentAsync(
+                    Upload.FilePath,
+                    Upload.Title,
+                    Upload.Tag?.Id,
+                    Upload.Type?.Id,
+                    Upload.Correspondent?.Id
+                );
 
-            if (success)
-                await LoadDocumentsAsync();
+                if (success)
+                {
+                    await LoadDocumentsAsync();
+                }
+                else
+                {
+                    MessageBox.Show((string)Application.Current.Resources["UploadFailed"]);
+                }
+
+            }
+            catch
+            {
+                MessageBox.Show((string)Application.Current.Resources["NetworkError"]);
+                return;
+            }
         }
 
 
         public async Task DeleteTagAsync(int id)
         {
 
+            try
+            {
+                var success = await _apiService.DeleteTagAsync(id);
 
-            var success = await _apiService.DeleteTagAsync(id);
-
-            if (success)
-                await LoadTagsAsync();
+                if (success)
+                {
+                    await LoadTagsAsync();
+                }
+                else
+                {
+                    MessageBox.Show((string)Application.Current.Resources["TagDeleteFailed"]);
+                }
+            }
+            catch
+            {
+                MessageBox.Show((string)Application.Current.Resources["NetworkError"]);
+                return;
+            }
         }
 
         private string _newTagName;
@@ -341,25 +408,31 @@ namespace HCI_2025_Project_Template.ViewModels
         {
             if (string.IsNullOrWhiteSpace(NewTagName))
             {
-                MessageBox.Show("Unesite naziv taga.");
+                MessageBox.Show(
+                    (string)Application.Current.Resources["TagNameRequired"]);
                 return;
             }
 
 
-            MessageBox.Show("aa" + NewTagColorHex);
-
-
-
-            bool success = await _apiService.CreateTagAsync(NewTagName, NewTagColorHex);
-            if (success)
+            try
             {
-                await LoadTagsAsync();
-                NewTagName = "";
-                NewTagColor = Colors.LightGray;
+                bool success = await _apiService.CreateTagAsync(NewTagName, NewTagColorHex);
+                if (success)
+                {
+                    await LoadTagsAsync();
+                    NewTagName = "";
+                    NewTagColor = Colors.LightGray;
+                }
+                else
+                {
+                    MessageBox.Show(
+                         (string)Application.Current.Resources["TagCreatedError"]);
+                }
             }
-            else
+            catch
             {
-                MessageBox.Show("Greška pri kreiranju taga.");
+                MessageBox.Show((string)Application.Current.Resources["NetworkError"]);
+                return;
             }
         }
 
@@ -402,20 +475,27 @@ namespace HCI_2025_Project_Template.ViewModels
 
 
             MessageBox.Show(hexColor);
-
-            var success = await _apiService.UpdateTagAsync(
-                CrudTag.Id,
-                CrudTag.Name,
-                hexColor
-            );
-
-            MessageBox.Show(success ? "UPDATED OK" : "UPDATE FAILED");
-
-            if (success)
+            try
             {
-                await LoadTagsAsync();
-                CrudTag = null;
-                HasSelectedTag = false;
+                var success = await _apiService.UpdateTagAsync(
+                    CrudTag.Id,
+                    CrudTag.Name,
+                    hexColor
+                );
+
+                MessageBox.Show(success ? (string)Application.Current.Resources["TagSussecUpdate"] : (string)Application.Current.Resources["TagFaliedUpdate"]);
+
+                if (success)
+                {
+                    await LoadTagsAsync();
+                    CrudTag = null;
+                    HasSelectedTag = false;
+                }
+            }
+            catch
+            {
+                MessageBox.Show((string)Application.Current.Resources["NetworkError"]);
+                return;
             }
         }
         private AppSettings _settings;

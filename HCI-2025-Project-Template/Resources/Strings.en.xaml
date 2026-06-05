@@ -34,5 +34,14 @@
   <sys:String x:Key="AccentColor">Accent color</sys:String>
   <sys:String x:Key="Save">Save</sys:String>
   <sys:String x:Key="Menu">MENU</sys:String>
-
+  <sys:String x:Key="TagNameRequired">Enter tag name.</sys:String>
+  <sys:String x:Key="TagCreatedError">Failed to create tag.</sys:String>
+  <sys:String x:Key="TagSussecUpdate">Tag successfully updated.</sys:String>
+  <sys:String x:Key="TagFaliedUpdate">Failed to update tag.</sys:String>
+  <sys:String x:Key="UploadFailed">Document upload failed.</sys:String>
+  <sys:String x:Key="TagDeleteFailed">Tag delete failed.</sys:String>
+  <sys:String x:Key="NetworkError">Unable to connect to server.</sys:String>
+  <sys:String x:Key="SelectFile">Please select a file.</sys:String>
+  <sys:String x:Key="EnterDocumentTitle">Please enter document title.</sys:String>
+  <sys:String x:Key="UploadSussesiful">Upload sussesiful.</sys:String>
 </ResourceDictionary>

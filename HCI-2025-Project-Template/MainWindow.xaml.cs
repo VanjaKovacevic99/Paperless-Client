@@ -1,17 +1,13 @@
-﻿using HCI_2025_Project_Template.ViewModels;
+﻿using HCI_2025_Project_Template.Models;
+using HCI_2025_Project_Template.ViewModels;
 using HCI_2025_Project_Template.Views;
-using HCI_2025_Project_Template.Models;
-
-using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace HCI_2025_Project_Template
 {
-    
+
     public partial class MainWindow : Window
     {
         private readonly DocumentsViewModel _viewModel;
@@ -21,7 +17,7 @@ namespace HCI_2025_Project_Template
             InitializeComponent();
             _viewModel = new DocumentsViewModel();
             this.DataContext = _viewModel;
-           
+
 
         }
 
@@ -32,7 +28,8 @@ namespace HCI_2025_Project_Template
             await vm.InitializeAsync();
         }
 
-        private async void Next_Click(object sender, RoutedEventArgs e) { 
+        private async void Next_Click(object sender, RoutedEventArgs e)
+        {
             var vm = (DocumentsViewModel)DataContext;
 
             vm.CurrentPage++;
@@ -141,31 +138,32 @@ namespace HCI_2025_Project_Template
 
                 var vm = (DocumentsViewModel)DataContext;
                 vm.Upload.FilePath = files[0];
-                vm.UploadFileName= System.IO.Path.GetFileName(files[0]);
+                vm.UploadFileName = System.IO.Path.GetFileName(files[0]);
 
-              
+
             }
         }
 
-        private async void UploadFile_Click(object sender, RoutedEventArgs e) {
+        private async void UploadFile_Click(object sender, RoutedEventArgs e)
+        {
             var vm = (DocumentsViewModel)DataContext;
 
             if (string.IsNullOrWhiteSpace(vm.Upload.FilePath))
             {
-                MessageBox.Show("Please select a file.");
+                MessageBox.Show((string)Application.Current.Resources["SelectFile"]);
                 return;
             }
 
-           
+
             if (string.IsNullOrWhiteSpace(vm.Upload.Title))
             {
-                MessageBox.Show("Please enter document title.");
+                MessageBox.Show((string)Application.Current.Resources["EnterDocumentTitle"]);
                 return;
             }
 
-            
+
             await vm.UploadAsync();
-            MessageBox.Show("Upload successful!");
+            MessageBox.Show((string)Application.Current.Resources["UploadSussesiful"]);
 
         }
 
@@ -175,21 +173,22 @@ namespace HCI_2025_Project_Template
             await vm.CreateTagAsync();
         }
 
-     
-        
+
+
 
         private async void DeleteTag_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
             var tag = button?.DataContext as Tag;  // direktno uzmi tag iz dugmeta
-      
+
             if (tag == null) return;
 
             var vm = (DocumentsViewModel)DataContext;
             await vm.DeleteTagAsync(tag.Id);  // proslijedi ID
         }
 
-        private async void EditTag_Click(object sender, RoutedEventArgs args) {
+        private async void EditTag_Click(object sender, RoutedEventArgs args)
+        {
             var button = sender as Button;
             var tag = button?.DataContext as Tag;
 
@@ -206,7 +205,8 @@ namespace HCI_2025_Project_Template
 
             vm.HasSelectedTag = true;
         }
-        private async void UpdateTag_Click(object sender, RoutedEventArgs args) {
+        private async void UpdateTag_Click(object sender, RoutedEventArgs args)
+        {
             var vm = (DocumentsViewModel)DataContext;
 
             await vm.UpdateTagAsync();

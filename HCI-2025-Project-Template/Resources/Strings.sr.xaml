@@ -34,4 +34,14 @@
   <sys:String x:Key="AccentColor">Akcent boja</sys:String>
   <sys:String x:Key="Save">Sačuvaj</sys:String>
   <sys:String x:Key="Menu">MENI</sys:String>
+  <sys:String x:Key="TagNameRequired">Unesite naziv taga.</sys:String>
+  <sys:String x:Key="TagCreatedError">Greška prilikom kreiranja taga.</sys:String>
+  <sys:String x:Key="TagSussecUpdate">Tag je uspješno izmijenjen.</sys:String>
+  <sys:String x:Key="TagFaliedUpdate">Greška prilikom izmjene taga.</sys:String>
+  <sys:String x:Key="UploadFailed">Greška pri dodavanju dokumenta.</sys:String>
+  <sys:String x:Key="TagDeleteFailed">Greška pri brisanju taga.</sys:String>
+  <sys:String x:Key="NetworkError">Nije moćuge povezati sa serverom.</sys:String>
+  <sys:String x:Key="SelectFile">Molimo Vas izaberite fajl.</sys:String>
+  <sys:String x:Key="EnterDocumentTitle">Molimo Vas unesite naziv dokumenta.</sys:String>
+  <sys:String x:Key="UploadSussesiful">Uspješno dodavanje.</sys:String>
 </ResourceDictionary>

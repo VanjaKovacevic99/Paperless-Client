@@ -15,6 +15,16 @@
         Background="{DynamicResource MaterialDesignPaper}">
     <Window.Resources>
         <conv:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background" Value="Transparent"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="Blue"/>
+                    <!-- Opciono: i boja teksta -->
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
 
     <Grid Margin="10">
@@ -44,6 +54,7 @@
                 <Button HorizontalAlignment="Left"
         Click="Documents_Click"
         Style="{StaticResource MaterialDesignFlatButton}"
+                        
         Margin="5">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="📄"/>
@@ -65,6 +76,7 @@
                 <Button HorizontalAlignment="Left"
         Click="Tags_Click"
         Style="{StaticResource MaterialDesignFlatButton}"
+                      
         Margin="5">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="🏷"/>
