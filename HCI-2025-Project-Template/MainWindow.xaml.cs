@@ -4,6 +4,7 @@ using HCI_2025_Project_Template.Views;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace HCI_2025_Project_Template
 {
@@ -17,6 +18,7 @@ namespace HCI_2025_Project_Template
             InitializeComponent();
             _viewModel = new DocumentsViewModel();
             this.DataContext = _viewModel;
+            SetActive(BtnDocuments);
 
 
         }
@@ -100,22 +102,32 @@ namespace HCI_2025_Project_Template
         private void Documents_Click(object sender, RoutedEventArgs e)
         {
             _viewModel.Navigate(AppView.Documents);
+            SetActive(BtnDocuments);
         }
 
         private void Upload_Click(object sender, RoutedEventArgs e)
         {
             _viewModel.Navigate(AppView.Upload);
+            SetActive(BtnUpload);
         }
 
         private void Tags_Click(object sender, RoutedEventArgs e)
         {
             _viewModel.Navigate(AppView.Tags);
+            SetActive(BtnTags);
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
             _viewModel.Navigate(AppView.Settings);
+            SetActive(BtnSettings);
         }
+        private void Analytics_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.Navigate(AppView.Analytics);
+            SetActive(BtnAnalytics);
+        }
+
 
         private void ChooseFile_Click(object sender, RoutedEventArgs e)
         {
@@ -219,6 +231,20 @@ namespace HCI_2025_Project_Template
             vm.ApplyTheme();
             vm.SetLanguage(vm.Settings.Language);
             vm.SaveSettings(); // snimi u JSON
+        }
+
+        private void SetActive(Button active)
+        {
+            var buttons = new[] { BtnDocuments, BtnUpload, BtnTags, BtnAnalytics, BtnSettings };
+
+            foreach (var b in buttons)
+            {
+                b.Background = Brushes.Transparent;
+                b.BorderBrush = Brushes.Transparent;
+            }
+
+            active.Background = new SolidColorBrush(Color.FromArgb(60, 0, 122, 204));
+            active.BorderBrush = Brushes.DodgerBlue;
         }
     }
 }

@@ -30,7 +30,7 @@
         <Grid Margin="10">
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="210"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
@@ -43,61 +43,99 @@
                 Padding="10"
                 Margin="0,0,10,0">
 
-            <StackPanel>
+                <Grid>
 
-                <TextBlock Text="{DynamicResource Menu}"
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock 
+                        Text="{DynamicResource Menu}"
                            FontSize="16"
                            FontWeight="Bold"
                            Margin="10"
                            Foreground="#333"/>
 
-                <Button HorizontalAlignment="Left"
+                    <Button  x:Name="BtnDocuments"
+                        Grid.Row="1"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Stretch"
         Click="Documents_Click"
         Style="{StaticResource MaterialDesignFlatButton}"
                         
         Margin="5">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="📄"/>
-                        <TextBlock Text="{DynamicResource Documents}"/>
-                    </StackPanel>
-                </Button>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FileDocumentOutline"/>
+                            <TextBlock Text="{DynamicResource Documents}"/>
+                        </StackPanel>
+                    </Button>
 
-                <Button 
-                        HorizontalAlignment="Left"
+                    <Button x:Name="BtnUpload" 
+                        Grid.Row="2"
+                       HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Stretch"
         Click="Upload_Click"
         Style="{StaticResource MaterialDesignFlatButton}"
         Margin="5">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="⬆"/>
-                        <TextBlock Text="{DynamicResource Upload}"/>
-                    </StackPanel>
-                </Button>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Upload"/>
+                            <TextBlock Text="{DynamicResource Upload}"/>
+                        </StackPanel>
+                    </Button>
 
-                <Button HorizontalAlignment="Left"
+                    <Button x:Name="BtnTags"
+                        Grid.Row="3"
+                       HorizontalAlignment="Stretch"
+        HorizontalContentAlignment="Stretch"
         Click="Tags_Click"
         Style="{StaticResource MaterialDesignFlatButton}"
                       
         Margin="5">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="🏷"/>
-                        <TextBlock Text="{DynamicResource Tags}"/>
-                    </StackPanel>
-                </Button>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="TagOutline"/>
+                            <TextBlock Text="{DynamicResource Tags}"/>
+                        </StackPanel>
+                    </Button>
 
-                <Button 
-                        HorizontalAlignment="Left"
+                    <Button x:Name="BtnAnalytics"
+                        Grid.Row="4"
+
+                        HorizontalAlignment="Stretch"
+        HorizontalContentAlignment="Stretch"
+        Click="Analytics_Click"
+        Style="{StaticResource MaterialDesignFlatButton}"
+        Margin="5">
+
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ChartBar"
+                                  Width="18"
+                                  Height="18"
+                                  Margin="0,0,5,0"/>
+                            <TextBlock Text="{DynamicResource Analytics}"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="BtnSettings"
+                        Grid.Row="5"
+                        HorizontalAlignment="Stretch"
+        HorizontalContentAlignment="Stretch"
         Click="Settings_Click"
         Style="{StaticResource MaterialDesignFlatButton}"
         Margin="5">
-                <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="⚙"/>
-                        <TextBlock Text="{DynamicResource Settings}"/>
-                </StackPanel>
-                </Button>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CogOutline"/>
+                            <TextBlock Text="{DynamicResource Settings}"/>
+                        </StackPanel>
+                    </Button>
 
-            </StackPanel>
+                </Grid>
 
-        </Border>
+            </Border>
 
         <!-- ===================== -->
         <!-- RIGHT MAIN CONTENT -->
@@ -540,7 +578,10 @@
 
             </Grid>
         </Grid>
-        <Grid Grid.Column="1"
+
+            <Grid Grid.Column="1"  Visibility="{Binding IsAnalytics, Converter={StaticResource BooleanToVisibilityConverter}}">
+            </Grid>
+            <Grid Grid.Column="1"
       Visibility="{Binding IsSettings, Converter={StaticResource BooleanToVisibilityConverter}}">
 
             <StackPanel Margin="100">

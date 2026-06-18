@@ -122,6 +122,8 @@ namespace HCI_2025_Project_Template.ViewModels
         public bool IsUpload => CurrentView == AppView.Upload;
         public bool IsTags => CurrentView == AppView.Tags;
         public bool IsSettings => CurrentView == AppView.Settings;
+
+        public bool IsAnalytics => CurrentView == AppView.Analytics;
         private AppView _currentView = AppView.Documents;
 
         public AppView CurrentView

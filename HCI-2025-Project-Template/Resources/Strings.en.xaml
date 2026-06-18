@@ -51,4 +51,5 @@
   <sys:String x:Key="FileRequired">File required.</sys:String>
   <sys:String x:Key="FileNotFound">File not found.</sys:String>
   <sys:String x:Key="SearchTooLong">Search text is too long.</sys:String>
+    <sys:String x:Key="Analytics">Analytics</sys:String>
 </ResourceDictionary>
