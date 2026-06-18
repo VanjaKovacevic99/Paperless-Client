@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
         xmlns:local="clr-namespace:HCI_2025_Project_Template"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:conv="clr-namespace:HCI_2025_Project_Template.Converters"
@@ -580,7 +581,18 @@
         </Grid>
 
             <Grid Grid.Column="1"  Visibility="{Binding IsAnalytics, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+
+                <lvc:PieChart Series="{Binding PieSeries}"
+                                  LegendPosition="Right"
+                                  TooltipPosition="Top"
+                                  
+                    ></lvc:PieChart>
+
+                <TextBlock Text="Proba tekst"></TextBlock>
+             
             </Grid>
+            
             <Grid Grid.Column="1"
       Visibility="{Binding IsSettings, Converter={StaticResource BooleanToVisibilityConverter}}">
 

@@ -1,12 +1,15 @@
 ﻿using HCI_2025_Project.Services;
 using HCI_2025_Project_Template.Models;
 using HCI_2025_Project_Template.Services;
+using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
 using MaterialDesignThemes.Wpf;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
+
 
 
 namespace HCI_2025_Project_Template.ViewModels
@@ -124,6 +127,7 @@ namespace HCI_2025_Project_Template.ViewModels
         public bool IsSettings => CurrentView == AppView.Settings;
 
         public bool IsAnalytics => CurrentView == AppView.Analytics;
+
         private AppView _currentView = AppView.Documents;
 
         public AppView CurrentView
@@ -138,11 +142,13 @@ namespace HCI_2025_Project_Template.ViewModels
                 OnPropertyChanged(nameof(IsUpload));
                 OnPropertyChanged(nameof(IsTags));
                 OnPropertyChanged(nameof(IsSettings));
+                OnPropertyChanged(nameof(IsAnalytics));
             }
         }
-        public void Navigate(AppView view)
+        public async void Navigate(AppView view)
         {
             CurrentView = view;
+
         }
 
         private string _uploadFileName;
@@ -172,6 +178,7 @@ namespace HCI_2025_Project_Template.ViewModels
         {
             _apiService = new PaperlessApiService();
             Documents = new ObservableCollection<Document>();
+
         }
 
         public ObservableCollection<Document> Documents { get; }
@@ -179,6 +186,7 @@ namespace HCI_2025_Project_Template.ViewModels
         public event PropertyChangedEventHandler? PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string name = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
 
         private bool _isLoading;
         public bool IsLoading
@@ -341,6 +349,10 @@ namespace HCI_2025_Project_Template.ViewModels
 
                 await LoadTagsAsync();
                 await LoadDocumentsAsync();
+
+
+
+
             }
             catch
             {
@@ -680,5 +692,77 @@ namespace HCI_2025_Project_Template.ViewModels
 
             Settings.Language = lang;
         }
+
+        private ISeries[] _pieSeries = Array.Empty<ISeries>();
+
+        public ISeries[] PieSeries
+        {
+            get => _pieSeries;
+            set
+            {
+                _pieSeries = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+
+        private List<Document> _allDocuments = new();
+        private bool _analyticsLoaded = false;
+
+        public async Task LoadAnalyticsAsync()
+        {
+            if (_analyticsLoaded)
+            {
+                BuildPieChartFromCache();
+                return;
+            }
+
+            IsLoading = true;
+
+            try
+            {
+                var types = await _apiService.GetDocumentTypesAsync();
+                var typeMap = types.ToDictionary(x => x.Id, x => x.Name);
+
+                _allDocuments = await _apiService.GetAllDocumentsAsync();
+
+                foreach (var d in _allDocuments)
+                {
+                    d.DocumentTypeName =
+                        d.DocumentType.HasValue && typeMap.TryGetValue(d.DocumentType.Value, out var name)
+                        ? name
+                        : "Unknown";
+                }
+
+                _analyticsLoaded = true;
+
+                BuildPieChartFromCache();
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+        public void BuildPieChartFromCache()
+        {
+            var stats = _allDocuments
+                .GroupBy(d => d.DocumentTypeName ?? "Unknown")
+                .ToDictionary(g => g.Key, g => g.Count());
+
+            var total = stats.Values.Sum();
+
+            PieSeries = stats.OrderByDescending(k => k.Value).Select(x =>
+            {
+                var percent = (double)x.Value / total * 100;
+
+                return new PieSeries<double>
+                {
+                    Values = new[] { (double)x.Value },
+                    Name = $"{x.Key} ({percent:0.0}%)"
+                };
+            }).ToArray();
+        }
+
     }
 }

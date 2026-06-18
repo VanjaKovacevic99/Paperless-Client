@@ -2,7 +2,6 @@
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Windows;
@@ -32,7 +31,87 @@ namespace HCI_2025_Project.Services
             return JsonSerializer.Deserialize<ApiResponse<Document>>(json,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
+        public async Task<List<Document>> GetAllDocumentsAsync()
+        {
+            var allDocuments = new List<Document>();
 
+            int page = 1;
+
+            while (true)
+            {
+                var response = await _httpClient.GetAsync(
+                    $"documents/?page={page}&page_size=100");
+
+                response.EnsureSuccessStatusCode();
+
+                var json = await response.Content.ReadAsStringAsync();
+
+                var result = JsonSerializer.Deserialize<ApiResponse<Document>>(
+                    json,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+                if (result?.results == null || result.results.Count == 0)
+                    break;
+
+                allDocuments.AddRange(result.results);
+
+                if (string.IsNullOrEmpty(result.next))
+                    break;
+
+                page++;
+            }
+
+
+            return allDocuments;
+        }
+
+        public async Task<Dictionary<string, int>> GetDocumentTypeStatsAsync()
+        {
+            var stats = new Dictionary<string, int>();
+
+            int page = 1;
+            const int pageSize = 100;
+
+            while (true)
+            {
+                var response = await _httpClient.GetAsync(
+                    $"documents/?page={page}&page_size={pageSize}");
+
+                response.EnsureSuccessStatusCode();
+
+                var json = await response.Content.ReadAsStringAsync();
+
+                var result = JsonSerializer.Deserialize<ApiResponse<Document>>(
+                    json,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+                if (result?.results == null || result.results.Count == 0)
+                    break;
+
+                foreach (var doc in result.results)
+                {
+                    var typeName = doc.DocumentTypeName ?? "Unknown";
+
+                    if (stats.ContainsKey(typeName))
+                        stats[typeName]++;
+                    else
+                        stats[typeName] = 1;
+                }
+
+                if (string.IsNullOrEmpty(result.next))
+                    break;
+
+                page++;
+            }
+
+            return stats;
+        }
         public async Task<List<Tag>> GetTagsAsync()
         {
             var response = await _httpClient.GetAsync("tags/");
@@ -64,7 +143,7 @@ namespace HCI_2025_Project.Services
         }
         public async Task<List<Correspondent>> GetCorrespondentsAsync()
         {
-           
+
 
             var response = await _httpClient.GetAsync("correspondents/");
 
@@ -81,7 +160,7 @@ namespace HCI_2025_Project.Services
             return apiResponse?.results ?? new List<Correspondent>();
         }
 
-        public async Task<ApiResponse<Document>> GetDocumentsAsync( int page, int pageSize, string search, int? tagId, int? typeId, int? correspondentId)
+        public async Task<ApiResponse<Document>> GetDocumentsAsync(int page, int pageSize, string search, int? tagId, int? typeId, int? correspondentId)
         {
             var url = $"documents/?page={page}&page_size={pageSize}";
 
@@ -116,11 +195,11 @@ namespace HCI_2025_Project.Services
 
         public async Task<bool> UploadDocumentAsync(string filePath, string title, int? tagId, int? typeId, int? correspondentId)
         {
-           
+
 
             using var form = new MultipartFormDataContent();
 
-       
+
             var fileBytes = await File.ReadAllBytesAsync(filePath);
             var fileContent = new ByteArrayContent(fileBytes);
             fileContent.Headers.ContentType =
@@ -128,7 +207,7 @@ namespace HCI_2025_Project.Services
 
             form.Add(fileContent, "document", Path.GetFileName(filePath));
 
-            
+
             form.Add(new StringContent(title ?? ""), "title");
 
             if (tagId.HasValue)
@@ -137,7 +216,7 @@ namespace HCI_2025_Project.Services
             if (typeId.HasValue)
                 form.Add(new StringContent(typeId.ToString()), "document_type");
 
-            if (correspondentId.HasValue )
+            if (correspondentId.HasValue)
                 form.Add(new StringContent(correspondentId.ToString()), "correspondent");
 
             var response = await _httpClient.PostAsync("documents/post_document/", form);

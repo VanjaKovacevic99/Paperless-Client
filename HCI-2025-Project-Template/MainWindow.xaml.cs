@@ -122,10 +122,11 @@ namespace HCI_2025_Project_Template
             _viewModel.Navigate(AppView.Settings);
             SetActive(BtnSettings);
         }
-        private void Analytics_Click(object sender, RoutedEventArgs e)
+        private async void Analytics_Click(object sender, RoutedEventArgs e)
         {
             _viewModel.Navigate(AppView.Analytics);
             SetActive(BtnAnalytics);
+            await _viewModel.LoadAnalyticsAsync();
         }
 
 
