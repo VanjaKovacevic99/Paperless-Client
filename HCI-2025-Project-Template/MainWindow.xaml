@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+        xmlns:lvcCore="clr-namespace:LiveChartsCore.SkiaSharpView;assembly=LiveChartsCore.SkiaSharpView"
         xmlns:local="clr-namespace:HCI_2025_Project_Template"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:conv="clr-namespace:HCI_2025_Project_Template.Converters"
@@ -538,7 +539,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
 
-                <!-- ================= RIGHT: EDIT PANEL ================= -->
+              
                 <!-- ================= RIGHT: EDIT PANEL ================= -->
                 <StackPanel Grid.Column="1"
             Margin="20"
@@ -583,16 +584,50 @@
             <Grid Grid.Column="1"  Visibility="{Binding IsAnalytics, Converter={StaticResource BooleanToVisibilityConverter}}">
 
 
-                <lvc:PieChart Series="{Binding PieSeries}"
-                                  LegendPosition="Right"
-                                  TooltipPosition="Top"
-                                  
-                    ></lvc:PieChart>
 
-                <TextBlock Text="Proba tekst"></TextBlock>
-             
-            </Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                    <Grid Grid.Column="0">
+                    <lvc:PieChart 
+                  Series="{Binding PieSeries}"
+                  LegendPosition="Right"
+                  TooltipPosition="Top"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"/>
+
+                </Grid>
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <ComboBox
+        Grid.Row="0"
+        Margin="5"
+        ItemsSource="{Binding Years}"
+        SelectedItem="{Binding SelectedYear}" />
+
+                    <lvc:CartesianChart
+        Grid.Row="1"
+        Margin="5"
+        Series="{Binding BarSeries}"
+        XAxes="{Binding XAxes}"
+        YAxes="{Binding YAxes}" />
+                </Grid >
+               
+                
+                
+
+                
+      
+                </Grid>
             
+           
             <Grid Grid.Column="1"
       Visibility="{Binding IsSettings, Converter={StaticResource BooleanToVisibilityConverter}}">
 

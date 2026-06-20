@@ -1,4 +1,5 @@
-﻿using HCI_2025_Project.Services;
+﻿
+using HCI_2025_Project.Services;
 using HCI_2025_Project_Template.Models;
 using HCI_2025_Project_Template.Services;
 using LiveChartsCore;
@@ -179,6 +180,18 @@ namespace HCI_2025_Project_Template.ViewModels
             _apiService = new PaperlessApiService();
             Documents = new ObservableCollection<Document>();
 
+            XAxes = new Axis[]
+{
+        new Axis
+        {
+            Labels = MonthLabels
+        }
+                };
+
+            YAxes = new Axis[]
+            {
+    new Axis()
+            };
         }
 
         public ObservableCollection<Document> Documents { get; }
@@ -734,10 +747,22 @@ namespace HCI_2025_Project_Template.ViewModels
                         ? name
                         : "Unknown";
                 }
+                Years = new ObservableCollection<int>(
+               _allDocuments
+            .Select(d => d.Created.Year)
+            .Distinct()
+            .OrderByDescending(x => x)
+           );
+
+                OnPropertyChanged(nameof(Years));
+
+                SelectedYear = Years.FirstOrDefault(); // auto izabere prvu
 
                 _analyticsLoaded = true;
 
                 BuildPieChartFromCache();
+                BuildBarChart();
+                LoadTagCloud();
             }
             finally
             {
@@ -762,6 +787,102 @@ namespace HCI_2025_Project_Template.ViewModels
                     Name = $"{x.Key} ({percent:0.0}%)"
                 };
             }).ToArray();
+        }
+
+        //bar chart
+
+        public ObservableCollection<int> Years { get; set; } = new();
+
+        private int _selectedYear;
+        public int SelectedYear
+        {
+            get => _selectedYear;
+            set
+            {
+                _selectedYear = value;
+                OnPropertyChanged();
+                BuildBarChart(); // svaki put kad promijeniš godinu
+            }
+
+
+        }
+        public string[] MonthLabels { get; set; } =
+[
+             "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+             "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+            ];
+
+        private ISeries[] _barSeries;
+        public ISeries[] BarSeries
+        {
+            get => _barSeries;
+            set
+            {
+                _barSeries = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public void BuildBarChart()
+        {
+            var filtered = _allDocuments
+                .Where(d => d.Created.Year == SelectedYear)
+                .GroupBy(d => d.Created.Month)
+                .ToDictionary(g => g.Key, g => g.Count());
+
+            var values = new int[12];
+
+            for (int i = 1; i <= 12; i++)
+            {
+                values[i - 1] = filtered.ContainsKey(i) ? filtered[i] : 0;
+            }
+
+            BarSeries = new ISeries[]
+            {
+        new ColumnSeries<int>
+        {
+            Values = values
+
+        }
+            };
+        }
+
+
+        private Axis[] _xAxes;
+        public Axis[] XAxes
+        {
+            get => _xAxes;
+            set
+            {
+                _xAxes = value;
+
+                OnPropertyChanged();
+            }
+        }
+
+        private Axis[] _yAxes;
+        public Axis[] YAxes
+        {
+            get => _yAxes;
+            set
+            {
+                _yAxes = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public List<KeyValuePair<string, int>> _tagCloud = new();
+        public void LoadTagCloud()
+        {
+            Random rnd = new Random();
+            _tagCloud = _allDocuments
+       .GroupBy(d => d.DocumentTypeName)
+       .Select(g => new KeyValuePair<string, int>(g.Key, g.Count()))
+       .OrderByDescending(x => x.Value)
+       .ToList();
+
+
+
         }
 
     }

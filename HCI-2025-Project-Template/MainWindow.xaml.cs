@@ -127,6 +127,14 @@ namespace HCI_2025_Project_Template
             _viewModel.Navigate(AppView.Analytics);
             SetActive(BtnAnalytics);
             await _viewModel.LoadAnalyticsAsync();
+
+
+        }
+        private bool IsOverlapping(Point pos, Size size, List<Rect> placed)
+        {
+            var rect = new Rect(pos, size);
+
+            return placed.Any(r => r.IntersectsWith(rect));
         }
 
 
