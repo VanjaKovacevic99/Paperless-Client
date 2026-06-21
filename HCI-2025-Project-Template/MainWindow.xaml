@@ -584,48 +584,89 @@
             <Grid Grid.Column="1"  Visibility="{Binding IsAnalytics, Converter={StaticResource BooleanToVisibilityConverter}}">
 
 
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
                 
-                    <Grid Grid.Column="0">
-                    <lvc:PieChart 
-                  Series="{Binding PieSeries}"
-                  LegendPosition="Right"
-                  TooltipPosition="Top"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch"/>
 
-                </Grid>
-                <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
+                        <!-- GORE: TABOVI -->
+                        <RowDefinition Height="4*"/>
+
+                        <!-- DOLE: TABELA -->
+                        <RowDefinition Height="3*"/>
                     </Grid.RowDefinitions>
 
-                    <ComboBox
-        Grid.Row="0"
-        Margin="5"
-        ItemsSource="{Binding Years}"
-        SelectedItem="{Binding SelectedYear}" />
+                    <!-- ===================== -->
+                    <!-- TABOVI: PIE / BAR / TAGS -->
+                    <!-- ===================== -->
+                    <TabControl Grid.Row="0">
 
-                    <lvc:CartesianChart
-        Grid.Row="1"
-        Margin="5"
-        Series="{Binding BarSeries}"
-        XAxes="{Binding XAxes}"
-        YAxes="{Binding YAxes}" />
-                </Grid >
-               
-                
-                
+                        <!-- PIE CHART -->
+                        <TabItem Header="Pie">
+                            <Grid Margin="10">
+                                <lvc:PieChart 
+                    Series="{Binding PieSeries}"
+                    LegendPosition="Right"
+                    TooltipPosition="Top"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"/>
+                            </Grid>
+                        </TabItem>
 
-                
-      
-                </Grid>
+                        <!-- BAR CHART -->
+                        <TabItem Header="Bar">
+                            <Grid Margin="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <ComboBox Grid.Row="0"
+                          Margin="5"
+                          ItemsSource="{Binding Years}"
+                          SelectedItem="{Binding SelectedYear}" />
+
+                                <lvc:CartesianChart Grid.Row="1"
+                                    Margin="5"
+                                    Series="{Binding BarSeries}"
+                                    XAxes="{Binding XAxes}"
+                                    YAxes="{Binding YAxes}" />
+                            </Grid>
+                        </TabItem>
+
+                        <!-- TAG CLOUD -->
+                        <TabItem Header="Tags">
+                        <Grid x:Name="TagCloudContainer"  SizeChanged="TagCloudContainer_SizeChanged">
+                            <Canvas x:Name="TagPanel"
+                         Background="Transparent"
+                            ClipToBounds="True"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            />
+                            </Grid>
+                    </TabItem>
+                    
+                    </TabControl>
+
+                    <!-- ===================== -->
+                    <!-- TABELA ISPOD -->
+                    <!-- ===================== -->
+                    <DataGrid Grid.Row="1"
+              ItemsSource="{Binding Documents}"
+              AutoGenerateColumns="False"
+              Margin="10"
+              IsReadOnly="True">
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*" />
+                            <DataGridTextColumn Header="Created" Binding="{Binding CreatedDisplay}" Width="150" />
+                            <DataGridTextColumn Header="Tags" Binding="{Binding TagNamesDisplay}" Width="200" />
+                            <DataGridTextColumn Header="Type" Binding="{Binding DocumentTypeName}" Width="150" />
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+
+           
+
+            </Grid>
             
            
             <Grid Grid.Column="1"

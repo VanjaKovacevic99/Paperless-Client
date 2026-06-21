@@ -1,4 +1,5 @@
-﻿using HCI_2025_Project_Template.Models;
+﻿
+using HCI_2025_Project_Template.Models;
 using HCI_2025_Project_Template.ViewModels;
 using HCI_2025_Project_Template.Views;
 using System.Windows;
@@ -12,13 +13,15 @@ namespace HCI_2025_Project_Template
     public partial class MainWindow : Window
     {
         private readonly DocumentsViewModel _viewModel;
-
+        private bool _tagCloudReady = false;
         public MainWindow()
         {
             InitializeComponent();
             _viewModel = new DocumentsViewModel();
             this.DataContext = _viewModel;
             SetActive(BtnDocuments);
+
+
 
 
         }
@@ -128,14 +131,154 @@ namespace HCI_2025_Project_Template
             SetActive(BtnAnalytics);
             await _viewModel.LoadAnalyticsAsync();
 
+            DrawTagCloud(TagPanel, _viewModel._tagCloud, 12, 30, 5);
+
 
         }
-        private bool IsOverlapping(Point pos, Size size, List<Rect> placed)
+
+        public void DrawTagCloud(Canvas canvas, List<KeyValuePair<string, int>> tags,
+                           double minFontSize = 12, double maxFontSize = 28,
+                           double spacing = 4.0)
         {
-            var rect = new Rect(pos, size);
+            if (canvas == null || tags == null || tags.Count == 0)
+                return;
 
-            return placed.Any(r => r.IntersectsWith(rect));
+            canvas.Children.Clear();
+
+            double widthGrid = canvas.ActualWidth;
+            double heightGrid = canvas.ActualHeight;
+
+            double centerX = widthGrid / 2;
+            double centerY = heightGrid / 2;
+
+            if (centerX <= 0 || centerY <= 0)
+            {
+                centerX = 400;
+                centerY = 100;
+            }
+
+            var cleanTags = tags
+                .Where(t => !string.IsNullOrWhiteSpace(t.Key) &&
+                            !t.Key.Equals("Unknown", StringComparison.OrdinalIgnoreCase))
+                .OrderByDescending(t => t.Value)
+                .ToList();
+
+            if (cleanTags.Count == 0)
+                return;
+
+            int maxWeight = cleanTags.Max(t => t.Value);
+            int minWeight = cleanTags.Min(t => t.Value);
+
+            List<Rect> occupiedRects = new List<Rect>();
+
+            int index = 0;
+            int total = cleanTags.Count;
+
+            foreach (var tag in cleanTags)
+            {
+                // 🔥 3 LEVEL FONT SIZE
+                double fontSize;
+
+                double ratio = (double)index / total;
+
+                if (ratio < 0.33)
+                    fontSize = maxFontSize;                         // najvažniji
+                else if (ratio < 0.66)
+                    fontSize = (minFontSize + maxFontSize) / 2;     // srednji
+                else
+                    fontSize = minFontSize;                        // najmanji
+
+                // 🎨 3 BOJE
+                SolidColorBrush brush;
+
+                if (fontSize == maxFontSize)
+                    brush = new SolidColorBrush(Colors.DarkBlue);
+                else if (fontSize == (minFontSize + maxFontSize) / 2)
+                    brush = new SolidColorBrush(Colors.MediumPurple);
+                else
+                    brush = new SolidColorBrush(Colors.Gray);
+
+                TextBlock tb = new TextBlock
+                {
+                    Text = tag.Key,
+                    FontSize = fontSize,
+                    FontWeight = FontWeights.Bold,
+                    Foreground = brush
+                };
+
+                tb.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+
+                double width = tb.DesiredSize.Width + spacing;
+                double height = tb.DesiredSize.Height + spacing;
+
+                double angle = 0;
+                double radius = 0;
+
+                const double angleStep = 0.25;
+                const double radiusStep = 0.8;
+                const int maxAttempts = 3000;
+
+                bool placed = false;
+                int attempts = 0;
+
+                while (!placed && attempts < maxAttempts)
+                {
+                    double x = centerX + radius * Math.Cos(angle) - width / 2;
+                    double y = centerY + radius * Math.Sin(angle) - height / 2;
+
+                    Rect candidate = new Rect(x, y, width, height);
+
+                    bool overlaps = false;
+
+                    foreach (var occupied in occupiedRects)
+                    {
+                        if (candidate.IntersectsWith(occupied))
+                        {
+                            overlaps = true;
+                            break;
+                        }
+                    }
+
+                    if (!overlaps)
+                    {
+                        occupiedRects.Add(candidate);
+
+                        Canvas.SetLeft(tb, x);
+                        Canvas.SetTop(tb, y);
+                        canvas.Children.Add(tb);
+
+                        placed = true;
+                    }
+                    else
+                    {
+                        angle += angleStep;
+                        radius += radiusStep / (1 + angle * 0.01);
+                        attempts++;
+                    }
+                }
+
+                if (!placed)
+                {
+                    double fallbackX = centerX + 50 * Math.Cos(attempts * 0.5);
+                    double fallbackY = centerY + 50 * Math.Sin(attempts * 0.5);
+
+                    Canvas.SetLeft(tb, fallbackX - width / 2);
+                    Canvas.SetTop(tb, fallbackY - height / 2);
+                    canvas.Children.Add(tb);
+                }
+
+                index++;
+            }
         }
+
+        private void TagCloudContainer_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            DrawTagCloud(TagPanel, _viewModel._tagCloud);
+        }
+
+
+
+
 
 
         private void ChooseFile_Click(object sender, RoutedEventArgs e)

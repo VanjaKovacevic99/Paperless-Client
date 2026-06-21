@@ -876,10 +876,11 @@ namespace HCI_2025_Project_Template.ViewModels
         {
             Random rnd = new Random();
             _tagCloud = _allDocuments
-       .GroupBy(d => d.DocumentTypeName)
-       .Select(g => new KeyValuePair<string, int>(g.Key, g.Count()))
-       .OrderByDescending(x => x.Value)
-       .ToList();
+            .Where(d => !string.IsNullOrWhiteSpace(d.DocumentTypeName))
+            .GroupBy(d => d.DocumentTypeName)
+            .Select(g => new KeyValuePair<string, int>(g.Key, g.Count()))
+            .OrderByDescending(x => x.Value)
+            .ToList();
 
 
 
