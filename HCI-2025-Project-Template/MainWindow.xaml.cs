@@ -76,10 +76,7 @@ namespace HCI_2025_Project_Template
         {
             var vm = (DocumentsViewModel)DataContext;
 
-            vm.SelectedTag = vm.Tags[0];
-            vm.SelectedType = vm.DocumentTypes[0];
-            vm.SelectedCorrespondent = vm.Correspondents[0];
-            vm.SearchText = "";
+            vm.ResetFilters();
         }
 
         private void DocumentsGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -108,6 +105,7 @@ namespace HCI_2025_Project_Template
         private void Documents_Click(object sender, RoutedEventArgs e)
         {
             _viewModel.Navigate(AppView.Documents);
+            _viewModel.ResetFilters();
             SetActive(BtnDocuments);
         }
 
@@ -133,6 +131,7 @@ namespace HCI_2025_Project_Template
             _viewModel.Navigate(AppView.Analytics);
             SetActive(BtnAnalytics);
             await _viewModel.LoadAnalyticsAsync();
+
 
             DrawTagCloud(TagPanel, _viewModel._tagCloud, 12, 30, 5);
 

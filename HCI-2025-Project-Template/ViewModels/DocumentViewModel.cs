@@ -940,7 +940,21 @@ namespace HCI_2025_Project_Template.ViewModels
             _ = LoadDocumentsAsync();
         }
 
+        public void ResetFilters()
+        {
+            SelectedTag = Tags.FirstOrDefault();
+            SelectedType = DocumentTypes.FirstOrDefault();
+            SelectedCorrespondent = Correspondents.FirstOrDefault();
 
+            SearchText = string.Empty;
+
+            CurrentPage = 1;
+
+            _appliedYear = null;
+            _appliedMonth = null;
+
+            _ = LoadDocumentsAsync();
+        }
     }
 
 }

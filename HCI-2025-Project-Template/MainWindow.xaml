@@ -593,6 +593,7 @@
                         <!-- DOLE: TABELA -->
                         <RowDefinition Height="3*"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
                     <!-- ===================== -->
@@ -723,6 +724,13 @@ Margin="5">
                         </StackPanel>
                     </Button>
                 </StackPanel>
+                <Grid Grid.Row="3">
+                    <Button Content="{DynamicResource Reset}"
+                    Margin="10,0,0,0"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Click="ResetFilters_Click"/>
+                </Grid>
+
 
             </Grid>
             
