@@ -781,12 +781,23 @@ namespace HCI_2025_Project_Template.ViewModels
                 IsLoading = false;
             }
         }
+        public Action<string> PieClicked;
+        public Dictionary<string, DocumentType> PieMap = new();
         public void BuildPieChartFromCache()
         {
             var stats = _allDocuments
-                .GroupBy(d => d.DocumentTypeName ?? "Unknown")
+            .Where(d => !string.IsNullOrWhiteSpace(d.DocumentTypeName) &&
+                 d.DocumentTypeName != "Unknown")
+                .GroupBy(d => d.DocumentTypeName)
                 .ToDictionary(g => g.Key, g => g.Count());
 
+            PieMap = new Dictionary<string, DocumentType>();
+            foreach (var x in stats)
+            {
+
+                PieMap[x.Key] = DocumentTypes.FirstOrDefault(t => t.Name == x.Key);
+
+            }
             var total = stats.Values.Sum();
 
             PieSeries = stats.OrderByDescending(k => k.Value).Select(x =>
@@ -796,7 +807,9 @@ namespace HCI_2025_Project_Template.ViewModels
                 return new PieSeries<double>
                 {
                     Values = new[] { (double)x.Value },
-                    Name = $"{x.Key} ({percent:0.0}%)"
+                    Name = $"{x.Key} ({percent:0.0}%)",
+
+
                 };
             }).ToArray();
         }
@@ -901,5 +914,8 @@ namespace HCI_2025_Project_Template.ViewModels
 
         }
 
+
+
     }
+
 }

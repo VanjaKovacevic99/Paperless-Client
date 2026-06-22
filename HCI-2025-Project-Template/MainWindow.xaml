@@ -614,7 +614,8 @@
                         LegendPosition="Right"
                         TooltipPosition="Top"
                         HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"/>
+                        VerticalAlignment="Stretch"
+                        DataPointerDown="PieChart_DataPointerDown"/>
                             </Grid>
                         </TabItem>
                    

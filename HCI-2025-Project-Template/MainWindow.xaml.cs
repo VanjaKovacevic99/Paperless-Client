@@ -2,6 +2,8 @@
 using HCI_2025_Project_Template.Models;
 using HCI_2025_Project_Template.ViewModels;
 using HCI_2025_Project_Template.Views;
+using LiveChartsCore.Kernel;
+using LiveChartsCore.Kernel.Sketches;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -20,6 +22,7 @@ namespace HCI_2025_Project_Template
             _viewModel = new DocumentsViewModel();
             this.DataContext = _viewModel;
             SetActive(BtnDocuments);
+
 
 
 
@@ -300,6 +303,45 @@ namespace HCI_2025_Project_Template
         }
 
 
+        private void PieChart_DataPointerDown(IChartView chart, IEnumerable<ChartPoint> points)
+        {
+            if (points == null || !points.Any()) return;
+
+            var vm = (DocumentsViewModel)DataContext;
+            var point = points.First();
+            if (point == null) return;
+
+
+            string seriesName = point.Context.Series.Name;
+            if (string.IsNullOrEmpty(seriesName)) return;
+
+
+            int idx = seriesName.IndexOf('(');
+            string key = idx > 0 ? seriesName.Substring(0, idx).Trim() : seriesName;
+
+
+            if (vm.PieMap != null && vm.PieMap.TryGetValue(key, out var selected))
+            {
+                vm.SelectedType = selected;
+                vm.CurrentPage = 1;
+                _ = vm.LoadDocumentsAsync();
+            }
+            else
+            {
+
+                selected = vm.DocumentTypes.FirstOrDefault(t => t.Name == key);
+                if (selected != null)
+                {
+                    vm.SelectedType = selected;
+                    vm.CurrentPage = 1;
+                    _ = vm.LoadDocumentsAsync();
+                }
+                else
+                {
+                    MessageBox.Show($"Nije pronađen tip: {key}");
+                }
+            }
+        }
 
 
         private void ChooseFile_Click(object sender, RoutedEventArgs e)
