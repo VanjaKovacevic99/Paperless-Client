@@ -631,13 +631,15 @@
                                 <ComboBox Grid.Row="0"
                           Margin="5"
                           ItemsSource="{Binding Years}"
-                          SelectedItem="{Binding SelectedYear}" />
+                          SelectedItem="{Binding SelectedYear}" 
+                           />
 
                                 <lvc:CartesianChart Grid.Row="1"
                                     Margin="5"
                                     Series="{Binding BarSeries}"
                                     XAxes="{Binding XAxes}"
-                                    YAxes="{Binding YAxes}" />
+                                    YAxes="{Binding YAxes}" 
+                                    DataPointerDown="BarChart_DataPointerDown"/>
                             </Grid>
                         </TabItem>
 

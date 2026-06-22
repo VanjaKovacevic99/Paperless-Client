@@ -342,7 +342,20 @@ namespace HCI_2025_Project_Template
                 }
             }
         }
+        private void BarChart_DataPointerDown(LiveChartsCore.Kernel.Sketches.IChartView chart, System.Collections.Generic.IEnumerable<LiveChartsCore.Kernel.ChartPoint> points)
+        {
+            if (points == null || !points.Any()) return;
 
+            var point = points.FirstOrDefault();
+            if (point == null) return;
+
+            // Dohvati indeks stupca (0 = Jan, 1 = Feb, ...)
+            int monthIndex = (int)point.Index;
+            int month = monthIndex + 1; // 1 = Jan, 2 = Feb, ...
+
+            var vm = (DocumentsViewModel)DataContext;
+            vm.OnBarClicked(month);
+        }
 
         private void ChooseFile_Click(object sender, RoutedEventArgs e)
         {

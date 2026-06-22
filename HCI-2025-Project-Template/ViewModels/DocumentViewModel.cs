@@ -216,6 +216,7 @@ namespace HCI_2025_Project_Template.ViewModels
             IsLoading = true;
             Documents.Clear();
 
+
             int? tagId = (SelectedTag != null && SelectedTag.Id != 0)
     ? SelectedTag.Id
     : null;
@@ -236,7 +237,9 @@ namespace HCI_2025_Project_Template.ViewModels
                     SearchText,
                     tagId,
                     typeId,
-                    correspondentId
+                    correspondentId,
+                    _appliedYear,
+                    _appliedMonth
                 );
 
 
@@ -244,8 +247,11 @@ namespace HCI_2025_Project_Template.ViewModels
                 _previous = response.previous;
 
                 var documents = response.results;
+
                 if (response?.results == null)
                     return;
+
+
 
                 // load once
                 if (_tagsCache.Count == 0)
@@ -914,6 +920,25 @@ namespace HCI_2025_Project_Template.ViewModels
 
         }
 
+        private int? _selectedMonthFromChart;
+        private int? _appliedYear;
+        private int? _appliedMonth;
+
+        public void OnBarClicked(int month)
+        {
+            if (SelectedYear == 0)
+            {
+                MessageBox.Show("Prvo odaberi godinu iz combo box-a!");
+                return;
+            }
+
+            _appliedYear = SelectedYear;
+            _appliedMonth = month;
+
+
+            CurrentPage = 1;
+            _ = LoadDocumentsAsync();
+        }
 
 
     }

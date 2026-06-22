@@ -160,7 +160,7 @@ namespace HCI_2025_Project.Services
             return apiResponse?.results ?? new List<Correspondent>();
         }
 
-        public async Task<ApiResponse<Document>> GetDocumentsAsync(int page, int pageSize, string search, int? tagId, int? typeId, int? correspondentId)
+        public async Task<ApiResponse<Document>> GetDocumentsAsync(int page, int pageSize, string search, int? tagId, int? typeId, int? correspondentId, int? year, int? month)
         {
             var url = $"documents/?page={page}&page_size={pageSize}";
 
@@ -175,6 +175,11 @@ namespace HCI_2025_Project.Services
 
             if (correspondentId.HasValue)
                 url += $"&correspondent__id={correspondentId}";
+
+            if (year.HasValue)
+                url += $"&created__year={year}";
+            if (month.HasValue)
+                url += $"&created__month={month}";
 
             var response = await _httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
