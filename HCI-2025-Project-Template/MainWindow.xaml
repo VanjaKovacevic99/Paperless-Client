@@ -592,7 +592,8 @@
 
                         <!-- DOLE: TABELA -->
                         <RowDefinition Height="3*"/>
-                    </Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
                     <!-- ===================== -->
                     <!-- TABOVI: PIE / BAR / TAGS -->
@@ -601,15 +602,22 @@
 
                         <!-- PIE CHART -->
                         <TabItem Header="Pie">
+                   
                             <Grid Margin="10">
-                                <lvc:PieChart 
-                    Series="{Binding PieSeries}"
-                    LegendPosition="Right"
-                    TooltipPosition="Top"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"/>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <lvc:PieChart
+                         Grid.Row="0"
+                        Series="{Binding PieSeries}"
+                        LegendPosition="Right"
+                        TooltipPosition="Top"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"/>
                             </Grid>
                         </TabItem>
+                   
 
                         <!-- BAR CHART -->
                         <TabItem Header="Bar">
@@ -649,22 +657,69 @@
                     <!-- ===================== -->
                     <!-- TABELA ISPOD -->
                     <!-- ===================== -->
-                    <DataGrid Grid.Row="1"
-              ItemsSource="{Binding Documents}"
-              AutoGenerateColumns="False"
-              Margin="10"
-              IsReadOnly="True">
+                <DataGrid Grid.Row="1" ItemsSource="{Binding Documents}"
+            AutoGenerateColumns="False"
+            IsReadOnly="True"
+            MouseDoubleClick="DocumentsGrid_MouseDoubleClick">
+                    <DataGrid.Columns>
 
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*" />
-                            <DataGridTextColumn Header="Created" Binding="{Binding CreatedDisplay}" Width="150" />
-                            <DataGridTextColumn Header="Tags" Binding="{Binding TagNamesDisplay}" Width="200" />
-                            <DataGridTextColumn Header="Type" Binding="{Binding DocumentTypeName}" Width="150" />
-                        </DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Title}"
+      Width="*">
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="{DynamicResource Title}" />
+                            </DataGridTextColumn.Header>
+                        </DataGridTextColumn>
 
-                    </DataGrid>
+                        <DataGridTextColumn Binding="{Binding CreatedDisplay}"
+      Width="200">
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="{DynamicResource Created}" />
+                            </DataGridTextColumn.Header>
+                        </DataGridTextColumn>
 
-           
+                        <DataGridTextColumn Binding="{Binding TagNamesDisplay}"
+      Width="200">
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="{DynamicResource Tags}" />
+                            </DataGridTextColumn.Header>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Binding="{Binding DocumentTypeName}"
+      Width="150">
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="{DynamicResource Type}" />
+                            </DataGridTextColumn.Header>
+                        </DataGridTextColumn>
+
+                    </DataGrid.Columns>
+
+                </DataGrid>
+                <StackPanel Grid.Row="2"
+                Orientation="Horizontal"
+                HorizontalAlignment="Center"
+                Margin="10">
+                    <Button Click="Prev_Click"
+IsEnabled="{Binding HasPreviousPage}"
+Margin="5">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="◀" Margin="0,0,5,0"/>
+                            <TextBlock Text="{DynamicResource Previous}"/>
+                        </StackPanel>
+                    </Button>
+
+                    <TextBlock Text="{Binding PageInfo}"
+   Margin="10"
+   VerticalAlignment="Center"/>
+
+                    <Button Click="Next_Click"
+IsEnabled="{Binding HasNextPage}"
+Margin="5">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{DynamicResource Next}"/>
+                            <TextBlock Text="▶" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
 
             </Grid>
             

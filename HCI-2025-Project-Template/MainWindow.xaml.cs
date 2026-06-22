@@ -176,7 +176,7 @@ namespace HCI_2025_Project_Template
 
             foreach (var tag in cleanTags)
             {
-                // 🔥 3 LEVEL FONT SIZE
+
                 double fontSize;
 
                 double ratio = (double)index / total;
@@ -188,7 +188,7 @@ namespace HCI_2025_Project_Template
                 else
                     fontSize = minFontSize;                        // najmanji
 
-                // 🎨 3 BOJE
+
                 SolidColorBrush brush;
 
                 if (fontSize == maxFontSize)
@@ -205,6 +205,9 @@ namespace HCI_2025_Project_Template
                     FontWeight = FontWeights.Bold,
                     Foreground = brush
                 };
+                tb.Cursor = Cursors.Hand;
+                tb.MouseLeftButtonUp += TagCloudItem_Click;
+                tb.Tag = tag.Key;
 
                 tb.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 
@@ -276,7 +279,25 @@ namespace HCI_2025_Project_Template
             DrawTagCloud(TagPanel, _viewModel._tagCloud);
         }
 
+        private async void TagCloudItem_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is TextBlock tb)
+            {
+                string tagName = tb.Tag?.ToString();
 
+                var vm = (DocumentsViewModel)DataContext;
+
+                var selectedTag = vm.Tags.FirstOrDefault(t => t.Name == tagName);
+
+                if (selectedTag != null)
+                {
+                    vm.SelectedTag = selectedTag;
+
+                    vm.CurrentPage = 1;
+
+                }
+            }
+        }
 
 
 

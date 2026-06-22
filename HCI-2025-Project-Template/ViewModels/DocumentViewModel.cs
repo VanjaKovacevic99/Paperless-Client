@@ -739,14 +739,26 @@ namespace HCI_2025_Project_Template.ViewModels
                 var typeMap = types.ToDictionary(x => x.Id, x => x.Name);
 
                 _allDocuments = await _apiService.GetAllDocumentsAsync();
+                var tagsLookup = _tagsCache.ToDictionary(t => t.Id, t => t.Name);
+                var typesLookup = _typesCache.ToDictionary(t => t.Id, t => t.Name);
 
-                foreach (var d in _allDocuments)
+                foreach (var doc in _allDocuments)
                 {
-                    d.DocumentTypeName =
-                        d.DocumentType.HasValue && typeMap.TryGetValue(d.DocumentType.Value, out var name)
-                        ? name
-                        : "Unknown";
+                    doc.TagNames = doc.Tags
+                        .Select(id => tagsLookup.TryGetValue(id, out var name) ? name : " ")
+                        .ToList();
+
+                    doc.DocumentTypeName =
+                        doc.DocumentType.HasValue &&
+                        typesLookup.TryGetValue(doc.DocumentType.Value, out var typeName)
+                        ? typeName
+                        : " ";
+
+
+
                 }
+
+
                 Years = new ObservableCollection<int>(
                _allDocuments
             .Select(d => d.Created.Year)
@@ -875,9 +887,12 @@ namespace HCI_2025_Project_Template.ViewModels
         public void LoadTagCloud()
         {
             Random rnd = new Random();
+
             _tagCloud = _allDocuments
-            .Where(d => !string.IsNullOrWhiteSpace(d.DocumentTypeName))
-            .GroupBy(d => d.DocumentTypeName)
+            .Where(d => d.TagNames != null)
+            .SelectMany(d => d.TagNames)
+            .Where(t => !string.IsNullOrWhiteSpace(t))
+            .GroupBy(tag => tag)
             .Select(g => new KeyValuePair<string, int>(g.Key, g.Count()))
             .OrderByDescending(x => x.Value)
             .ToList();
