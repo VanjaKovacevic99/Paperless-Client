@@ -52,4 +52,5 @@
   <sys:String x:Key="FileNotFound">Fajl nije pronađen.</sys:String>
   <sys:String x:Key="SearchTooLong">Tekst za pretragu je previše dug.</sys:String>
     <sys:String x:Key="Analytics">Analitika</sys:String>
+    <sys:String x:Key="Logout">Odjava</sys:String>
 </ResourceDictionary>

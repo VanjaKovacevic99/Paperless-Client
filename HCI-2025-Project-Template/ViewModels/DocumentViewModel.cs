@@ -23,6 +23,20 @@ namespace HCI_2025_Project_Template.ViewModels
         private string? _previous;
         private List<Tag> _tagsCache = new List<Tag>();
         private List<DocumentType> _typesCache = new List<DocumentType>();
+        public string Username { get; set; }
+
+        public DocumentsViewModel(PaperlessApiService apiService, string username)
+        {
+            _apiService = apiService;
+
+
+            Username = username;
+            Documents = new ObservableCollection<Document>();
+            Tags = new ObservableCollection<Tag>();
+            DocumentTypes = new ObservableCollection<DocumentType>();
+            Correspondents = new ObservableCollection<Correspondent>();
+
+        }
         public int _pageSize { get; set; } = 10;
 
         public int PageSize
@@ -348,7 +362,7 @@ namespace HCI_2025_Project_Template.ViewModels
             IsLoading = true;
             try
             {
-                Settings = _settingsService.Load();
+                Settings = _settingsService.Load(Username);
                 ApplyTheme();
                 SetLanguage(Settings.Language);
                 Tags = new ObservableCollection<Tag>(await _apiService.GetTagsAsync());
@@ -669,7 +683,7 @@ namespace HCI_2025_Project_Template.ViewModels
 
         public void SaveSettings()
         {
-            _settingsService.Save(Settings);
+            _settingsService.Save(Username, Settings);
         }
 
 

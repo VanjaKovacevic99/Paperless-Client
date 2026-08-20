@@ -1,9 +1,11 @@
 ﻿
+using HCI_2025_Project.Services;
 using HCI_2025_Project_Template.Models;
 using HCI_2025_Project_Template.ViewModels;
 using HCI_2025_Project_Template.Views;
 using LiveChartsCore.Kernel;
 using LiveChartsCore.Kernel.Sketches;
+using MaterialDesignThemes.Wpf;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -16,17 +18,14 @@ namespace HCI_2025_Project_Template
     {
         private readonly DocumentsViewModel _viewModel;
         private bool _tagCloudReady = false;
-        public MainWindow()
+        private readonly PaperlessApiService _apiService;
+        public MainWindow(PaperlessApiService apiService, string username)
         {
             InitializeComponent();
-            _viewModel = new DocumentsViewModel();
-            this.DataContext = _viewModel;
-            SetActive(BtnDocuments);
 
-
-
-
-
+            _apiService = apiService;
+            _viewModel = new DocumentsViewModel(_apiService, username);
+            DataContext = _viewModel;
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -472,6 +471,22 @@ namespace HCI_2025_Project_Template
 
             active.Background = new SolidColorBrush(Color.FromArgb(60, 0, 122, 204));
             active.BorderBrush = Brushes.DodgerBlue;
+        }
+
+        private void Logout_Click(object sender, RoutedEventArgs e)
+        {
+            // Vrati Material Design temu na default
+            var paletteHelper = new PaletteHelper();
+            var theme = paletteHelper.GetTheme();
+
+            theme.SetPrimaryColor(Colors.Indigo);
+
+            paletteHelper.SetTheme(theme);
+
+            var loginWindow = new LoginWindow(_apiService);
+            loginWindow.Show();
+
+            Close();
         }
     }
 }

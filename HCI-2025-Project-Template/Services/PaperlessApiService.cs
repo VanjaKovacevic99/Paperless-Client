@@ -18,8 +18,7 @@ namespace HCI_2025_Project.Services
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri("http://paperless-etf.duckdns.org:8000/api/");
 
-            _httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Token", "b8425a921ceaba0a8551bae3c70c3f2bd18b914f");
+
         }
 
         public async Task<ApiResponse<Document>> GetDocumentsAsync(int page, int pageSize)
@@ -310,16 +309,66 @@ namespace HCI_2025_Project.Services
                 bitmap.CacheOption = BitmapCacheOption.OnLoad;
                 bitmap.StreamSource = ms;
                 bitmap.EndInit();
-                bitmap.Freeze(); // omogućava korišćenje u drugim nitima
+                bitmap.Freeze();
 
                 return bitmap;
             }
             catch (Exception ex)
             {
-                // Ovde možeš logovati grešku, a ne prikazivati MessageBox (nije dobro u servisnom sloju)
-                // System.Diagnostics.Debug.WriteLine($"THUMBNAIL ERROR: {ex.Message}");
+                MessageBox.Show($"Error: {ex.Message}");
                 return null;
             }
+        }
+
+
+        public async Task<string?> LoginAsync(string username, string password)
+        {
+            try
+            {
+                var loginData = new
+                {
+                    username,
+                    password
+                };
+
+                var json = JsonSerializer.Serialize(loginData);
+                var content = new StringContent(
+                    json,
+                    Encoding.UTF8,
+                    "application/json");
+
+                var response = await _httpClient.PostAsync("token/", content);
+
+                if (!response.IsSuccessStatusCode)
+                    return null;
+
+                var responseJson = await response.Content.ReadAsStringAsync();
+
+                using var document = JsonDocument.Parse(responseJson);
+
+                if (!document.RootElement.TryGetProperty("token", out var tokenProperty))
+                    return null;
+
+                string? token = tokenProperty.GetString();
+
+                if (!string.IsNullOrWhiteSpace(token))
+                {
+                    SetToken(token);
+                    return token;
+                }
+
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public void SetToken(string token)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Token", token);
         }
     }
 }

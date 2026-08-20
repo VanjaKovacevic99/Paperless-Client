@@ -1,0 +1,75 @@
+﻿<Window x:Class="HCI_2025_Project_Template.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Paperless Client"
+        Height="600"
+        Width="900"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource MaterialDesignPaper}">
+
+    <Grid>
+
+        <materialDesign:Card
+            Width="600"
+            Padding="35"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+
+            <StackPanel>
+
+                <!-- LOGO -->
+                <Image Source="/Resources/Images/logo_black.png"
+       Width="280"
+       Height="100"
+       HorizontalAlignment="Center"
+       Margin="0,0,0,15"
+       Stretch="Uniform"/>
+
+            
+
+                <TextBlock
+                    Text="Sign in to continue"
+                    FontSize="14"
+                    Opacity="0.6"
+                    HorizontalAlignment="Center"
+                    Margin="0,5,0,30"/>
+
+                <!-- USERNAME -->
+                <TextBox
+                    x:Name="UsernameTextBox"
+                    materialDesign:HintAssist.Hint="Username"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    Margin="0,0,0,15"/>
+
+                <!-- PASSWORD -->
+                <PasswordBox
+                    x:Name="PasswordBox"
+                    materialDesign:HintAssist.Hint="Password"
+                    Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
+                    Margin="0,0,0,10"/>
+
+                <!-- ERROR MESSAGE -->
+                <TextBlock
+                    x:Name="ErrorText"
+                    Foreground="Red"
+                    FontSize="12"
+                    TextWrapping="Wrap"
+                    Margin="0,0,0,10"/>
+
+                <!-- LOGIN -->
+                <Button
+                    Content="Login"
+                    Height="42"
+                    Click="Login_Click"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                   
+                    Margin="0,10,0,0"/>
+
+            </StackPanel>
+
+        </materialDesign:Card>
+
+    </Grid>
+
+</Window>

@@ -31,15 +31,15 @@
     <Grid>
         <Grid Margin="10">
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="210"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="210"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-        <!-- ===================== -->
-        <!-- LEFT SIDEBAR -->
-        <!-- ===================== -->
-        <Border Grid.Column="0"
+            <!-- ===================== -->
+            <!-- LEFT SIDEBAR -->
+            <!-- ===================== -->
+            <Border Grid.Column="0"
                 Background="{DynamicResource MaterialDesignCardBackground}"
                 CornerRadius="8"
                 Padding="10"
@@ -48,6 +48,7 @@
                 <Grid>
 
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -134,31 +135,46 @@
                             <TextBlock Text="{DynamicResource Settings}"/>
                         </StackPanel>
                     </Button>
+                    <Button x:Name="BtnLogout"
+        Grid.Row="6"
+        HorizontalAlignment="Stretch"
+        HorizontalContentAlignment="Stretch"
+        Click="Logout_Click"
+        Style="{StaticResource MaterialDesignFlatButton}"
+        Margin="5">
+
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Logout"/>
+                            <TextBlock Text="{DynamicResource Logout}"
+                   Margin="5,0,0,0"/>
+                        </StackPanel>
+
+                    </Button>
 
                 </Grid>
 
             </Border>
 
-        <!-- ===================== -->
-        <!-- RIGHT MAIN CONTENT -->
-        <!-- ===================== -->
-        <Grid Grid.Column="1"  Visibility="{Binding IsDocuments, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <!-- ===================== -->
+            <!-- RIGHT MAIN CONTENT -->
+            <!-- ===================== -->
+            <Grid Grid.Column="1"  Visibility="{Binding IsDocuments, Converter={StaticResource BooleanToVisibilityConverter}}">
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <!-- HEADER -->
-            <StackPanel Grid.Row="0" Margin="0,0,0,10">
+                <!-- HEADER -->
+                <StackPanel Grid.Row="0" Margin="0,0,0,10">
 
-                <TextBlock Grid.Row="0" Text="{DynamicResource Documents}" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+                    <TextBlock Grid.Row="0" Text="{DynamicResource Documents}" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
 
-                <!-- SEARCH WRAPPER -->
-                <Grid Margin="0,0,0,10">
+                    <!-- SEARCH WRAPPER -->
+                    <Grid Margin="0,0,0,10">
 
-                    <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                  VerticalAlignment="Center"
                  VerticalContentAlignment="Center"
                  materialDesign:HintAssist.Hint="{DynamicResource Search}"
@@ -166,119 +182,119 @@
                  Padding="30,0,0,0"
                  Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
 
-                    <!-- ICON (LOUPE) -->
-                    <materialDesign:PackIcon Kind="Magnify"
+                        <!-- ICON (LOUPE) -->
+                        <materialDesign:PackIcon Kind="Magnify"
                                  Width="20"
                                  Height="20"
                                  VerticalAlignment="Center"
                                  HorizontalAlignment="Left"
                                  Margin="10,0,0,0"/>
-                </Grid>
+                    </Grid>
 
-                <!-- FILTERS -->
-                <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+                    <!-- FILTERS -->
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
 
-                    <ComboBox Width="180"
+                        <ComboBox Width="180"
                   ItemsSource="{Binding Tags}"
                   DisplayMemberPath="Name"
                   SelectedItem="{Binding SelectedTag}"
                   materialDesign:HintAssist.Hint="{DynamicResource Tag}"/>
 
-                    <ComboBox Width="180"
+                        <ComboBox Width="180"
                   Margin="10,0,0,0"
                   ItemsSource="{Binding DocumentTypes}"
                   DisplayMemberPath="Name"
                   SelectedItem="{Binding SelectedType}"
                   materialDesign:HintAssist.Hint="{DynamicResource Type}"/>
 
-                    <ComboBox Width="180"
+                        <ComboBox Width="180"
                   Margin="10,0,0,0"
                   ItemsSource="{Binding Correspondents}"
                   DisplayMemberPath="Name"
                   SelectedItem="{Binding SelectedCorrespondent}"
                   materialDesign:HintAssist.Hint="{DynamicResource Correspondent}"/>
 
-                    <Button Content="{DynamicResource Reset}"
+                        <Button Content="{DynamicResource Reset}"
                 Margin="10,0,0,0"
                 Style="{StaticResource MaterialDesignOutlinedButton}"
                 Click="ResetFilters_Click"/>
 
+                    </StackPanel>
+
                 </StackPanel>
 
-            </StackPanel>
-
-            <!-- ================= TAB CONTENT ================= -->
-            <TabControl Grid.Row="1"
+                <!-- ================= TAB CONTENT ================= -->
+                <TabControl Grid.Row="1"
                         Style="{StaticResource MaterialDesignTabControl}"
                         >
 
-                <!-- TABLE -->
-                <TabItem Header="{DynamicResource Table}">
+                    <!-- TABLE -->
+                    <TabItem Header="{DynamicResource Table}">
 
-                    <DataGrid ItemsSource="{Binding Documents}"
+                        <DataGrid ItemsSource="{Binding Documents}"
                               AutoGenerateColumns="False"
                               IsReadOnly="True"
                               MouseDoubleClick="DocumentsGrid_MouseDoubleClick">
-                        <DataGrid.Columns>
+                            <DataGrid.Columns>
 
-                            <DataGridTextColumn Binding="{Binding Title}"
+                                <DataGridTextColumn Binding="{Binding Title}"
                         Width="*">
-                                <DataGridTextColumn.Header>
-                                    <TextBlock Text="{DynamicResource Title}" />
-                                </DataGridTextColumn.Header>
-                            </DataGridTextColumn>
+                                    <DataGridTextColumn.Header>
+                                        <TextBlock Text="{DynamicResource Title}" />
+                                    </DataGridTextColumn.Header>
+                                </DataGridTextColumn>
 
-                            <DataGridTextColumn Binding="{Binding CreatedDisplay}"
+                                <DataGridTextColumn Binding="{Binding CreatedDisplay}"
                         Width="200">
-                                <DataGridTextColumn.Header>
-                                    <TextBlock Text="{DynamicResource Created}" />
-                                </DataGridTextColumn.Header>
-                            </DataGridTextColumn>
+                                    <DataGridTextColumn.Header>
+                                        <TextBlock Text="{DynamicResource Created}" />
+                                    </DataGridTextColumn.Header>
+                                </DataGridTextColumn>
 
-                            <DataGridTextColumn Binding="{Binding TagNamesDisplay}"
+                                <DataGridTextColumn Binding="{Binding TagNamesDisplay}"
                         Width="200">
-                                <DataGridTextColumn.Header>
-                                    <TextBlock Text="{DynamicResource Tags}" />
-                                </DataGridTextColumn.Header>
-                            </DataGridTextColumn>
+                                    <DataGridTextColumn.Header>
+                                        <TextBlock Text="{DynamicResource Tags}" />
+                                    </DataGridTextColumn.Header>
+                                </DataGridTextColumn>
 
-                            <DataGridTextColumn Binding="{Binding DocumentTypeName}"
+                                <DataGridTextColumn Binding="{Binding DocumentTypeName}"
                         Width="150">
-                                <DataGridTextColumn.Header>
-                                    <TextBlock Text="{DynamicResource Type}" />
-                                </DataGridTextColumn.Header>
-                            </DataGridTextColumn>
+                                    <DataGridTextColumn.Header>
+                                        <TextBlock Text="{DynamicResource Type}" />
+                                    </DataGridTextColumn.Header>
+                                </DataGridTextColumn>
 
-                        </DataGrid.Columns>
+                            </DataGrid.Columns>
 
-                    </DataGrid>
+                        </DataGrid>
 
-                </TabItem>
-                
+                    </TabItem>
 
-                <!-- CARDS -->
-                <TabItem Header="{DynamicResource Cards}">
 
-                    <ScrollViewer>
+                    <!-- CARDS -->
+                    <TabItem Header="{DynamicResource Cards}">
 
-                        <ItemsControl ItemsSource="{Binding Documents}">
+                        <ScrollViewer>
 
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
+                            <ItemsControl ItemsSource="{Binding Documents}">
 
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
 
-                                    <materialDesign:Card Width="220"
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+
+                                        <materialDesign:Card Width="220"
                                                          Margin="10"
                                                          Padding="10"
                                                          Background="White"
                                                          MouseDoubleClick="Card_MouseDoubleClick">
 
-                                        <StackPanel>
+                                            <StackPanel>
                                                 <Border Height="120"
                 Margin="0,0,0,10"
                 CornerRadius="5"
@@ -290,98 +306,98 @@
                                                        FontSize="16"
                                                        FontWeight="Bold"/>
 
-                                            <TextBlock Text="{Binding CreatedDisplay}"
+                                                <TextBlock Text="{Binding CreatedDisplay}"
                                                        Opacity="0.6"/>
 
-                                            <TextBlock Text="{Binding TagNamesDisplay}"
+                                                <TextBlock Text="{Binding TagNamesDisplay}"
                                                        TextWrapping="Wrap"
                                                        Margin="0,5,0,0"/>
 
-                                            <TextBlock Text="{Binding DocumentTypeName}"
+                                                <TextBlock Text="{Binding DocumentTypeName}"
                                                        FontStyle="Italic"
                                                        Opacity="0.7"/>
 
-                                        </StackPanel>
+                                            </StackPanel>
 
-                                    </materialDesign:Card>
+                                        </materialDesign:Card>
 
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
 
-                        </ItemsControl>
+                            </ItemsControl>
 
-                    </ScrollViewer>
+                        </ScrollViewer>
 
-                </TabItem>
+                    </TabItem>
 
-            </TabControl>
+                </TabControl>
 
-            <!-- ================= PAGINATION ================= -->
-            <StackPanel Grid.Row="2"
+                <!-- ================= PAGINATION ================= -->
+                <StackPanel Grid.Row="2"
                         Orientation="Horizontal"
                         HorizontalAlignment="Center"
                         Margin="10">
-                <Button Click="Prev_Click"
+                    <Button Click="Prev_Click"
         IsEnabled="{Binding HasPreviousPage}"
         Margin="5">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="◀" Margin="0,0,5,0"/>
-                        <TextBlock Text="{DynamicResource Previous}"/>
-                    </StackPanel>
-                </Button>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="◀" Margin="0,0,5,0"/>
+                            <TextBlock Text="{DynamicResource Previous}"/>
+                        </StackPanel>
+                    </Button>
 
-                <TextBlock Text="{Binding PageInfo}"
+                    <TextBlock Text="{Binding PageInfo}"
            Margin="10"
            VerticalAlignment="Center"/>
 
-                <Button Click="Next_Click"
+                    <Button Click="Next_Click"
         IsEnabled="{Binding HasNextPage}"
         Margin="5">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{DynamicResource Next}"/>
-                        <TextBlock Text="▶" Margin="5,0,0,0"/>
-                    </StackPanel>
-                </Button>
-            </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{DynamicResource Next}"/>
+                            <TextBlock Text="▶" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
 
-        </Grid>
-        <Grid Grid.Column="1"   Visibility="{Binding IsUpload, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Border Padding="60,40,60,40">
-                <StackPanel HorizontalAlignment="Stretch" >
+            </Grid>
+            <Grid Grid.Column="1"   Visibility="{Binding IsUpload, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Border Padding="60,40,60,40">
+                    <StackPanel HorizontalAlignment="Stretch" >
 
-                    <TextBlock Text="{DynamicResource UploadDocument}"
+                        <TextBlock Text="{DynamicResource UploadDocument}"
                    FontSize="20"
                    FontWeight="Bold"
                    Margin="0,0,0,10"/>
 
-                    <!-- TITLE -->
-                    <TextBox Text="{Binding Upload.Title, UpdateSourceTrigger=PropertyChanged}"
+                        <!-- TITLE -->
+                        <TextBox Text="{Binding Upload.Title, UpdateSourceTrigger=PropertyChanged}"
                  materialDesign:HintAssist.Hint="{DynamicResource Title}"
                  Margin="0,0,0,10"/>
 
-                    <!-- TAG -->
-                    <ComboBox ItemsSource="{Binding Tags}"
+                        <!-- TAG -->
+                        <ComboBox ItemsSource="{Binding Tags}"
                   DisplayMemberPath="Name"
                   SelectedItem="{Binding Upload.Tag}"
                   materialDesign:HintAssist.Hint="{DynamicResource Tag}"
                   Margin="0,0,0,10"/>
 
-                    <!-- TYPE -->
-                    <ComboBox ItemsSource="{Binding DocumentTypes}"
+                        <!-- TYPE -->
+                        <ComboBox ItemsSource="{Binding DocumentTypes}"
                   DisplayMemberPath="Name"
                   SelectedItem="{Binding Upload.Type}"
                   materialDesign:HintAssist.Hint="{DynamicResource Type}"
                   Margin="0,0,0,10"/>
 
-                    <!-- CORRESPONDENT -->
-                    <ComboBox ItemsSource="{Binding Correspondents}"
+                        <!-- CORRESPONDENT -->
+                        <ComboBox ItemsSource="{Binding Correspondents}"
                   DisplayMemberPath="Name"
                   SelectedItem="{Binding Upload.Correspondent}"
                   materialDesign:HintAssist.Hint="{DynamicResource Correspondent}"
                   Margin="0,0,0,20"/>
 
-                    <!-- FILE SECTION (LAST) -->
-                    <Border BorderBrush="#DDD"
+                        <!-- FILE SECTION (LAST) -->
+                        <Border BorderBrush="#DDD"
                 BorderThickness="1"
                 Padding="15"
                 CornerRadius="8"
@@ -389,95 +405,95 @@
                 AllowDrop="True"
                 Drop="File_Drop">
 
-                        <StackPanel HorizontalAlignment="Center">
+                            <StackPanel HorizontalAlignment="Center">
 
-                            <TextBlock Text="Drag &amp; drop file "
+                                <TextBlock Text="Drag &amp; drop file "
                            HorizontalAlignment="Center"
                            Opacity="0.7"
                            Margin="0,0,0,10"/>
 
-                            <TextBlock Text="{Binding UploadFileName}"
+                                <TextBlock Text="{Binding UploadFileName}"
                            HorizontalAlignment="Center"
                            FontWeight="Bold"
                            Margin="0,0,0,10"/>
 
-                            <Button Content="{DynamicResource ChooseFile}"
+                                <Button Content="{DynamicResource ChooseFile}"
                         Width="150"
                         Click="ChooseFile_Click"
                         Style="{StaticResource MaterialDesignOutlinedButton}"/>
 
-                        </StackPanel>
+                            </StackPanel>
 
-                    </Border>
+                        </Border>
 
-                    <!-- UPLOAD BUTTON -->
-                    <Button Content="{DynamicResource Create}"
+                        <!-- UPLOAD BUTTON -->
+                        <Button Content="{DynamicResource Create}"
                 Margin="0,20,0,0"
                 Height="40"
                 Style="{StaticResource MaterialDesignRaisedButton}"
                 Click="UploadFile_Click"/>
 
-                </StackPanel>
-            </Border>
-        </Grid>
-        <Grid Grid.Column="1"  Visibility="{Binding IsTags, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="40">
+                    </StackPanel>
+                </Border>
+            </Grid>
+            <Grid Grid.Column="1"  Visibility="{Binding IsTags, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="40">
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
 
-            <!-- Naslov -->
-            <TextBlock Grid.Row="0" Text="{DynamicResource Tags}" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+                <!-- Naslov -->
+                <TextBlock Grid.Row="0" Text="{DynamicResource Tags}" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
 
-            <!-- Dodavanje novog taga -->
-            <Grid Grid.Row="1" Margin="0,0,0,20">
+                <!-- Dodavanje novog taga -->
+                <Grid Grid.Row="1" Margin="0,0,0,20">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <!-- NAME -->
-                <TextBox Grid.Column="0"
+                    <!-- NAME -->
+                    <TextBox Grid.Column="0"
              MinWidth="120"
              Text="{Binding NewTagName, UpdateSourceTrigger=PropertyChanged}"
              materialDesign:HintAssist.Hint="{DynamicResource EnterNewTag}"
              Margin="0,0,10,0"/>
 
-                <!-- COLOR -->
-                <materialDesign:ColorPicker Grid.Column="1"
+                    <!-- COLOR -->
+                    <materialDesign:ColorPicker Grid.Column="1"
                               
                                  Color="{Binding NewTagColor, Mode=TwoWay}"
                                  
                                  Margin="0,0,10,0"/>
 
 
-                <TextBlock Text="{Binding NewTagColorHex}"
+                    <TextBlock Text="{Binding NewTagColorHex}"
                Margin="10,0,0,0"
                VerticalAlignment="Center"/>
-                <!-- BUTTON -->
-                <Button Grid.Column="2"
+                    <!-- BUTTON -->
+                    <Button Grid.Column="2"
             Content="{DynamicResource Add}"
             Width="120"
             Click="AddTag_Click"
             Style="{StaticResource MaterialDesignRaisedButton}"/>
 
-            </Grid>
+                </Grid>
 
 
-            <Grid Grid.Row="2">
+                <Grid Grid.Row="2">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
 
-                <!-- ================= LEFT: DATA GRID ================= -->
-                <DataGrid Grid.Column="0"
+                    <!-- ================= LEFT: DATA GRID ================= -->
+                    <DataGrid Grid.Column="0"
               ItemsSource="{Binding Tags1}"
               SelectedItem="{Binding CrudTag}"
               AutoGenerateColumns="False"
@@ -488,135 +504,135 @@
               CanUserAddRows="False"
               CanUserDeleteRows="False"
               ScrollViewer.VerticalScrollBarVisibility="Auto">
-                    <DataGrid.Columns>
+                        <DataGrid.Columns>
 
-                        <!-- Color -->
-                        <DataGridTemplateColumn Width="Auto">
-                            <DataGridTemplateColumn.Header>
-                                <TextBlock Text="{DynamicResource Color}" />
-                            </DataGridTemplateColumn.Header>
+                            <!-- Color -->
+                            <DataGridTemplateColumn Width="Auto">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Text="{DynamicResource Color}" />
+                                </DataGridTemplateColumn.Header>
 
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5">
-                                        <Ellipse Width="16" Height="16"
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5">
+                                            <Ellipse Width="16" Height="16"
                              Fill="{Binding Color, Converter={StaticResource ColorToBrushConverter}}"
                              Margin="0,0,8,0"/>
-                                        <TextBlock Text="{Binding Color}"
+                                            <TextBlock Text="{Binding Color}"
                                FontFamily="Consolas"
                                FontSize="11"
                                Foreground="Gray"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
-                        <!-- Name -->
-                        <DataGridTextColumn Binding="{Binding Name}"
+                            <!-- Name -->
+                            <DataGridTextColumn Binding="{Binding Name}"
                          Width="*">
-                            <DataGridTextColumn.Header>
-                                <TextBlock Text="{DynamicResource Name}" />
-                            </DataGridTextColumn.Header>
-                        </DataGridTextColumn>
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource Name}" />
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
 
-                        <!-- Edit -->
-                        <DataGridTemplateColumn Width="Auto">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Content="{DynamicResource Edit}"
+                            <!-- Edit -->
+                            <DataGridTemplateColumn Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="{DynamicResource Edit}"
                         Click="EditTag_Click"
                         Style="{StaticResource MaterialDesignOutlinedButton}"
                         Margin="5,0"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
-                        <!-- Delete -->
-                        <DataGridTemplateColumn  Width="Auto">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Content="{DynamicResource Delete}"
+                            <!-- Delete -->
+                            <DataGridTemplateColumn  Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="{DynamicResource Delete}"
                         Click="DeleteTag_Click"
                         Style="{StaticResource MaterialDesignOutlinedButton}"
                         Margin="5,0"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
-                    </DataGrid.Columns>
-                </DataGrid>
+                        </DataGrid.Columns>
+                    </DataGrid>
 
-              
-                <!-- ================= RIGHT: EDIT PANEL ================= -->
-                <StackPanel Grid.Column="1"
+
+                    <!-- ================= RIGHT: EDIT PANEL ================= -->
+                    <StackPanel Grid.Column="1"
             Margin="20"
             IsEnabled="{Binding HasSelectedTag}">
 
-                    <!-- EMPTY STATE TEXT -->
-                    <TextBlock Text="{DynamicResource SelectTag}"
+                        <!-- EMPTY STATE TEXT -->
+                        <TextBlock Text="{DynamicResource SelectTag}"
                HorizontalAlignment="Center"
                Opacity="0.5"
                Margin="0,20,0,20"
                Visibility="{Binding HasSelectedTag, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=True}">
-                    </TextBlock>
+                        </TextBlock>
 
-                    <!-- EDIT TITLE -->
-                    <TextBlock Text="{DynamicResource EditTag}"
+                        <!-- EDIT TITLE -->
+                        <TextBlock Text="{DynamicResource EditTag}"
                FontSize="18"
                FontWeight="Bold"
                Margin="0,0,0,10"/>
 
-                    <!-- NAME -->
-                    <TextBox Text="{Binding CrudTag.Name, UpdateSourceTrigger=PropertyChanged}"
+                        <!-- NAME -->
+                        <TextBox Text="{Binding CrudTag.Name, UpdateSourceTrigger=PropertyChanged}"
              materialDesign:HintAssist.Hint="{DynamicResource TagName}"
              Margin="0,0,0,10"/>
 
-                    <!-- COLOR -->
-                    <materialDesign:ColorPicker
+                        <!-- COLOR -->
+                        <materialDesign:ColorPicker
         Color="{Binding CrudTag.Color, Mode=TwoWay}"
         Margin="0,0,0,10"/>
 
-                    <!-- UPDATE BUTTON -->
-                    <Button Content="{DynamicResource Update}"
+                        <!-- UPDATE BUTTON -->
+                        <Button Content="{DynamicResource Update}"
             Click="UpdateTag_Click"
             Style="{StaticResource MaterialDesignRaisedButton}">
-                    
-                    </Button>
 
-                </StackPanel>
+                        </Button>
 
+                    </StackPanel>
+
+                </Grid>
             </Grid>
-        </Grid>
 
             <Grid Grid.Column="1"  Visibility="{Binding IsAnalytics, Converter={StaticResource BooleanToVisibilityConverter}}">
 
 
-                
 
-                    <Grid.RowDefinitions>
-                        <!-- GORE: TABOVI -->
-                        <RowDefinition Height="4*"/>
 
-                        <!-- DOLE: TABELA -->
-                        <RowDefinition Height="3*"/>
+                <Grid.RowDefinitions>
+                    <!-- GORE: TABOVI -->
+                    <RowDefinition Height="4*"/>
+
+                    <!-- DOLE: TABELA -->
+                    <RowDefinition Height="3*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                    <!-- ===================== -->
-                    <!-- TABOVI: PIE / BAR / TAGS -->
-                    <!-- ===================== -->
-                    <TabControl Grid.Row="0">
+                <!-- ===================== -->
+                <!-- TABOVI: PIE / BAR / TAGS -->
+                <!-- ===================== -->
+                <TabControl Grid.Row="0">
 
-                        <!-- PIE CHART -->
-                        <TabItem Header="Pie">
-                   
-                            <Grid Margin="10">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
+                    <!-- PIE CHART -->
+                    <TabItem Header="Pie">
 
-                                <lvc:PieChart
+                        <Grid Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <lvc:PieChart
                          Grid.Row="0"
                         Series="{Binding PieSeries}"
                         LegendPosition="Right"
@@ -624,35 +640,35 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         DataPointerDown="PieChart_DataPointerDown"/>
-                            </Grid>
-                        </TabItem>
-                   
+                        </Grid>
+                    </TabItem>
 
-                        <!-- BAR CHART -->
-                        <TabItem Header="Bar">
-                            <Grid Margin="10">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
 
-                                <ComboBox Grid.Row="0"
+                    <!-- BAR CHART -->
+                    <TabItem Header="Bar">
+                        <Grid Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <ComboBox Grid.Row="0"
                           Margin="5"
                           ItemsSource="{Binding Years}"
                           SelectedItem="{Binding SelectedYear}" 
                            />
 
-                                <lvc:CartesianChart Grid.Row="1"
+                            <lvc:CartesianChart Grid.Row="1"
                                     Margin="5"
                                     Series="{Binding BarSeries}"
                                     XAxes="{Binding XAxes}"
                                     YAxes="{Binding YAxes}" 
                                     DataPointerDown="BarChart_DataPointerDown"/>
-                            </Grid>
-                        </TabItem>
+                        </Grid>
+                    </TabItem>
 
-                        <!-- TAG CLOUD -->
-                        <TabItem Header="Tags">
+                    <!-- TAG CLOUD -->
+                    <TabItem Header="Tags">
                         <Grid x:Name="TagCloudContainer"  SizeChanged="TagCloudContainer_SizeChanged">
                             <Canvas x:Name="TagPanel"
                          Background="Transparent"
@@ -660,14 +676,14 @@
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
                             />
-                            </Grid>
+                        </Grid>
                     </TabItem>
-                    
-                    </TabControl>
 
-                    <!-- ===================== -->
-                    <!-- TABELA ISPOD -->
-                    <!-- ===================== -->
+                </TabControl>
+
+                <!-- ===================== -->
+                <!-- TABELA ISPOD -->
+                <!-- ===================== -->
                 <DataGrid Grid.Row="1" ItemsSource="{Binding Documents}"
             AutoGenerateColumns="False"
             IsReadOnly="True"
@@ -740,53 +756,53 @@ Margin="5">
 
 
             </Grid>
-            
-           
+
+
             <Grid Grid.Column="1"
       Visibility="{Binding IsSettings, Converter={StaticResource BooleanToVisibilityConverter}}">
 
-            <StackPanel Margin="100">
+                <StackPanel Margin="100">
 
-                <TextBlock Text="{DynamicResource Settings}"
+                    <TextBlock Text="{DynamicResource Settings}"
                FontSize="22"
                FontWeight="Bold"
                Margin="0,0,0,20"/>
 
-                <!-- THEME -->
-                <TextBlock Text="{DynamicResource Theme}"
+                    <!-- THEME -->
+                    <TextBlock Text="{DynamicResource Theme}"
                Margin="0,10,0,5"/>
-                <ComboBox SelectedValue="{Binding Settings.Theme, Mode=TwoWay}"
+                    <ComboBox SelectedValue="{Binding Settings.Theme, Mode=TwoWay}"
           SelectedValuePath="Content">
-                    <ComboBoxItem Content="Light"/>
-                    <ComboBoxItem Content="Dark"/>
-                </ComboBox>
+                        <ComboBoxItem Content="Light"/>
+                        <ComboBoxItem Content="Dark"/>
+                    </ComboBox>
 
-                <!-- LANGUAGE -->
-                <TextBlock Text="{DynamicResource Language}"
+                    <!-- LANGUAGE -->
+                    <TextBlock Text="{DynamicResource Language}"
             Margin="0,15,0,5"/>
 
-                <ComboBox SelectedValue="{Binding Settings.Language, Mode=TwoWay}"
+                    <ComboBox SelectedValue="{Binding Settings.Language, Mode=TwoWay}"
                     SelectedValuePath="Content">
-                    <ComboBoxItem Content="en"/>
-                    <ComboBoxItem Content="sr"/>
-                </ComboBox>
+                        <ComboBoxItem Content="en"/>
+                        <ComboBoxItem Content="sr"/>
+                    </ComboBox>
 
-                <!-- COLOR -->
-                <TextBlock Text="{DynamicResource AccentColor}"
+                    <!-- COLOR -->
+                    <TextBlock Text="{DynamicResource AccentColor}"
                Margin="0,15,0,5"/>
 
-                <materialDesign:ColorPicker
+                    <materialDesign:ColorPicker
              Color="{Binding SelectedColor, Mode=TwoWay}"
             Height="100"/>
 
-                <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                    <Button Style="{StaticResource MaterialDesignRaisedButton}"
                          Click="SaveSettings_Click" Content="{DynamicResource Save}"/>
 
-            </StackPanel>
+                </StackPanel>
+            </Grid>
+
+
         </Grid>
-       
-        
-    </Grid>
         <Grid Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
 Background="#80000000"
 Panel.ZIndex="999"

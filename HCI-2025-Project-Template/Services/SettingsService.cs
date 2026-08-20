@@ -16,23 +16,43 @@
                 "settings.json");
         }
 
-        public AppSettings Load()
+        private Dictionary<string, AppSettings> LoadAll()
         {
             if (!File.Exists(_path))
-                return new AppSettings();
+                return new Dictionary<string, AppSettings>();
 
             var json = File.ReadAllText(_path);
-            return JsonSerializer.Deserialize<AppSettings>(json) ?? new AppSettings();
+
+            return JsonSerializer.Deserialize<Dictionary<string, AppSettings>>(json)
+                   ?? new Dictionary<string, AppSettings>();
         }
 
-        public void Save(AppSettings settings)
+        public AppSettings Load(string username)
         {
+            var allSettings = LoadAll();
+
+            if (allSettings.TryGetValue(username, out var settings))
+                return settings;
+            var defaultSettings = new AppSettings();
+
+            Save(username, defaultSettings);
+            return new AppSettings();
+        }
+
+        public void Save(string username, AppSettings settings)
+        {
+            var allSettings = LoadAll();
+
+            allSettings[username] = settings;
+
             Directory.CreateDirectory(Path.GetDirectoryName(_path)!);
 
-            var json = JsonSerializer.Serialize(settings, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
+            var json = JsonSerializer.Serialize(
+                allSettings,
+                new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                });
 
             File.WriteAllText(_path, json);
         }
