@@ -254,6 +254,7 @@
                     </DataGrid>
 
                 </TabItem>
+                
 
                 <!-- CARDS -->
                 <TabItem Header="{DynamicResource Cards}">
@@ -278,8 +279,14 @@
                                                          MouseDoubleClick="Card_MouseDoubleClick">
 
                                         <StackPanel>
+                                                <Border Height="120"
+                Margin="0,0,0,10"
+                CornerRadius="5"
+                ClipToBounds="True">
+                                                    <Image Source="{Binding Thumbnail}" Stretch="UniformToFill" />
+                                                </Border>
 
-                                            <TextBlock Text="{Binding Title}"
+                                                <TextBlock Text="{Binding Title}"
                                                        FontSize="16"
                                                        FontWeight="Bold"/>
 

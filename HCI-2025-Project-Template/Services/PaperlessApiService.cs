@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace HCI_2025_Project.Services
 {
@@ -15,10 +16,10 @@ namespace HCI_2025_Project.Services
         public PaperlessApiService()
         {
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("http://paperless-etfbl.duckdns.org:8000/api/");
+            _httpClient.BaseAddress = new Uri("http://paperless-etf.duckdns.org:8000/api/");
 
             _httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Token", "88bf3a2b5e1d113067e974612e0a6bf73bb35e67");
+                new AuthenticationHeaderValue("Token", "b8425a921ceaba0a8551bae3c70c3f2bd18b914f");
         }
 
         public async Task<ApiResponse<Document>> GetDocumentsAsync(int page, int pageSize)
@@ -288,6 +289,36 @@ namespace HCI_2025_Project.Services
             {
                 MessageBox.Show(ex.Message);
                 return false;
+            }
+        }
+
+
+        public async Task<BitmapImage?> GetDocumentThumbnailAsync(int id)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"documents/{id}/thumb/");
+                if (!response.IsSuccessStatusCode)
+                    return null;
+
+                byte[] bytes = await response.Content.ReadAsByteArrayAsync();
+
+                // Učitavanje direktno iz bajtova – WPF sve podržava (JPEG, PNG, BMP, GIF...)
+                using var ms = new MemoryStream(bytes);
+                var bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.StreamSource = ms;
+                bitmap.EndInit();
+                bitmap.Freeze(); // omogućava korišćenje u drugim nitima
+
+                return bitmap;
+            }
+            catch (Exception ex)
+            {
+                // Ovde možeš logovati grešku, a ne prikazivati MessageBox (nije dobro u servisnom sloju)
+                // System.Diagnostics.Debug.WriteLine($"THUMBNAIL ERROR: {ex.Message}");
+                return null;
             }
         }
     }

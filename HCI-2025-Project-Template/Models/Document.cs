@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using System.Text.Json.Serialization;
+using System.Windows.Media.Imaging;
 
 namespace HCI_2025_Project_Template.Models
 {
@@ -31,7 +26,10 @@ namespace HCI_2025_Project_Template.Models
 
         [JsonPropertyName("document_type")]
         public int? DocumentType { get; set; }
-        
+
         public string? DocumentTypeName { get; set; }
+
+        [JsonIgnore]
+        public BitmapImage? Thumbnail { get; set; }
     }
 }

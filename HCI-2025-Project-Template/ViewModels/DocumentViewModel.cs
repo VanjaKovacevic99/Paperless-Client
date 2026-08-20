@@ -274,7 +274,7 @@ namespace HCI_2025_Project_Template.ViewModels
                         typesLookup.TryGetValue(doc.DocumentType.Value, out var typeName)
                         ? typeName
                         : " ";
-
+                    doc.Thumbnail = await _apiService.GetDocumentThumbnailAsync(doc.Id);
                     Documents.Add(doc);
 
                 }
@@ -600,7 +600,7 @@ namespace HCI_2025_Project_Template.ViewModels
                 MessageBox.Show((string)Application.Current.Resources["TagNameTooShort"]);
                 return;
             }
-            if (NewTagName.Length > 30)
+            if (NewTagName.Length > 40)
             {
                 MessageBox.Show((string)Application.Current.Resources["TagNameTooLong"]);
                 return;
