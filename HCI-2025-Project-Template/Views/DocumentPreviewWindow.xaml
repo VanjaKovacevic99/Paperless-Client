@@ -6,7 +6,8 @@
         xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         xmlns:local="clr-namespace:HCI_2025_Project_Template.Views"
         mc:Ignorable="d"
-        Title="DocumentPreviewWindow" Height="450" Width="800">
+        Title="Paperless Client" Height="450" Width="800"
+        Icon="/Resources/Images/favicon.png">
     <Grid>
         <Grid Margin="10">
 

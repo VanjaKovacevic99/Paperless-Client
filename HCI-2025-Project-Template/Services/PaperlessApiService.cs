@@ -12,11 +12,11 @@ namespace HCI_2025_Project.Services
     public class PaperlessApiService
     {
         private readonly HttpClient _httpClient;
-
+        private readonly string URL = "http://paperless-etf.duckdns.org:8000/api/";
         public PaperlessApiService()
         {
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("http://paperless-etf.duckdns.org:8000/api/");
+            _httpClient.BaseAddress = new Uri(URL);
 
 
         }
@@ -192,11 +192,12 @@ namespace HCI_2025_Project.Services
 
         public async Task<byte[]> DownloadDocumentAsync(int id)
         {
-            var url = $"http://paperless-etfbl.duckdns.org:8000/api/documents/{id}/download/";
+            var response = await _httpClient.GetAsync($"documents/{id}/download/");
 
-            return await _httpClient.GetByteArrayAsync(url);
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsByteArrayAsync();
         }
-
 
         public async Task<bool> UploadDocumentAsync(string filePath, string title, int? tagId, int? typeId, int? correspondentId)
         {

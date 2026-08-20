@@ -6,7 +6,8 @@
         Height="600"
         Width="900"
         WindowStartupLocation="CenterScreen"
-        Background="{DynamicResource MaterialDesignPaper}">
+        Background="{DynamicResource MaterialDesignPaper}"
+        Icon="/Resources/Images/favicon.png">
 
     <Grid>
 

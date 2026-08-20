@@ -14,7 +14,8 @@
         Title="Paperless Client"
         Height="600"
         Width="900"
-        Background="{DynamicResource MaterialDesignPaper}">
+        Background="{DynamicResource MaterialDesignPaper}"
+        Icon="/Resources/Images/favicon.png">
     <Window.Resources>
         <conv:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
         <Style TargetType="DataGridRow">

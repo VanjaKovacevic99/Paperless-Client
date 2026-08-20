@@ -12,7 +12,9 @@
   <ItemGroup>
     <None Remove="Resources\Images\logo_black.png" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Resource Include="Resources\Images\favicon.png" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="FluentWPF" Version="0.10.2" />

@@ -84,7 +84,7 @@ namespace HCI_2025_Project_Template
 
             if (grid?.SelectedItem is Document selectedDocument)
             {
-                var previewWindow = new DocumentPreviewWindow(selectedDocument);
+                var previewWindow = new DocumentPreviewWindow(selectedDocument, _apiService);
                 previewWindow.ShowDialog();
             }
         }
@@ -97,7 +97,7 @@ namespace HCI_2025_Project_Template
             var doc = card.DataContext as Document;
             if (doc == null) return;
 
-            var preview = new DocumentPreviewWindow(doc);
+            var preview = new DocumentPreviewWindow(doc, _apiService);
             preview.Show();
         }
 
