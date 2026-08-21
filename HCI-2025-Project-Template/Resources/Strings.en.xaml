@@ -53,4 +53,12 @@
   <sys:String x:Key="SearchTooLong">Search text is too long.</sys:String>
     <sys:String x:Key="Analytics">Analytics</sys:String>
     <sys:String x:Key="Logout">Logout</sys:String>
+    <sys:String x:Key="AddTag">Add tag</sys:String>
+    <sys:String x:Key="Cancel">Cancel</sys:String>
+    <sys:String x:Key="DeleteTagConfirmation">
+    Do you want to delete the tag "{0}"?</sys:String>
+
+    <sys:String x:Key="DeleteConfirmation">
+        Delete confirmation
+    </sys:String>
 </ResourceDictionary>

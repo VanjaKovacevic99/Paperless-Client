@@ -53,4 +53,13 @@
   <sys:String x:Key="SearchTooLong">Tekst za pretragu je previše dug.</sys:String>
     <sys:String x:Key="Analytics">Analitika</sys:String>
     <sys:String x:Key="Logout">Odjava</sys:String>
+    <sys:String x:Key="AddTag">Dodaj tag</sys:String>
+    <sys:String x:Key="Cancel">Otkaži</sys:String>
+    <sys:String x:Key="DeleteTagConfirmation">
+        Da li želite obrisati tag "{0}"?
+    </sys:String>
+
+    <sys:String x:Key="DeleteConfirmation">
+        Potvrda brisanja
+    </sys:String>
 </ResourceDictionary>

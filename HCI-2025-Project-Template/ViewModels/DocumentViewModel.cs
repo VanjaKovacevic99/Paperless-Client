@@ -28,14 +28,26 @@ namespace HCI_2025_Project_Template.ViewModels
         public DocumentsViewModel(PaperlessApiService apiService, string username)
         {
             _apiService = apiService;
-
-
             Username = username;
+
             Documents = new ObservableCollection<Document>();
             Tags = new ObservableCollection<Tag>();
+            Tags1 = new ObservableCollection<Tag>();
             DocumentTypes = new ObservableCollection<DocumentType>();
             Correspondents = new ObservableCollection<Correspondent>();
 
+            XAxes = new Axis[]
+            {
+        new Axis
+        {
+            Labels = MonthLabels
+        }
+            };
+
+            YAxes = new Axis[]
+            {
+        new Axis()
+            };
         }
         public int _pageSize { get; set; } = 10;
 
@@ -189,24 +201,7 @@ namespace HCI_2025_Project_Template.ViewModels
                 OnPropertyChanged();
             }
         }
-        public DocumentsViewModel()
-        {
-            _apiService = new PaperlessApiService();
-            Documents = new ObservableCollection<Document>();
 
-            XAxes = new Axis[]
-{
-        new Axis
-        {
-            Labels = MonthLabels
-        }
-                };
-
-            YAxes = new Axis[]
-            {
-    new Axis()
-            };
-        }
 
         public ObservableCollection<Document> Documents { get; }
 
@@ -545,8 +540,7 @@ namespace HCI_2025_Project_Template.ViewModels
                 if (success)
                 {
                     await LoadTagsAsync();
-                    NewTagName = "";
-                    NewTagColor = Colors.LightGray;
+                    ResetTagForm();
                 }
                 else
                 {
@@ -567,14 +561,22 @@ namespace HCI_2025_Project_Template.ViewModels
 
 
 
+
         private bool _hasSelectedTag;
+
         public bool HasSelectedTag
         {
             get => _hasSelectedTag;
             set
             {
+                if (_hasSelectedTag == value)
+                    return;
+
                 _hasSelectedTag = value;
+
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(TagFormButtonText));
+                OnPropertyChanged(nameof(TagFormTitle));
             }
         }
 
@@ -614,7 +616,7 @@ namespace HCI_2025_Project_Template.ViewModels
                 MessageBox.Show((string)Application.Current.Resources["TagNameTooShort"]);
                 return;
             }
-            if (NewTagName.Length > 40)
+            if (CrudTag.Name?.Length > 40)
             {
                 MessageBox.Show((string)Application.Current.Resources["TagNameTooLong"]);
                 return;
@@ -637,8 +639,8 @@ namespace HCI_2025_Project_Template.ViewModels
                 if (success)
                 {
                     await LoadTagsAsync();
-                    CrudTag = null;
-                    HasSelectedTag = false;
+
+                    ResetTagForm();
                 }
             }
             catch
@@ -724,6 +726,8 @@ namespace HCI_2025_Project_Template.ViewModels
             dictionaries.Add(dict);
 
             Settings.Language = lang;
+            OnPropertyChanged(nameof(TagFormTitle));
+            OnPropertyChanged(nameof(TagFormButtonText));
         }
 
         private ISeries[] _pieSeries = Array.Empty<ISeries>();
@@ -934,7 +938,7 @@ namespace HCI_2025_Project_Template.ViewModels
 
         }
 
-        private int? _selectedMonthFromChart;
+
         private int? _appliedYear;
         private int? _appliedMonth;
 
@@ -969,6 +973,92 @@ namespace HCI_2025_Project_Template.ViewModels
 
             _ = LoadDocumentsAsync();
         }
-    }
 
+        public string TagFormButtonText
+        {
+            get
+            {
+                return HasSelectedTag
+                    ? Application.Current.Resources["Update"]?.ToString() ?? "Update"
+                    : Application.Current.Resources["Add"]?.ToString() ?? "Add";
+            }
+        }
+        public string TagFormName
+        {
+            get => HasSelectedTag ? CrudTag?.Name : NewTagName;
+            set
+            {
+                if (HasSelectedTag)
+                {
+                    if (CrudTag != null)
+                        CrudTag.Name = value;
+                }
+                else
+                {
+                    NewTagName = value;
+                }
+
+                OnPropertyChanged();
+            }
+        }
+
+        public string TagFormTitle
+        {
+            get
+            {
+                return HasSelectedTag
+                    ? Application.Current.Resources["EditTag"]?.ToString() ?? "Edit tag"
+                    : Application.Current.Resources["AddTag"]?.ToString() ?? "Add tag";
+            }
+        }
+        public Color TagFormColor
+        {
+            get
+            {
+                if (HasSelectedTag && CrudTag != null)
+                    return (Color)ColorConverter.ConvertFromString(CrudTag.Color);
+
+                return NewTagColor;
+            }
+            set
+            {
+                if (HasSelectedTag)
+                {
+                    if (CrudTag != null)
+                        CrudTag.Color = value.ToString();
+                }
+                else
+                {
+                    NewTagColor = value;
+                }
+
+                OnPropertyChanged();
+            }
+        }
+
+        public void OnTagFormChanged()
+        {
+            OnPropertyChanged(nameof(TagFormName));
+            OnPropertyChanged(nameof(TagFormColor));
+            OnPropertyChanged(nameof(TagFormTitle));
+            OnPropertyChanged(nameof(TagFormButtonText));
+        }
+
+
+
+        private void ResetTagForm()
+        {
+            CrudTag = null;
+            HasSelectedTag = false;
+
+            NewTagName = "";
+            NewTagColor = Colors.LightGray;
+
+            OnPropertyChanged(nameof(TagFormName));
+            OnPropertyChanged(nameof(TagFormColor));
+            OnPropertyChanged(nameof(TagFormTitle));
+            OnPropertyChanged(nameof(TagFormButtonText));
+        }
+
+    }
 }

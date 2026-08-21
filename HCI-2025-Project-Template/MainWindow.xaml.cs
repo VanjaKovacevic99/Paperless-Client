@@ -405,27 +405,59 @@ namespace HCI_2025_Project_Template
 
         }
 
-        private async void AddTag_Click(object sender, RoutedEventArgs e)
+        private async void SaveTag_Click(object sender, RoutedEventArgs e)
         {
             var vm = (DocumentsViewModel)DataContext;
-            await vm.CreateTagAsync();
+
+            if (vm.HasSelectedTag && vm.CrudTag != null)
+            {
+                await vm.UpdateTagAsync();
+            }
+            else
+            {
+                await vm.CreateTagAsync();
+            }
+
+            vm.HasSelectedTag = false;
+            vm.CrudTag = null;
         }
 
 
+        private void CancelTagEdit_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = (DocumentsViewModel)DataContext;
 
+            vm.CrudTag = null;
+            vm.HasSelectedTag = false;
+        }
 
         private async void DeleteTag_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
-            var tag = button?.DataContext as Tag;  // direktno uzmi tag iz dugmeta
+            var tag = button?.DataContext as Tag;
 
             if (tag == null) return;
 
-            var vm = (DocumentsViewModel)DataContext;
-            await vm.DeleteTagAsync(tag.Id);  // proslijedi ID
-        }
+            string message = string.Format(
+                (string)Application.Current.Resources["DeleteTagConfirmation"],
+                tag.Name);
 
-        private async void EditTag_Click(object sender, RoutedEventArgs args)
+            string title =
+                (string)Application.Current.Resources["DeleteConfirmation"];
+
+            var result = MessageBox.Show(
+                message,
+                title,
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result != MessageBoxResult.Yes)
+                return;
+
+            var vm = (DocumentsViewModel)DataContext;
+            await vm.DeleteTagAsync(tag.Id);
+        }
+        private void EditTag_Click(object sender, RoutedEventArgs args)
         {
             var button = sender as Button;
             var tag = button?.DataContext as Tag;
@@ -442,12 +474,9 @@ namespace HCI_2025_Project_Template
             };
 
             vm.HasSelectedTag = true;
-        }
-        private async void UpdateTag_Click(object sender, RoutedEventArgs args)
-        {
-            var vm = (DocumentsViewModel)DataContext;
 
-            await vm.UpdateTagAsync();
+            // Osvježi formu
+            vm.OnTagFormChanged();
         }
 
         private async void SaveSettings_Click(object sender, RoutedEventArgs e)
@@ -488,5 +517,11 @@ namespace HCI_2025_Project_Template
 
             Close();
         }
+
+
+
+
+
+
     }
 }

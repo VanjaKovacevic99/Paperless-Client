@@ -269,7 +269,6 @@ namespace HCI_2025_Project.Services
                     name = newName,
                     color = color
                 };
-                MessageBox.Show(color);
                 var json = JsonSerializer.Serialize(payload);
 
                 var content = new StringContent(json, Encoding.UTF8, "application/json");

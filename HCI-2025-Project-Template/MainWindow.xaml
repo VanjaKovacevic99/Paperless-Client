@@ -92,6 +92,8 @@
                         </StackPanel>
                     </Button>
 
+
+
                     <Button x:Name="BtnTags"
                         Grid.Row="3"
                        HorizontalAlignment="Stretch"
@@ -437,77 +439,51 @@
                     </StackPanel>
                 </Border>
             </Grid>
-            <Grid Grid.Column="1"  Visibility="{Binding IsTags, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="40">
+            <Grid Grid.Column="1"
+      Visibility="{Binding IsTags, Converter={StaticResource BooleanToVisibilityConverter}}"
+      Margin="40">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
+                <!-- NASLOV -->
+                <TextBlock Grid.Row="0"
+               Text="{DynamicResource Tags}"
+               FontSize="20"
+               FontWeight="Bold"
+               Margin="0,0,0,20"/>
 
-                <!-- Naslov -->
-                <TextBlock Grid.Row="0" Text="{DynamicResource Tags}" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
-
-                <!-- Dodavanje novog taga -->
-                <Grid Grid.Row="1" Margin="0,0,0,20">
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-
-                    <!-- NAME -->
-                    <TextBox Grid.Column="0"
-             MinWidth="120"
-             Text="{Binding NewTagName, UpdateSourceTrigger=PropertyChanged}"
-             materialDesign:HintAssist.Hint="{DynamicResource EnterNewTag}"
-             Margin="0,0,10,0"/>
-
-                    <!-- COLOR -->
-                    <materialDesign:ColorPicker Grid.Column="1"
-                              
-                                 Color="{Binding NewTagColor, Mode=TwoWay}"
-                                 
-                                 Margin="0,0,10,0"/>
-
-
-                    <TextBlock Text="{Binding NewTagColorHex}"
-               Margin="10,0,0,0"
-               VerticalAlignment="Center"/>
-                    <!-- BUTTON -->
-                    <Button Grid.Column="2"
-            Content="{DynamicResource Add}"
-            Width="120"
-            Click="AddTag_Click"
-            Style="{StaticResource MaterialDesignRaisedButton}"/>
-
-                </Grid>
-
-
-                <Grid Grid.Row="2">
+                <!-- GLAVNI SADRŽAJ -->
+                <Grid Grid.Row="1">
 
                     <Grid.ColumnDefinitions>
+                        <!-- TABELA -->
                         <ColumnDefinition Width="2*"/>
+
+                        <!-- FORMA -->
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- ================= LEFT: DATA GRID ================= -->
+
+                    <!-- ================= LEFT: TABELA TAGOVA ================= -->
                     <DataGrid Grid.Column="0"
-              ItemsSource="{Binding Tags1}"
-              SelectedItem="{Binding CrudTag}"
-              AutoGenerateColumns="False"
-              HeadersVisibility="Column"
-              BorderThickness="1"
-              BorderBrush="#DDD"
-              IsReadOnly="True"
-              CanUserAddRows="False"
-              CanUserDeleteRows="False"
-              ScrollViewer.VerticalScrollBarVisibility="Auto">
+                  ItemsSource="{Binding Tags1}"
+                  SelectedItem="{Binding CrudTag}"
+                  AutoGenerateColumns="False"
+                  HeadersVisibility="Column"
+                  BorderThickness="1"
+                  BorderBrush="#DDD"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  Margin="0,0,20,0">
+
                         <DataGrid.Columns>
 
-                            <!-- Color -->
+                            <!-- BOJA -->
                             <DataGridTemplateColumn Width="Auto">
                                 <DataGridTemplateColumn.Header>
                                     <TextBlock Text="{DynamicResource Color}" />
@@ -515,47 +491,55 @@
 
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5">
-                                            <Ellipse Width="16" Height="16"
-                             Fill="{Binding Color, Converter={StaticResource ColorToBrushConverter}}"
-                             Margin="0,0,8,0"/>
+                                        <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Center"
+                                        Margin="5">
+
+                                            <Ellipse Width="16"
+                                         Height="16"
+                                         Fill="{Binding Color, Converter={StaticResource ColorToBrushConverter}}"
+                                         Margin="0,0,8,0"/>
+
                                             <TextBlock Text="{Binding Color}"
-                               FontFamily="Consolas"
-                               FontSize="11"
-                               Foreground="Gray"/>
+                                           FontFamily="Consolas"
+                                           FontSize="11"
+                                           Foreground="Gray"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <!-- Name -->
+
+                            <!-- NAZIV -->
                             <DataGridTextColumn Binding="{Binding Name}"
-                         Width="*">
+                                    Width="*">
                                 <DataGridTextColumn.Header>
                                     <TextBlock Text="{DynamicResource Name}" />
                                 </DataGridTextColumn.Header>
                             </DataGridTextColumn>
 
-                            <!-- Edit -->
+
+                            <!-- IZMIJENI -->
                             <DataGridTemplateColumn Width="Auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="{DynamicResource Edit}"
-                        Click="EditTag_Click"
-                        Style="{StaticResource MaterialDesignOutlinedButton}"
-                        Margin="5,0"/>
+                                    Click="EditTag_Click"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Margin="5,0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <!-- Delete -->
-                            <DataGridTemplateColumn  Width="Auto">
+
+                            <!-- OBRIŠI -->
+                            <DataGridTemplateColumn Width="Auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="{DynamicResource Delete}"
-                        Click="DeleteTag_Click"
-                        Style="{StaticResource MaterialDesignOutlinedButton}"
-                        Margin="5,0"/>
+                                    Click="DeleteTag_Click"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Margin="5,0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -564,45 +548,59 @@
                     </DataGrid>
 
 
-                    <!-- ================= RIGHT: EDIT PANEL ================= -->
-                    <StackPanel Grid.Column="1"
-            Margin="20"
-            IsEnabled="{Binding HasSelectedTag}">
+                    <!-- ================= RIGHT: JEDINSTVENA FORMA ================= -->
+                    <Border Grid.Column="1"
+                Padding="20"
+                BorderBrush="#DDD"
+                BorderThickness="1"
+                CornerRadius="8"
+                Background="{DynamicResource MaterialDesignCardBackground}">
 
-                        <!-- EMPTY STATE TEXT -->
-                        <TextBlock Text="{DynamicResource SelectTag}"
-               HorizontalAlignment="Center"
-               Opacity="0.5"
-               Margin="0,20,0,20"
-               Visibility="{Binding HasSelectedTag, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=True}">
-                        </TextBlock>
+                        <StackPanel>
 
-                        <!-- EDIT TITLE -->
-                        <TextBlock Text="{DynamicResource EditTag}"
-               FontSize="18"
-               FontWeight="Bold"
-               Margin="0,0,0,10"/>
+                            <!-- NASLOV SE MIJENJA -->
+                            <TextBlock Text="{Binding TagFormTitle}"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Margin="0,0,0,20"/>
 
-                        <!-- NAME -->
-                        <TextBox Text="{Binding CrudTag.Name, UpdateSourceTrigger=PropertyChanged}"
-             materialDesign:HintAssist.Hint="{DynamicResource TagName}"
-             Margin="0,0,0,10"/>
 
-                        <!-- COLOR -->
-                        <materialDesign:ColorPicker
-        Color="{Binding CrudTag.Color, Mode=TwoWay}"
-        Margin="0,0,0,10"/>
+                            <!-- NAZIV -->
+                            <TextBox Text="{Binding TagFormName, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:HintAssist.Hint="{DynamicResource TagName}"
+                         Margin="0,0,0,15"/>
 
-                        <!-- UPDATE BUTTON -->
-                        <Button Content="{DynamicResource Update}"
-            Click="UpdateTag_Click"
-            Style="{StaticResource MaterialDesignRaisedButton}">
 
-                        </Button>
+                            <!-- BOJA -->
+                            <TextBlock Text="{DynamicResource Color}"
+                           Margin="0,0,0,5"/>
 
-                    </StackPanel>
+                            <materialDesign:ColorPicker
+                         Color="{Binding TagFormColor, Mode=TwoWay}"
+                            HorizontalAlignment="Stretch"
+                        Height="100"
+                            Margin="0,0,0,20"/>
+    
+
+
+                            <!-- GLAVNO DUGME: DODAJ / SAČUVAJ -->
+                            <Button Content="{Binding TagFormButtonText}"
+                        Click="SaveTag_Click"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Margin="0,0,0,10"/>
+
+
+                            <!-- OTKAŽI -->
+                            <Button Content="{DynamicResource Cancel}"
+                        Click="CancelTagEdit_Click"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"/>
+
+                        </StackPanel>
+
+                    </Border>
 
                 </Grid>
+
             </Grid>
 
             <Grid Grid.Column="1"  Visibility="{Binding IsAnalytics, Converter={StaticResource BooleanToVisibilityConverter}}">
