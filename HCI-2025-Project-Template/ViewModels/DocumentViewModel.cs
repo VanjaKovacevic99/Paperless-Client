@@ -23,6 +23,7 @@ namespace HCI_2025_Project_Template.ViewModels
         private string? _previous;
         private List<Tag> _tagsCache = new List<Tag>();
         private List<DocumentType> _typesCache = new List<DocumentType>();
+        public ObservableCollection<Document> UploadQueue { get; } = new();
         public string Username { get; set; }
 
         public DocumentsViewModel(PaperlessApiService apiService, string username)
@@ -220,6 +221,29 @@ namespace HCI_2025_Project_Template.ViewModels
                 OnPropertyChanged();
             }
         }
+        private string _uploadProgressText = (string)Application.Current.Resources["Loading"];
+
+        public string UploadProgressText
+        {
+            get => _uploadProgressText;
+            set
+            {
+                _uploadProgressText = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double _uploadProgress;
+
+        public double UploadProgress
+        {
+            get => _uploadProgress;
+            set
+            {
+                _uploadProgress = value;
+                OnPropertyChanged();
+            }
+        }
         public async Task LoadDocumentsAsync()
         {
             IsLoading = true;
@@ -360,6 +384,7 @@ namespace HCI_2025_Project_Template.ViewModels
                 Settings = _settingsService.Load(Username);
                 ApplyTheme();
                 SetLanguage(Settings.Language);
+                _uploadProgressText = (string)Application.Current.Resources["Loading"];
                 Tags = new ObservableCollection<Tag>(await _apiService.GetTagsAsync());
                 Tags.Insert(0, new Tag { Id = 0, Name = "All tags" });
                 OnPropertyChanged(nameof(Tags));
@@ -1061,4 +1086,5 @@ namespace HCI_2025_Project_Template.ViewModels
         }
 
     }
+
 }

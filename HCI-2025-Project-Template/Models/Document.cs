@@ -31,5 +31,14 @@ namespace HCI_2025_Project_Template.Models
 
         [JsonIgnore]
         public BitmapImage? Thumbnail { get; set; }
+
+        [JsonIgnore]
+        public string? FilePath { get; set; }
+
+        [JsonIgnore]
+        public string? FileName =>
+            string.IsNullOrWhiteSpace(FilePath)
+                ? null
+                : System.IO.Path.GetFileName(FilePath);
     }
 }

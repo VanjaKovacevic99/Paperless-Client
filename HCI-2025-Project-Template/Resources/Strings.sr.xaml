@@ -55,11 +55,19 @@
     <sys:String x:Key="Logout">Odjava</sys:String>
     <sys:String x:Key="AddTag">Dodaj tag</sys:String>
     <sys:String x:Key="Cancel">Otkaži</sys:String>
-    <sys:String x:Key="DeleteTagConfirmation">
-        Da li želite obrisati tag "{0}"?
-    </sys:String>
-
-    <sys:String x:Key="DeleteConfirmation">
-        Potvrda brisanja
-    </sys:String>
+    <sys:String x:Key="DeleteTagConfirmation">Da li želite obrisati tag "{0}"?</sys:String>
+    <sys:String x:Key="DeleteConfirmation">Potvrda brisanja</sys:String>
+    <sys:String x:Key="UploadDocuments">Dodavanje dokumenata</sys:String>
+    <sys:String x:Key="AddOneOrMoreDocuments">Dodajte jedan ili više dokumenata.</sys:String>
+    <sys:String x:Key="AddDocument">Dodaj dokument</sys:String>
+    <sys:String x:Key="DocumentsToUpload">Dokumenti za otpremu</sys:String>
+    <sys:String x:Key="UploadAllDocuments">Otpremi sve dokumente</sys:String>
+    <sys:String x:Key="NewDocument">Novi dokument</sys:String>
+    <sys:String x:Key="RemoveDocument">Ukloni dokument</sys:String>
+    <sys:String x:Key="Loading">Učitavanje ...</sys:String>
+    <sys:String x:Key="UploadProgress">Dodavanje{0}/{1}</sys:String>
+    <sys:String x:Key="UploadResult">Uspješno poslano: {0}&#10;Neuspješno: {1}</sys:String>
+    <sys:String x:Key="UploadQueueEmpty">Red za upload je prazan.</sys:String>
+    <sys:String x:Key="ClearUploadQueueConfirmation">Da li želite ukloniti sve dokumente iz reda za upload?</sys:String>
+    <sys:String x:Key="DocumentTypeNotFound">Nije pronađen tip: {0}</sys:String>
 </ResourceDictionary>

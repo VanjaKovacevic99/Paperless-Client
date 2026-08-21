@@ -55,10 +55,19 @@
     <sys:String x:Key="Logout">Logout</sys:String>
     <sys:String x:Key="AddTag">Add tag</sys:String>
     <sys:String x:Key="Cancel">Cancel</sys:String>
-    <sys:String x:Key="DeleteTagConfirmation">
-    Do you want to delete the tag "{0}"?</sys:String>
-
-    <sys:String x:Key="DeleteConfirmation">
-        Delete confirmation
-    </sys:String>
+    <sys:String x:Key="DeleteTagConfirmation">Do you want to delete the tag "{0}"?</sys:String>
+    <sys:String x:Key="DeleteConfirmation">Delete confirmation </sys:String>
+    <sys:String x:Key="UploadDocuments">Upload documents</sys:String>
+    <sys:String x:Key="AddOneOrMoreDocuments">Add one or more documents.</sys:String>
+    <sys:String x:Key="AddDocument">Add Document</sys:String>
+    <sys:String x:Key="DocumentsToUpload">Documents to upload</sys:String>
+    <sys:String x:Key="UploadAllDocuments">Upload all documents</sys:String>
+    <sys:String x:Key="NewDocument">New document</sys:String>
+    <sys:String x:Key="RemoveDocument">Remove document</sys:String>
+    <sys:String x:Key="Loading">Loading...</sys:String>
+    <sys:String x:Key="UploadProgress">Upload {0}/{1}</sys:String>
+    <sys:String x:Key="UploadResult">Successfully uploaded: {0}&#10;Failed: {1}</sys:String>
+    <sys:String x:Key="UploadQueueEmpty">The upload queue is empty.</sys:String>
+    <sys:String x:Key="ClearUploadQueueConfirmation">Do you want to remove all documents from the upload queue?</sys:String>
+    <sys:String x:Key="DocumentTypeNotFound">Document type not found: {0}</sys:String>
 </ResourceDictionary>

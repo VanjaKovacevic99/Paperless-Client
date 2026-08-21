@@ -180,6 +180,7 @@
                         <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                  VerticalAlignment="Center"
                  VerticalContentAlignment="Center"
+                                 
                  materialDesign:HintAssist.Hint="{DynamicResource Search}"
                  Height="35"
                  Padding="30,0,0,0"
@@ -364,80 +365,333 @@
                 </StackPanel>
 
             </Grid>
-            <Grid Grid.Column="1"   Visibility="{Binding IsUpload, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Border Padding="60,40,60,40">
-                    <StackPanel HorizontalAlignment="Stretch" >
+            <!-- ========================= -->
+            <!-- UPLOAD DOCUMENTS -->
+            <!-- ========================= -->
+            <Grid Grid.Column="1"
+      Visibility="{Binding IsUpload, Converter={StaticResource BooleanToVisibilityConverter}}">
 
-                        <TextBlock Text="{DynamicResource UploadDocument}"
-                   FontSize="20"
-                   FontWeight="Bold"
-                   Margin="0,0,0,10"/>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-                        <!-- TITLE -->
-                        <TextBox Text="{Binding Upload.Title, UpdateSourceTrigger=PropertyChanged}"
-                 materialDesign:HintAssist.Hint="{DynamicResource Title}"
-                 Margin="0,0,0,10"/>
 
-                        <!-- TAG -->
-                        <ComboBox ItemsSource="{Binding Tags}"
-                  DisplayMemberPath="Name"
-                  SelectedItem="{Binding Upload.Tag}"
-                  materialDesign:HintAssist.Hint="{DynamicResource Tag}"
-                  Margin="0,0,0,10"/>
+                <!-- ============================= -->
+                <!-- HEADER -->
+                <!-- ============================= -->
 
-                        <!-- TYPE -->
-                        <ComboBox ItemsSource="{Binding DocumentTypes}"
-                  DisplayMemberPath="Name"
-                  SelectedItem="{Binding Upload.Type}"
-                  materialDesign:HintAssist.Hint="{DynamicResource Type}"
-                  Margin="0,0,0,10"/>
+                <StackPanel Grid.Row="0"
+                Margin="20,10,20,15">
 
-                        <!-- CORRESPONDENT -->
-                        <ComboBox ItemsSource="{Binding Correspondents}"
-                  DisplayMemberPath="Name"
-                  SelectedItem="{Binding Upload.Correspondent}"
-                  materialDesign:HintAssist.Hint="{DynamicResource Correspondent}"
-                  Margin="0,0,0,20"/>
+                    <TextBlock Text="{DynamicResource UploadDocument}"
+                   FontSize="24"
+                   FontWeight="Bold"/>
 
-                        <!-- FILE SECTION (LAST) -->
-                        <Border BorderBrush="#DDD"
-                BorderThickness="1"
-                Padding="15"
-                CornerRadius="8"
-                Background="#FAFAFA"
-                AllowDrop="True"
-                Drop="File_Drop">
+                    <TextBlock Text="{DynamicResource AddOneOrMoreDocuments}"
+                   Opacity="0.65"
+                   Margin="0,5,0,0"/>
 
-                            <StackPanel HorizontalAlignment="Center">
+                </StackPanel>
 
-                                <TextBlock Text="Drag &amp; drop file "
-                           HorizontalAlignment="Center"
-                           Opacity="0.7"
-                           Margin="0,0,0,10"/>
 
-                                <TextBlock Text="{Binding UploadFileName}"
-                           HorizontalAlignment="Center"
-                           FontWeight="Bold"
-                           Margin="0,0,0,10"/>
+                <!-- ============================= -->
+                <!-- SCROLLABLE CONTENT -->
+                <!-- ============================= -->
 
-                                <Button Content="{DynamicResource ChooseFile}"
-                        Width="150"
-                        Click="ChooseFile_Click"
-                        Style="{StaticResource MaterialDesignOutlinedButton}"/>
+                <ScrollViewer Grid.Row="1"
+                  VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
 
-                            </StackPanel>
+                    <Grid Margin="20,0,20,30">
+
+                        <Grid.RowDefinitions>
+
+                            <!-- FORMA -->
+                            <RowDefinition Height="Auto"/>
+
+                            <!-- LISTA -->
+                            <RowDefinition Height="Auto"/>
+
+                            <!-- FINALNO DUGME -->
+                            <RowDefinition Height="Auto"/>
+
+                        </Grid.RowDefinitions>
+
+
+                        <!-- ================================= -->
+                        <!-- FORMA ZA JEDAN DOKUMENT -->
+                        <!-- ================================= -->
+
+                        <Border Grid.Row="0"
+                    Padding="20"
+                    BorderThickness="1"
+                    BorderBrush="#DDDDDD"
+                    CornerRadius="10"
+                    Background="{DynamicResource MaterialDesignCardBackground}">
+
+                            <Grid>
+
+                                <Grid.RowDefinitions>
+
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+
+                                </Grid.RowDefinitions>
+
+
+                                <!-- NASLOV FORME -->
+
+                                <TextBlock Grid.Row="0"
+                               Text="{DynamicResource NewDocument}"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,20"/>
+
+
+                                <!-- TITLE -->
+
+                                <TextBox Grid.Row="1"
+                             Text="{Binding Upload.Title, UpdateSourceTrigger=PropertyChanged}"
+                             materialDesign:HintAssist.Hint="{DynamicResource Title}"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             Margin="0,0,0,12"/>
+
+
+                                <!-- TAG -->
+
+                                <ComboBox Grid.Row="2"
+                              ItemsSource="{Binding Tags}"
+                              DisplayMemberPath="Name"
+                              SelectedItem="{Binding Upload.Tag}"
+                              materialDesign:HintAssist.Hint="{DynamicResource Tag}"
+                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              Margin="0,0,0,12"/>
+
+
+                                <!-- TYPE -->
+
+                                <ComboBox Grid.Row="3"
+                              ItemsSource="{Binding DocumentTypes}"
+                              DisplayMemberPath="Name"
+                              SelectedItem="{Binding Upload.Type}"
+                              materialDesign:HintAssist.Hint="{DynamicResource Type}"
+                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              Margin="0,0,0,12"/>
+
+
+                                <!-- CORRESPONDENT -->
+
+                                <ComboBox Grid.Row="4"
+                              ItemsSource="{Binding Correspondents}"
+                              DisplayMemberPath="Name"
+                              SelectedItem="{Binding Upload.Correspondent}"
+                              materialDesign:HintAssist.Hint="{DynamicResource Correspondent}"
+                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              Margin="0,0,0,15"/>
+
+
+                                <!-- FILE -->
+
+                                <Border Grid.Row="5"
+                            BorderBrush="#CCCCCC"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="15"
+                            AllowDrop="True"
+                            Drop="File_Drop">
+
+                                    <Grid>
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+
+                                        <materialDesign:PackIcon
+                                Grid.Row="0"
+                                Kind="FileUploadOutline"
+                                Width="32"
+                                Height="32"
+                                HorizontalAlignment="Center"
+                                Opacity="0.6"
+                                Margin="0,0,0,8"/>
+
+
+                                        <TextBlock Grid.Row="1"
+                                       Text="{Binding UploadFileName}"
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,10"/>
+
+
+                                        <Button Grid.Row="2"
+                                    Content="{DynamicResource ChooseFile}"
+                                    Width="160"
+                                    Height="38"
+                                    HorizontalAlignment="Center"
+                                    Click="ChooseFile_Click"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"/>
+
+                                    </Grid>
+
+                                </Border>
+
+                            </Grid>
 
                         </Border>
 
-                        <!-- UPLOAD BUTTON -->
-                        <Button Content="{DynamicResource Create}"
-                Margin="0,20,0,0"
-                Height="40"
-                Style="{StaticResource MaterialDesignRaisedButton}"
-                Click="UploadFile_Click"/>
 
-                    </StackPanel>
-                </Border>
+                        <!-- ================================= -->
+                        <!-- DODAJ DOKUMENT -->
+                        <!-- ================================= -->
+
+                        <Button Grid.Row="1" 
+                                Click="AddDocumentToQueue_Click"
+        Style="{StaticResource MaterialDesignRaisedButton}"
+        Height="45"
+        HorizontalAlignment="Stretch"
+        Margin="0,15,0,25">
+
+                            <StackPanel Orientation="Horizontal"
+                HorizontalAlignment="Center">
+
+                                <materialDesign:PackIcon Kind="Plus"
+                                 Width="20"
+                                 Height="20"
+                                 Margin="0,0,8,0"/>
+
+                                <TextBlock Text="{DynamicResource AddDocument}"
+                   VerticalAlignment="Center"/>
+
+                            </StackPanel>
+
+                        </Button>
+
+
+                        <!-- ================================= -->
+                        <!-- LISTA DOKUMENATA -->
+                        <!-- ================================= -->
+
+                        <StackPanel Grid.Row="2">
+
+                            <TextBlock Text="{DynamicResource DocumentsToUpload}"
+           FontSize="18"
+           FontWeight="SemiBold"
+           Margin="0,0,0,10"/>
+
+
+                            <Border BorderThickness="1"
+                        BorderBrush="#DDDDDD"
+                        CornerRadius="8"
+                        Padding="5">
+
+                                <ItemsControl ItemsSource="{Binding UploadQueue}">
+
+                                    <ItemsControl.ItemTemplate>
+
+                                        <DataTemplate>
+
+                                            <Border Padding="12"
+                                        Margin="3"
+                                        CornerRadius="6"
+                                        Background="{DynamicResource MaterialDesignPaper}">
+
+                                                <Grid>
+
+                                                    <Grid.ColumnDefinitions>
+
+                                                        <ColumnDefinition Width="*"/>
+
+                                                        <ColumnDefinition Width="Auto"/>
+
+                                                    </Grid.ColumnDefinitions>
+
+
+                                                    <StackPanel Grid.Column="0">
+
+                                                        <TextBlock Text="{Binding Title}"
+                                                       FontWeight="Bold"
+                                                       FontSize="15"/>
+
+                                                        <TextBlock Text="{Binding FileName}"
+                                                       TextWrapping="Wrap"
+                                                       Opacity="0.65"
+                                                       Margin="0,3,0,0"/>
+
+                                                    </StackPanel>
+
+
+                                                    <Button Grid.Column="1"
+        Width="36"
+        Height="36"
+        Margin="10,0,0,0"
+        Click="RemoveDocumentFromQueue_Click"
+        ToolTip="{DynamicResource RemoveDocument}"
+        Background="Transparent"
+        BorderBrush="DarkRed"
+        BorderThickness="1"
+        Padding="0">
+
+                                                        <materialDesign:PackIcon Kind="Close"
+                             Width="22"
+                             Height="22"
+                             Foreground="DarkRed"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"/>
+
+                                                    </Button>
+
+                                                </Grid>
+
+                                            </Border>
+
+                                        </DataTemplate>
+
+                                    </ItemsControl.ItemTemplate>
+
+                                </ItemsControl>
+
+                            </Border>
+
+
+                            <!-- ================================= -->
+                            <!-- OTPREMI SVE -->
+                            <!-- ================================= -->
+                            <Button Click="UploadAllDocuments_Click"
+        Style="{StaticResource MaterialDesignRaisedButton}"
+        Height="45"
+        HorizontalAlignment="Stretch"
+        Margin="0,20,0,0">
+
+                                <StackPanel Orientation="Horizontal"
+                HorizontalAlignment="Center">
+
+                                    <materialDesign:PackIcon Kind="Upload"
+                                 Width="20"
+                                 Height="20"
+                                 Margin="0,0,8,0"/>
+
+                                    <TextBlock Text="{DynamicResource UploadAllDocuments}"
+                   VerticalAlignment="Center"/>
+
+                                </StackPanel>
+
+                            </Button>
+
+                        </StackPanel>
+
+                    </Grid>
+
+                </ScrollViewer>
+
             </Grid>
             <Grid Grid.Column="1"
       Visibility="{Binding IsTags, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -514,7 +768,8 @@
                             <DataGridTextColumn Binding="{Binding Name}"
                                     Width="*">
                                 <DataGridTextColumn.Header>
-                                    <TextBlock Text="{DynamicResource Name}" />
+                                    <TextBlock Text="{DynamicResource Name}" 
+                                     materialDesign:HintAssist.Hint="{DynamicResource Title}"/>
                                 </DataGridTextColumn.Header>
                             </DataGridTextColumn>
 
@@ -580,7 +835,7 @@
                             HorizontalAlignment="Stretch"
                         Height="100"
                             Margin="0,0,0,20"/>
-    
+
 
 
                             <!-- GLAVNO DUGME: DODAJ / SAČUVAJ -->
@@ -825,7 +1080,7 @@ VerticalAlignment="Stretch">
                        Height="4"
                        Margin="0,0,0,10"/>
 
-                        <TextBlock Text="Loading..."
+                        <TextBlock Text="{Binding UploadProgressText}"
                      Foreground="White"
                      HorizontalAlignment="Center"/>
                     </StackPanel>

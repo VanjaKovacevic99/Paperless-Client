@@ -6,6 +6,7 @@ using HCI_2025_Project_Template.Views;
 using LiveChartsCore.Kernel;
 using LiveChartsCore.Kernel.Sketches;
 using MaterialDesignThemes.Wpf;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -518,8 +519,192 @@ namespace HCI_2025_Project_Template
             Close();
         }
 
+        private async void UploadAllDocuments_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = (DocumentsViewModel)DataContext;
 
+            if (vm.UploadQueue.Count == 0)
+            {
+                MessageBox.Show(
+                (string)Application.Current.Resources["UploadQueueEmpty"],
+                "Paperless Client",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
 
+                return;
+            }
+
+            var documents = vm.UploadQueue.ToList();
+
+            int total = documents.Count;
+            int current = 0;
+            int successful = 0;
+            int failed = 0;
+
+            vm.IsLoading = true;
+
+            try
+            {
+                foreach (var document in documents)
+                {
+                    current++;
+
+                    // Prikaz npr. Upload 1/3
+                    vm.UploadProgressText = string.Format(
+                    (string)Application.Current.Resources["UploadProgress"],
+                     current,
+                    total);
+
+                    // Procenat
+                    vm.UploadProgress = ((double)current / total) * 100;
+
+                    // Omogući UI-u da prikaže promjenu
+                    await Task.Delay(50);
+
+                    try
+                    {
+                        if (string.IsNullOrWhiteSpace(document.FilePath) ||
+                            !File.Exists(document.FilePath))
+                        {
+                            failed++;
+                            continue;
+                        }
+
+                        int? tagId = document.Tags.FirstOrDefault();
+
+                        if (tagId == 0)
+                            tagId = null;
+
+                        bool success = await _apiService.UploadDocumentAsync(
+                            document.FilePath,
+                            document.Title,
+                            tagId,
+                            document.DocumentType,
+                            document.Correspondent
+                        );
+
+                        if (success)
+                        {
+                            vm.UploadQueue.Remove(document);
+                            successful++;
+                        }
+                        else
+                        {
+                            failed++;
+                        }
+                    }
+                    catch
+                    {
+                        failed++;
+                    }
+                }
+
+                await vm.LoadDocumentsAsync();
+            }
+            finally
+            {
+                vm.IsLoading = false;
+                vm.UploadProgressText = "";
+                vm.UploadProgress = 0;
+            }
+
+            string message = string.Format(
+     (string)Application.Current.Resources["UploadResult"],
+     successful,
+     failed);
+
+            MessageBox.Show(
+                message,
+                "Paperless Client",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+        }
+
+        private void RemoveDocumentFromQueue_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = (DocumentsViewModel)DataContext;
+
+            if (sender is Button button &&
+                button.DataContext is Document document)
+            {
+                vm.UploadQueue.Remove(document);
+            }
+        }
+        private void ClearPendingDocuments_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = (DocumentsViewModel)DataContext;
+
+            if (vm.UploadQueue.Count == 0)
+                return;
+
+            var result = MessageBox.Show(
+    (string)Application.Current.Resources["ClearUploadQueueConfirmation"],
+    "Paperless Client",
+    MessageBoxButton.YesNo,
+    MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                vm.UploadQueue.Clear();
+            }
+        }
+
+        private void AddDocumentToQueue_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = (DocumentsViewModel)DataContext;
+
+            if (string.IsNullOrWhiteSpace(vm.Upload.FilePath))
+            {
+                MessageBox.Show(
+                    (string)FindResource("SelectFile"),
+                    "Paperless Client",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(vm.Upload.Title))
+            {
+                MessageBox.Show(
+                    (string)FindResource("TitleRequired"),
+                    "Paperless Client",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
+
+            if (!File.Exists(vm.Upload.FilePath))
+            {
+                MessageBox.Show(
+                    (string)FindResource("FileNotFound"),
+                    "Paperless Client",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
+
+            var document = new Document
+            {
+                Title = vm.Upload.Title,
+                FilePath = vm.Upload.FilePath,
+                Correspondent = vm.Upload.Correspondent?.Id,
+                DocumentType = vm.Upload.Type?.Id
+            };
+
+            if (vm.Upload.Tag != null)
+            {
+                document.Tags.Add(vm.Upload.Tag.Id);
+            }
+
+            vm.UploadQueue.Add(document);
+
+            // Očisti formu
+            vm.Upload = new UploadDocumentModel();
+            vm.UploadFileName = string.Empty;
+        }
 
 
 
