@@ -383,6 +383,15 @@ namespace HCI_2025_Project_Template.ViewModels
             {
                 Settings = _settingsService.Load(Username);
                 ApplyTheme();
+                Color _selectedColor = (Color)ColorConverter.ConvertFromString("#FFDF1C60");
+                if (!string.IsNullOrWhiteSpace(Settings.PrimaryColor))
+                {
+                    SelectedColor = (Color)ColorConverter.ConvertFromString(Settings.PrimaryColor);
+                }
+                else
+                {
+                    SelectedColor = _selectedColor;
+                }
                 SetLanguage(Settings.Language);
                 _uploadProgressText = (string)Application.Current.Resources["Loading"];
                 Tags = new ObservableCollection<Tag>(await _apiService.GetTagsAsync());
@@ -649,7 +658,6 @@ namespace HCI_2025_Project_Template.ViewModels
             string hexColor = NormalizeColor(CrudTag.Color);
 
 
-            MessageBox.Show(hexColor);
             IsLoading = true;
             try
             {
